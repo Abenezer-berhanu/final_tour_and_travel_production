@@ -7,7 +7,7 @@ function NavbarLinks() {
       {navItems.map((data, idx) => (
         <p
           key={idx}
-          className="font-semibold tracking-wide capitalize hover:text-primary"
+          className="font-semibold tracking-wide capitalize hover:text-primary_orange"
         >
           <Link href={data.link}>{data.label}</Link>
         </p>
