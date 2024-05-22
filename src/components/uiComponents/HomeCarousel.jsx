@@ -1,14 +1,14 @@
-'use client'
 import Autoplay from "embla-carousel-autoplay";
+
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import homeCarousel from "@/lib/homeCarousel";
 import { Separator } from "../ui/separator";
 import { Calendar, LocateFixed, Star } from "lucide-react";
 import Image from "next/image";
-import homeCarousel from "@/lib/homeCarousel";
 
 function HomeCarousel() {
   return (

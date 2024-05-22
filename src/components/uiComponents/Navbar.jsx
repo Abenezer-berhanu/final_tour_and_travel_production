@@ -6,7 +6,7 @@ import NavbarUser from "./NavbarUser";
 
 function Navbar() {
   return (
-    <div className="flex w-full min-h-24 mb-5 items-center justify-between lg:px-20 md:px-10 px-2">
+    <div className="flex w-full min-h-[70px] mb-10 items-center justify-between lg:px-20 md:px-10 px-2 bg-primary text-white">
       <div className="flex gap-3 items-center mr-4">
         <span className="hidden max-md:flex">
           <NavbarSheet />
