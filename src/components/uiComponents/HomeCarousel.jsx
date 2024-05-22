@@ -77,7 +77,7 @@ function HomeCarousel() {
                   width={1000}
                   height={500}
                   alt="alt"
-                  className="max-h-[550px] h-full brightness-50 md:brightness-100 w-full ml-auto object-cover z-0"
+                  className="h-[460px] brightness-50 md:brightness-100 w-full ml-auto object-cover z-0"
                   src={item.link}
                 />
               </div>
