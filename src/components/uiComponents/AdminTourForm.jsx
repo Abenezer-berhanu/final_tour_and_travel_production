@@ -9,6 +9,7 @@ import { Separator } from "../ui/separator";
 import AdminDatePicker from "./AdminDatePicker";
 import { Checkbox } from "../ui/checkbox";
 import { countries } from "@/lib/countries";
+import ImagesUpload from "./ImagesUpload";
 function AdminTourForm() {
   return (
     <div className="flex flex-col gap-5">
@@ -318,6 +319,47 @@ function AdminTourForm() {
             placeholder="Description about Landing address and location"
           ></textarea>
         </span>
+      </div>
+
+      <Separator />
+      <h1 className="text-lg font-semibold">Choose Guides</h1>
+      <div>
+        <span className="flex flex-col gap-1">
+          <label
+            htmlFor="name"
+            className="block text-sm font-medium text-form_text"
+          >
+            Guides
+          </label>
+
+          <Select>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Guide" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="123498">Mamo Lamo</SelectItem>
+              <SelectItem value="480384">Dabo Chalo</SelectItem>
+              <SelectItem value="408308">Wamo Kamo</SelectItem>
+            </SelectContent>
+          </Select>
+        </span>
+      </div>
+
+      <Separator />
+      <h1 className="text-lg font-semibold">Upload Tour Images</h1>
+      <div className="col-span-6 sm:col-span-5 bg-white p-5 grid grid-cols-6 gap-3 rounded-lg font-medium">
+        <div className="col-span-2 p-2 flex flex-col gap-3">
+          <h1 className="text-md font-semibold">Primary Image</h1>
+          <span className="border p-3">
+            <ImagesUpload />
+          </span>
+        </div>
+        <div className="col-span-4 p-2 flex flex-col gap-3">
+          <h1 className="text-md font-semibold">Detail Images</h1>
+          <span className="border p-3">
+            <ImagesUpload />
+          </span>
+        </div>
       </div>
     </div>
   );
