@@ -3,6 +3,7 @@ import { GiSubway } from "react-icons/gi";
 import { FaUser } from "react-icons/fa";
 import AdminSmallUsersTable from "@/components/uiComponents/AdminSmallUsersTable";
 import { AdminPieChart } from "@/components/uiComponents/AdminPieChart";
+import Link from "next/link";
 
 function page() {
   return (
@@ -37,11 +38,28 @@ function page() {
         {/* for the 5 users and tours */}
         <div className="flex flex-col gap-4 col-span-8">
           <span className="py-3">
-            <h1 className="text-xl font-bold">Users</h1>
+            <span className="flex justify-between items-center py-1">
+              <h1 className="text-xl font-bold">Users</h1>{" "}
+              <Link
+                href="/admin/users"
+                className="text-sm font-semibold text-primary "
+              >
+                Sell all
+              </Link>
+            </span>
             <AdminSmallUsersTable />
           </span>
           <span>
-            <h1 className="text-xl font-bold">Tours</h1>
+            <span className="flex justify-between items-center py-1">
+              <h1 className="text-xl font-bold">Tours</h1>{" "}
+              <Link
+                href="/admin/users"
+                className="text-sm font-semibold text-primary "
+              >
+                Sell all
+              </Link>
+            </span>
+
             <AdminSmallUsersTable />
           </span>
         </div>

@@ -19,7 +19,7 @@ function DashboardLayout() {
       <div className="flex flex-col items-start justify-center gap-3">
         <Link
           href={"/admin/dashboard"}
-          className="flex w-full items-center justify-center bg-white text-black rounded-md p-1 cursor-pointer hover:bg-primary_orange duration-200"
+          className="flex w-full items-center justify-center bg-white text-black rounded-md p-1 cursor-pointer text-primary hover:bg-primary_orange duration-200"
         >
           <div className="flex gap-3 items-center py-5 min-w-[120px] max-h-[30px]">
             <FaHome size={25} className="" />
@@ -28,7 +28,7 @@ function DashboardLayout() {
         </Link>
         <Link
           href={"/admin/users"}
-          className="flex items-center justify-center w-full bg-white text-black rounded-md p-1 cursor-pointer hover:bg-primary_orange duration-200"
+          className="flex items-center justify-center w-full bg-white text-black rounded-md p-1 cursor-pointer text-primary hover:bg-primary_orange duration-200"
         >
           <div className="flex gap-3 items-center py-5 min-w-[120px] max-h-[30px]">
             <FaUser size={25} />
@@ -37,7 +37,7 @@ function DashboardLayout() {
         </Link>
         <Link
           href={"/admin/tours"}
-          className="flex items-center justify-center w-full bg-white text-black rounded-md p-1 cursor-pointer hover:bg-primary_orange duration-200"
+          className="flex items-center justify-center w-full bg-white text-black rounded-md p-1 cursor-pointer text-primary hover:bg-primary_orange duration-200"
         >
           <div className="flex gap-3 items-center py-5 min-w-[120px] max-h-[30px]">
             <FaSubway size={25} />

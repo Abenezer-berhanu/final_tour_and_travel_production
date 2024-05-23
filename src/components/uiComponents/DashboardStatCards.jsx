@@ -4,7 +4,7 @@ import React from "react";
 function DashboardStatCards({ icon, title, amount, link }) {
   return (
     <>
-      <article className="flex items-end justify-between rounded-lg border border-gray-100 bg-white p-6">
+      <article className="flex items-end justify-between rounded-lg shadow-md bg-white p-6">
         <div className="flex items-center gap-4">
           {icon}
 
