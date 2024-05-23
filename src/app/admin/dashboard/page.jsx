@@ -1,6 +1,6 @@
 import DashboardStatCards from "@/components/uiComponents/DashboardStatCards";
 import { GiSubway } from "react-icons/gi";
-import { FaUser } from "react-icons/fa";
+import { FaUser, FaUserCheck, FaUserMinus } from "react-icons/fa";
 import AdminSmallUsersTable from "@/components/uiComponents/AdminSmallUsersTable";
 import { AdminPieChart } from "@/components/uiComponents/AdminPieChart";
 import Link from "next/link";
@@ -25,13 +25,13 @@ function page() {
           title={"Active Users"}
           amount={800}
           link={"users?type=active"}
-          icon={<GiSubway size={20} />}
+          icon={<FaUserCheck size={20} />}
         />
         <DashboardStatCards
           title={"InActive Users"}
           amount={800}
           link={"users?type=inactive"}
-          icon={<GiSubway size={20} />}
+          icon={<FaUserMinus size={20} />}
         />
       </div>
       <div className="grid grid-cols-11 gap-2">

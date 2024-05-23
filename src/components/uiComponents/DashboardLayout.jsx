@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { FaHome, FaUser, FaSubway } from "react-icons/fa";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { GiSubway } from "react-icons/gi";
 
 function DashboardLayout() {
   const pathname = usePathname();
@@ -23,7 +24,9 @@ function DashboardLayout() {
         <Link
           href={"/admin/dashboard"}
           className={`flex w-full items-center justify-center ${
-            pathname == "/admin/dashboard" ? "bg-primary_orange" : "bg-white text-primary"
+            pathname == "/admin/dashboard"
+              ? "bg-primary_orange"
+              : "bg-white text-primary"
           } text-black rounded-md p-1 cursor-pointer hover:bg-primary_orange duration-200`}
         >
           <div className="flex gap-3 items-center py-5 min-w-[120px] max-h-[30px]">
@@ -34,7 +37,9 @@ function DashboardLayout() {
         <Link
           href={"/admin/users"}
           className={`flex w-full items-center justify-center ${
-            pathname == "/admin/users" ? "bg-primary_orange" : "bg-white text-primary"
+            pathname == "/admin/users"
+              ? "bg-primary_orange"
+              : "bg-white text-primary"
           } text-black rounded-md p-1 cursor-pointer hover:bg-primary_orange duration-200`}
         >
           <div className="flex gap-3 items-center py-5 min-w-[120px] max-h-[30px]">
@@ -45,12 +50,27 @@ function DashboardLayout() {
         <Link
           href={"/admin/tours"}
           className={`flex w-full items-center justify-center ${
-            pathname == "/admin/tours" ? "bg-primary_orange" : "bg-white text-primary"
+            pathname == "/admin/tours"
+              ? "bg-primary_orange"
+              : "bg-white text-primary"
           } text-black rounded-md p-1 cursor-pointer hover:bg-primary_orange duration-200`}
         >
           <div className="flex gap-3 items-center py-5 min-w-[120px] max-h-[30px]">
             <FaSubway size={25} />
             <b>Tours</b>
+          </div>
+        </Link>
+        <Link
+          href={"/admin/tours"}
+          className={`flex w-full items-center justify-center ${
+            pathname == "/admin/tours"
+              ? "bg-primary_orange"
+              : "bg-white text-primary"
+          } text-black rounded-md p-1 cursor-pointer hover:bg-primary_orange duration-200`}
+        >
+          <div className="flex gap-3 items-center py-5 min-w-[120px] max-h-[30px]">
+            <GiSubway size={25} />
+            <b>New Tour</b>
           </div>
         </Link>
       </div>
