@@ -2,6 +2,7 @@ import DashboardStatCards from "@/components/uiComponents/DashboardStatCards";
 import { GiSubway } from "react-icons/gi";
 import { FaUser } from "react-icons/fa";
 import AdminSmallUsersTable from "@/components/uiComponents/AdminSmallUsersTable";
+import { AdminPieChart } from "@/components/uiComponents/AdminPieChart";
 
 function page() {
   return (
@@ -45,7 +46,9 @@ function page() {
           </span>
         </div>
         {/* for the right pie chart */}
-        <div className="col-span-3 w-full border mt-10"></div>
+        <div className="col-span-3 w-full border mt-10">
+          <AdminPieChart />
+        </div>
       </div>
     </div>
   );
