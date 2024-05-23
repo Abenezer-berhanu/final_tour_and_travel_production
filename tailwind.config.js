@@ -31,6 +31,7 @@ module.exports = {
         sans: ["var(--font-sans)", ...fontFamily.sans],
       },
       colors: {
+        form_text: "#06041c",
         primary_orange: "#fcba03",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
