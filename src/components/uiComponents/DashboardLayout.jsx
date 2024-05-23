@@ -6,6 +6,7 @@ import Link from "next/link";
 function DashboardLayout() {
   return (
     <div className="bg-main h-full bg-primary text-white flex flex-col gap-10 p-3 w-full flex-grow">
+        <h1 className="text-2xl font-bold mx-auto">My Dashboard</h1>
       <div className="flex flex-col gap-1 items-center justify-center">
         <Avatar className="size-24">
           <AvatarImage src="https://github.com/shadcn.png" />
