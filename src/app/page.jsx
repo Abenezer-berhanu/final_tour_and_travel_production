@@ -1,15 +1,15 @@
-'use client'
-
 import { Button } from "@/components/ui/button";
 import HomeCarousel from "@/components/uiComponents/HomeCarousel";
 import TourCard from "@/components/uiComponents/TourCard";
 import CheapToursCard from "@/components/uiComponents/cheapToursCard";
-import tours from "@/lib/tour";
+import { fetchAllTours } from "@/lib/actions/tours";
 
-function page() {
+async function page() {
+  const res = await fetchAllTours();
+  const tours = res ? JSON.parse(res) : null;
   return (
     <div className="p-5 ">
-      <HomeCarousel/>
+      <HomeCarousel />
       <div className="mt-20 max-w-7xl mx-auto flex flex-col gap-3">
         <div className="my-5">
           <span className="flex justify-between items-center">
