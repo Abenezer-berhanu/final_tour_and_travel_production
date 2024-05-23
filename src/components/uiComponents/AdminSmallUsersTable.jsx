@@ -19,7 +19,7 @@ export default function AdminSmallUsersTable(props) {
       <Tbody>
         <Tr className="h-8 border-b-2">
           <Td>
-            <Avatar className="size-6">
+            <Avatar className="size-6 border">
               <AvatarImage src="https://github.com/shadcn.png" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
@@ -44,7 +44,7 @@ export default function AdminSmallUsersTable(props) {
         </Tr>
         <Tr className="h-8 border-b-2">
           <Td>
-            <Avatar className="size-6">
+            <Avatar className="size-6 border">
               <AvatarImage src="https://github.com/shadcn.png" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
@@ -69,7 +69,7 @@ export default function AdminSmallUsersTable(props) {
         </Tr>
         <Tr className="h-8 border-b-2 bg-slate-100">
           <Td>
-            <Avatar className="size-6">
+            <Avatar className="size-6 border">
               <AvatarImage src="https://github.com/shadcn.png" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
@@ -95,7 +95,7 @@ export default function AdminSmallUsersTable(props) {
         </Tr>
         <Tr className="h-8 border-b-2">
           <Td>
-            <Avatar className="size-6">
+            <Avatar className="size-6 border">
               <AvatarImage src="https://github.com/shadcn.png" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>

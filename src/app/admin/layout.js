@@ -7,7 +7,7 @@ function layout({ children }) {
       <div className="col-span-2 shadow-md">
         <DashboardLayout />
       </div>
-      <div className="col-span-9 shadow-md">{children}</div>
+      <div className="col-span-9 shadow-md p-2">{children}</div>
     </div>
   );
 }
