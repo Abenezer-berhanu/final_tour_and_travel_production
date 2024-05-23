@@ -5,7 +5,7 @@ import Image from "next/image";
 
 function page() {
   return (
-    <div className="w-full bg-slate-100 p-6 rounded-md shadow-md  max-h-[800px] flex flex-col md:flex-row items-center justify-between">
+    <div className="w-full bg-slate-50 p-6 rounded-md shadow-md  max-h-[800px] flex flex-col md:flex-row items-center justify-between">
       <div className="w-full md:w-1/2">
         <div className="max-w-xs mx-auto">
           <NavbarLogo />

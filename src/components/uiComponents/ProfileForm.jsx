@@ -49,7 +49,7 @@ function ProfileForm() {
             Update your personal detail here.
           </p>
         </div>
-        <div className="col-span-4 sm:col-span-3 bg-slate-100 rounded-md p-5 grid grid-cols-2 gap-7">
+        <div className="col-span-4 sm:col-span-3 bg-slate-50 rounded-md p-5 grid grid-cols-2 gap-7">
           <label htmlFor="fullname" className="flex flex-col col-span-2">
             <span className="font-semibold">Name</span>
             <input
@@ -83,7 +83,7 @@ function ProfileForm() {
             This image will be displayed on your profile.
           </p>
         </div>
-        <div className="col-span-4 sm:col-span-3 bg-slate-100 rounded-md p-5 grid grid-cols-6 gap-7">
+        <div className="col-span-4 sm:col-span-3 bg-slate-50 rounded-md p-5 grid grid-cols-6 gap-7">
           <div className="col-span-6 sm:col-span-1">
             <Avatar className="size-14 overflow-hidden">
               <AvatarImage
@@ -132,7 +132,7 @@ function ProfileForm() {
             Enter your current password to make update.
           </p>
         </div>
-        <div className="col-span-4 sm:col-span-3 bg-slate-100 rounded-md p-5 flex flex-col gap-7">
+        <div className="col-span-4 sm:col-span-3 bg-slate-50 rounded-md p-5 flex flex-col gap-7">
           <label htmlFor="password" className="flex flex-col">
             <span className="font-semibold">Current Password</span>
             <input

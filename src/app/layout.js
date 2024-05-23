@@ -19,12 +19,12 @@ export default function RootLayout({ children }) {
     <html lang="en" className="">
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased flex flex-col",
+          "min-h-screen bg-background font-sans antialiased",
           fontSans.variable
         )}
       >
         <Navbar />
-        <div className="max-w-[1400px] mx-auto flex-1 flex-shrink-0">{children}</div>
+        <div className="max-w-[1400px] mx-auto flex-1">{children}</div>
         <Footer />
       </body>
     </html>

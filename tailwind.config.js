@@ -18,6 +18,15 @@ module.exports = {
       },
     },
     extend: {
+      screens: {
+        mobile: "300px",
+        sml: "450px",
+        tablet: "640px",
+        mdl: "840px",
+        laptop: "1024px",
+        lgl: "1200px",
+        desktop: "1400px",
+      },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
       },

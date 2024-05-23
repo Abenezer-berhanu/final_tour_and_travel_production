@@ -7,7 +7,7 @@ function Profile() {
 
 
   return (
-    <div className="bg-slate-100 w-full h-full relative overflow-hidden p-2  sm:p-8">
+    <div className="bg-slate-50 w-full h-full relative overflow-hidden p-2  sm:p-8">
       {/* {isLoading && (
         <div className="absolute z-30 w-screen h-screen flex items-center justify-center">
           <Spinner />

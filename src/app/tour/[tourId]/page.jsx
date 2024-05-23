@@ -133,7 +133,7 @@ function page({ params }) {
             {" "}
             <b>Guides: </b>
             {data.guides.map((item, idx) => (
-              <div className="bg-slate-100 shadow-md w-full px-1" key={idx}>
+              <div className="bg-slate-50 shadow-md w-full px-1" key={idx}>
                 <span className="flex items-center justify-start px-2">
                   <Avatar>
                     <AvatarFallback>
@@ -152,7 +152,7 @@ function page({ params }) {
             ))}
           </div>
 
-          <div className="flex flex-col gap-2 relative my-3 bg-slate-100 p-1 rounded-md">
+          <div className="flex flex-col gap-2 relative my-3 bg-slate-50 p-1 rounded-md">
             <b>Description:</b>
             <span className="max-h-[300px] overflow-y-auto w-full no-scrollbar p-1 whitespace-pre-line">
               {data.description}

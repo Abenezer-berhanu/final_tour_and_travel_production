@@ -1,9 +1,15 @@
-import React from 'react'
+import DashboardLayout from "@/components/uiComponents/DashboardLayout";
+import React from "react";
 
-function layout() {
+function layout({ children }) {
   return (
-    <div>layout</div>
-  )
+    <div className="min-h-[680px] w-full mx-auto grid grid-cols-11 gap-5 border">
+      <div className="col-span-2 border ">
+        <DashboardLayout />
+      </div>
+      <div className="col-span-9 border">{children}</div>
+    </div>
+  );
 }
 
-export default layout
+export default layout;

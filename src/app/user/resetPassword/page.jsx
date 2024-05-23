@@ -4,7 +4,7 @@ import Image from "next/image";
 
 function page() {
   return (
-    <div className="w-full border bg-slate-100 p-6 rounded-md shadow-md flex flex-col md:flex-row items-center justify-between">
+    <div className="w-full border bg-slate-50 p-6 rounded-md shadow-md flex flex-col md:flex-row items-center justify-between">
       <div className="w-full md:w-1/2">
         <div className="max-w-xs mx-auto">
           <NavbarLogo />
