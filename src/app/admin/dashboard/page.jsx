@@ -4,13 +4,19 @@ import { FaUser, FaUserCheck, FaUserMinus } from "react-icons/fa";
 import AdminSmallUsersTable from "@/components/uiComponents/AdminSmallUsersTable";
 import { AdminPieChart } from "@/components/uiComponents/AdminPieChart";
 import Link from "next/link";
-import { getActiveUsers, getAllUsers } from "@/lib/actions/users";
+import {
+  getActiveUsers,
+  getAllUsers,
+  getInactiveUsers,
+} from "@/lib/actions/users";
 import { getAllTours } from "@/lib/actions/tours";
 
 async function page() {
-  const users = await getAllUsers()
-  const tours = await getAllTours()
-  const activeUsers = await getActiveUsers()
+  const users = await getAllUsers();
+  const tours = await getAllTours();
+  const activeUsers = await getActiveUsers();
+  const inactiveUsers = await getInactiveUsers();
+
   return (
     <div className="flex flex-col p-2">
       <div className="grid grid-cols-4 gap-3">
@@ -28,13 +34,13 @@ async function page() {
         />
         <DashboardStatCards
           title={"Active Users"}
-          amount={800}
+          amount={activeUsers?.length}
           link={"users?type=active"}
           icon={<FaUserCheck size={20} />}
         />
         <DashboardStatCards
           title={"InActive Users"}
-          amount={800}
+          amount={inactiveUsers.length}
           link={"users?type=inactive"}
           icon={<FaUserMinus size={20} />}
         />
