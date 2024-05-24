@@ -35,6 +35,11 @@ async function NavbarUser() {
             <DropdownMenuItem>
               <Link href={"/user/tours"}>My tours</Link>
             </DropdownMenuItem>
+            {user?.role.toLowerCase() == "admin" && (
+              <DropdownMenuItem>
+                <Link href={"/user/tours"}>Dashboard</Link>
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem className="hover:bg-none font-semibold">
               <button className="w-full my-2">Log out</button>
             </DropdownMenuItem>

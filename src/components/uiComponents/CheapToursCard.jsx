@@ -1,11 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 
-
 function CheapToursCard({ data }) {
   return (
     <Link
-      href={data._id}
+      href={`/auth/${data._id}`}
       className="group relative block bg-black h-[300px] rounded-xl w-[280px] flex-shrink-0"
     >
       <Image
@@ -38,6 +37,5 @@ function CheapToursCard({ data }) {
     </Link>
   );
 }
-
 
 export default CheapToursCard;

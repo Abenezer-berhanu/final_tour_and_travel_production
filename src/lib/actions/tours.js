@@ -23,3 +23,12 @@ export const fetchTourById = async (id) => {
     return tours ? JSON.stringify(tours) : false;
   } catch (error) {}
 };
+
+export const fetchTop5Cheap = async () => {
+  "use server";
+  try {
+    await connectDB();
+    const tours = await tourModel.find({}).sort({ price: 1 }).limit(5).lean();
+    return tours ? JSON.stringify(tours) : false;
+  } catch (error) {}
+};

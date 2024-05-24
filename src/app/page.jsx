@@ -4,16 +4,19 @@ import HomeCarousel from "@/components/uiComponents/HomeCarousel";
 import Spinner from "@/components/uiComponents/Spinner";
 import TourCard from "@/components/uiComponents/TourCard";
 import CheapToursCard from "@/components/uiComponents/cheapToursCard";
-import { fetchAllTours } from "@/lib/actions/tours";
+import { fetchAllTours, fetchTop5Cheap } from "@/lib/actions/tours";
 import { Suspense } from "react";
 
 async function page() {
   const res = await fetchAllTours();
   const tours = res ? JSON.parse(res) : null;
+  const cheapToursRes = await fetchTop5Cheap();
+  const top5Cheap = cheapToursRes ? JSON.parse(cheapToursRes) : null;
+
   return (
     <div className="p-5 ">
       <HomeCarousel />
-      {tours ? (
+      {tours && top5Cheap ? (
         <div className="mt-20 max-w-7xl mx-auto flex flex-col gap-3">
           <div className="my-5">
             <span className="flex justify-between items-center">
@@ -23,7 +26,7 @@ async function page() {
             <Suspense fallback={<Spinner />}>
               {" "}
               <div className="flex overflow-x-auto overflow-y-hidden height-[300px] py-3 gap-3 scrollbox">
-                {tours.slice(3).map((tour, idx) => (
+                {top5Cheap.map((tour, idx) => (
                   <CheapToursCard key={idx} data={tour} />
                 ))}
               </div>
@@ -48,11 +51,13 @@ async function page() {
           </>
         </div>
       ) : (
-        <ErrorAlert
-          description={
-            "Something went wrong please check your connection and try again."
-          }
-        />
+        <div className="mt-20">
+          <ErrorAlert
+            description={
+              "Something went wrong please check your connection and try again."
+            }
+          />
+        </div>
       )}
     </div>
   );
