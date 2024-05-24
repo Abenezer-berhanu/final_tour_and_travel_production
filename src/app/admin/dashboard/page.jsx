@@ -4,12 +4,13 @@ import { FaUser, FaUserCheck, FaUserMinus } from "react-icons/fa";
 import AdminSmallUsersTable from "@/components/uiComponents/AdminSmallUsersTable";
 import { AdminPieChart } from "@/components/uiComponents/AdminPieChart";
 import Link from "next/link";
-import { getAllUsers } from "@/lib/actions/users";
+import { getActiveUsers, getAllUsers } from "@/lib/actions/users";
 import { getAllTours } from "@/lib/actions/tours";
 
 async function page() {
   const users = await getAllUsers()
   const tours = await getAllTours()
+  const activeUsers = await getActiveUsers()
   return (
     <div className="flex flex-col p-2">
       <div className="grid grid-cols-4 gap-3">

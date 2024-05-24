@@ -157,3 +157,15 @@ export const getAllUsers = async () => {
     console.log(error);
   }
 };
+
+export const getActiveUsers = async () => {
+  try {
+    await connectDB();
+    const users = await userModel.find({ isActive: true }).lean();
+    if (users) {
+      return users;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
