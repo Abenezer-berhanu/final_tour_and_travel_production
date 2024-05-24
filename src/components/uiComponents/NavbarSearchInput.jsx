@@ -5,7 +5,7 @@ function NavbarSearchInput() {
         type="text"
         id="Search"
         placeholder="Search for..."
-        className="w-full rounded-md border border-black/50 indent-3 py-2.5 text-sm font-medium pe-10 outline-none shadow-sm sm:text-sm"
+        className="w-full rounded-md border text-black border-black/50 indent-3 py-2.5 text-sm font-medium pe-10 outline-none shadow-sm sm:text-sm"
       />
 
       <span className="absolute inset-y-0 end-0 grid w-10 place-content-center">

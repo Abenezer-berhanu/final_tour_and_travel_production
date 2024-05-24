@@ -4,20 +4,24 @@ import { FaUser, FaUserCheck, FaUserMinus } from "react-icons/fa";
 import AdminSmallUsersTable from "@/components/uiComponents/AdminSmallUsersTable";
 import { AdminPieChart } from "@/components/uiComponents/AdminPieChart";
 import Link from "next/link";
+import { getAllUsers } from "@/lib/actions/users";
+import { getAllTours } from "@/lib/actions/tours";
 
-function page() {
+async function page() {
+  const users = await getAllUsers()
+  const tours = await getAllTours()
   return (
     <div className="flex flex-col p-2">
       <div className="grid grid-cols-4 gap-3">
         <DashboardStatCards
           title={"Total Tours"}
-          amount={800}
+          amount={tours?.length}
           link={"tours"}
           icon={<GiSubway size={20} />}
         />
         <DashboardStatCards
           title={"Total Users"}
-          amount={800}
+          amount={users?.length}
           link={"users"}
           icon={<FaUser size={20} />}
         />

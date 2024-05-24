@@ -141,8 +141,19 @@ export const signUserOut = () => {
   if (existToken) {
     cookies().delete("adventure_hub_jwt");
     redirect("/auth/signin");
-    return true;
   } else {
     return true;
+  }
+};
+
+export const getAllUsers = async () => {
+  try {
+    await connectDB();
+    const user = await userModel.find({}).lean();
+    if (user) {
+      return user;
+    }
+  } catch (error) {
+    console.log(error);
   }
 };

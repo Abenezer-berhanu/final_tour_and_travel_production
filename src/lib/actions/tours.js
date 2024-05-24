@@ -32,3 +32,15 @@ export const fetchTop5Cheap = async () => {
     return tours ? JSON.stringify(tours) : false;
   } catch (error) {}
 };
+
+export const getAllTours = async () => {
+  try {
+    await connectDB();
+    const tours = await tourModel.find({}).lean();
+    if (tours) {
+      return tours;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
