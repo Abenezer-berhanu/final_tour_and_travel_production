@@ -4,6 +4,7 @@ import userModel from "../db/model/userModel";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import z from "zod";
+import { sendMail } from "../createHashedTokenAndSendMail";
 
 export const fetchAllUsers = async () => {
   try {
@@ -88,8 +89,12 @@ export const registerUser = async (currentState, formData) => {
       });
       //send verifcation email to the user mail
 
-      
-      return { success: "user registered successfully" };
+      await sendMail({
+        emailType: "verifyEmail",
+        userId: newUser?._id,
+        email: newUser?.email,
+      });
+      return { success: "Verification email has been sent to your email." };
     }
   } catch (error) {
     if (error?.name == "ZodError") {
