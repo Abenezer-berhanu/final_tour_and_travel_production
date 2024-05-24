@@ -132,7 +132,7 @@ export const findUserById = async (id) => {
     await connectDB();
     const user = await userModel.findById(id).lean();
     if (user) {
-      return user;
+      return JSON.stringify(user);
     }
   } catch (error) {
     console.log(error);
@@ -154,7 +154,7 @@ export const getAllUsers = async () => {
     await connectDB();
     const user = await userModel.find({}).lean();
     if (user) {
-      return user;
+      return JSON.stringify(user);
     }
   } catch (error) {
     console.log(error);
@@ -166,7 +166,7 @@ export const getActiveUsers = async () => {
     await connectDB();
     const users = await userModel.find({ isActive: true }).lean();
     if (users) {
-      return users;
+      return JSON.stringify(users);
     }
   } catch (error) {
     console.log(error);
@@ -178,7 +178,7 @@ export const getInactiveUsers = async () => {
     await connectDB();
     const users = await userModel.find({ isActive: false }).lean();
     if (users) {
-      return users;
+      return JSON.stringify(users);
     }
   } catch (error) {
     console.log(error);

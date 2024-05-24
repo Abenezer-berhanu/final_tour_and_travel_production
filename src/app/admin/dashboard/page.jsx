@@ -12,10 +12,14 @@ import {
 import { getAllTours } from "@/lib/actions/tours";
 
 async function page() {
-  const users = await getAllUsers();
-  const tours = await getAllTours();
-  const activeUsers = await getActiveUsers();
-  const inactiveUsers = await getInactiveUsers();
+  const usersRes = await getAllUsers();
+  const users = usersRes && JSON.parse(usersRes);
+  const toursRes = await getAllTours();
+  const tours = toursRes && JSON.parse(toursRes);
+  const activeUsersRes = await getActiveUsers();
+  const activeUsers = activeUsersRes && JSON.parse(activeUsersRes);
+  const inactiveUsersRes = await getInactiveUsers();
+  const inactiveUsers = activeUsersRes && JSON.parse(inactiveUsersRes);
 
   return (
     <div className="flex flex-col p-2">

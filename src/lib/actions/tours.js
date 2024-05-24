@@ -38,7 +38,7 @@ export const getAllTours = async () => {
     await connectDB();
     const tours = await tourModel.find({}).lean();
     if (tours) {
-      return tours;
+      return JSON.stringify(tours);
     }
   } catch (error) {
     console.log(error);
