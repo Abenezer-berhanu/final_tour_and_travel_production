@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import z from "zod";
 import { sendMail } from "../createHashedTokenAndSendMail";
+import { cookies } from "next/headers";
 
 export const fetchAllUsers = async () => {
   try {
@@ -20,8 +21,8 @@ export const loginUser = async (currentState, formData) => {
   const { email, password } = Object.fromEntries(formData);
   try {
     await connectDB();
-    const user = await userModel.find({ email }).lean();
-    console.log(user);
+    const user = await userModel.findOne({ email }).lean();
+
     if (user) {
       const correctPassword = await bcrypt.compare(password, user?.password);
       if (correctPassword) {
@@ -34,14 +35,12 @@ export const loginUser = async (currentState, formData) => {
         const token = jwt.sign(userInfo, process.env.JWT_SECRET_KEY, {
           expiresIn: "1d",
         });
-
         cookies().set({
-          name: "next_commerce_user",
+          name: "adventure_hub_jwt",
           value: token,
           httpOnly: true,
           maxAge: 24 * 60 * 60,
         });
-        console.log(token);
         return { success: "logged in successfully" };
       } else {
         return { error: "invalid email or password" };
