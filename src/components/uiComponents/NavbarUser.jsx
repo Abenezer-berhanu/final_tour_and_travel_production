@@ -14,7 +14,7 @@ import Link from "next/link";
 async function NavbarUser() {
   const userInfo = await verifyToken();
   const userRes = userInfo && (await findUserById(userInfo?.userId));
-  const user = userRes && JSON.parse(userRes)
+  const user = userRes && JSON.parse(userRes);
   return (
     <section className="max-md:hidden">
       {userInfo ? (
@@ -31,14 +31,20 @@ async function NavbarUser() {
             <DropdownMenuLabel>{user?.name}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link href={"/user/profile"} className="h-full w-full">Profile</Link>
+              <Link href={"/user/profile"} className="h-full w-full">
+                Profile
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link href={"/user/tours"} className="h-full w-full">My tours</Link>
+              <Link href={"/user/tours"} className="h-full w-full">
+                My tours
+              </Link>
             </DropdownMenuItem>
             {user?.role.toLowerCase() == "admin" && (
               <DropdownMenuItem>
-                <Link href={"/user/tours"} className="h-full w-full">Dashboard</Link>
+                <Link href={"/user/tours"} className="h-full w-full">
+                  Dashboard
+                </Link>
               </DropdownMenuItem>
             )}
             <DropdownMenuItem className="hover:bg-none font-semibold">
@@ -54,7 +60,7 @@ async function NavbarUser() {
         <div className="mx-2 flex gap-3 items-center h-full">
           <Link
             className="font-semibold text-white hover:underline"
-            href={"login"}
+            href={"/auth/signin"}
           >
             Log in
           </Link>

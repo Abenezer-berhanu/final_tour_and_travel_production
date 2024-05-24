@@ -43,6 +43,9 @@ export const loginUser = async (currentState, formData) => {
           email: user?.email,
           role: user?.role,
         };
+        if (!user.isAdmin) {
+          await userModel.findByIdAndUpdate(user?._id, { isActive: true });
+        }
         const token = jwt.sign(userInfo, process.env.JWT_SECRET_KEY, {
           expiresIn: "1d",
         });
@@ -247,4 +250,20 @@ export const updateUser = async (currentState, formData) => {
   }
 };
 
-
+export const deleteAccount = async (currentState, formData) => {
+  const { id, purpose } = Object.fromEntries(formData);
+  try {
+    await connectDB();
+    if (purpose == "permanent") {
+      await userModel.findByIdAndDelete(id);
+      signUserOut();
+      return { success: true };
+    } else if (purpose == "temporary") {
+      await userModel.findByIdAndUpdate(id, { isActive: false });
+      signUserOut();
+      return { success: true };
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
