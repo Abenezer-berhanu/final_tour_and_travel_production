@@ -7,6 +7,7 @@ import z from "zod";
 import { sendMail } from "../createHashedTokenAndSendMail";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import cloudinary from "../cloudinaryConfig";
 
 const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
 
@@ -202,6 +203,7 @@ export const updateUser = async (currentState, formData) => {
     if (newPassword) {
       passwordSchema.parse(newPassword);
     }
+
     const userInfo = {
       name,
       photo: JSON.parse(photo),
@@ -209,17 +211,33 @@ export const updateUser = async (currentState, formData) => {
       newPassword,
     };
 
-    console.log(userInfo);
+    if (JSON.parse(photo)) {
+      const uploadedImage = await cloudinary.uploader.upload(userInfo.photo, {
+        folder: "",
+      });
+      userInfo.photo = uploadedImage.secure_url;
+    }
+
     Object.keys(userInfo).forEach(
       (key) =>
         (userInfo[key] == "" || undefined || null) && delete userInfo[key]
     );
 
     await connectDB();
-    const updatedUser = await userModel.findByIdAndUpdate(id, userInfo);
-
-    if (updatedUser) {
-      return { success: "Your account has been updated successfully." };
+    const user = await userModel.findById(id).lean();
+    if (user) {
+      const passwordCompare = await bcrypt.compare(
+        userInfo.currentPassword,
+        user.password
+      );
+      if (passwordCompare) {
+        const updatedUser = await userModel.findByIdAndUpdate(id, userInfo);
+        if (updatedUser) {
+          return { success: "Your account has been updated successfully." };
+        }
+        return { error: "something went wrong please try again." };
+      }
+      return { error: "Current password is not correct." };
     }
   } catch (error) {
     if (error?.name == "ZodError") {
@@ -228,3 +246,5 @@ export const updateUser = async (currentState, formData) => {
     console.log(error);
   }
 };
+
+

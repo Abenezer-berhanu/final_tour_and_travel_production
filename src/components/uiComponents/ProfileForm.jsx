@@ -91,7 +91,7 @@ function ProfileForm({ userId, user }) {
           </p>
         </div>
         <div className="col-span-4 sm:col-span-3 bg-slate-50 rounded-md p-5 grid grid-cols-6 gap-7">
-          <div className="col-span-6 sm:col-span-1">
+          <div className="col-span-6 sm:col-span-1 flex flex-col">
             <Avatar className="size-14 overflow-hidden">
               <AvatarImage
                 src={user?.photo || "https://github.com/shadcn.png"}
@@ -99,8 +99,19 @@ function ProfileForm({ userId, user }) {
               />
               <AvatarFallback>B</AvatarFallback>
             </Avatar>
+            {photo && (
+              <div className="mt-auto">
+                <small>
+                  <b>New Image</b>
+                </small>
+                <Avatar className="size-14 overflow-hidden">
+                  <AvatarImage src={photo} className="size-14 rounded-full" />
+                  <AvatarFallback>B</AvatarFallback>
+                </Avatar>
+              </div>
+            )}
           </div>
-          <div className="col-span-6 sm:col-span-5 bg-white p-5 rounded-lg font-medium">
+          <div className="col-span-6 sm:col-span-5 bg-white p-5 rounded-lg font-medium cursor-pointer">
             <div
               {...getRootProps()}
               className="flex flex-col items-center justify-center"
