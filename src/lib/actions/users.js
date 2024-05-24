@@ -103,3 +103,23 @@ export const registerUser = async (currentState, formData) => {
     console.log(error);
   }
 };
+
+export const verifyEmail = async (token) => {
+  try {
+    const user = await userModel.findOne({
+      verifyToken: token,
+      verifyTokenExpiry: { $gt: Date.now() },
+    });
+
+    if (!user)
+      return { error: "Email verification token is invalid or has expired" };
+    user.isEmailVerified = true;
+    user.verifyTokenExpiry = undefined;
+    user.verifyToken = undefined;
+    await user.save({ validateBeforeSave: false });
+
+    return { success: "Email has been verified." };
+  } catch (error) {
+    console.log(error);
+  }
+};

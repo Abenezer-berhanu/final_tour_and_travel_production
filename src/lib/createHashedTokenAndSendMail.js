@@ -7,15 +7,16 @@ import path from "path";
 export const sendMail = async ({ emailType, userId, email }) => {
   try {
     const hashedToken = await bcrypt.hash(userId.toString(), 10);
+    const twentyFourHoursInMillis = 24 * 60 * 60 * 1000;
     if (emailType == "verifyEmail") {
       await userModel.findByIdAndUpdate(userId, {
         verifyToken: hashedToken,
-        verifyTokenExpiry: Date.now() + 1200000,
+        verifyTokenExpiry: Date.now() + Number(twentyFourHoursInMillis),
       });
     } else if (emailType == "forgotPassword") {
       await userModel.findByIdAndUpdate(userId, {
         forgotPasswordToken: hashedToken,
-        forgotPasswordTokenExpiry: Date.now() + 1200000,
+        forgotPasswordTokenExpiry: Date.now() + Number(twentyFourHoursInMillis),
       });
     }
 

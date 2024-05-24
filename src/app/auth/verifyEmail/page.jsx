@@ -1,13 +1,31 @@
-import { Button } from "@/components/ui/button";
+"use client";
 import Spinner from "@/components/uiComponents/Spinner";
 import Image from "next/image";
-import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { verifyEmail } from "@/lib/actions/users";
 
-function page() {
-  const error = false;
-  const data = true;
-  const isLoading = false;
+function usePage() {
+  const searchParams = useSearchParams();
+  const { push } = useRouter();
+  const [status, setStatus] = useState("loading");
+  useEffect(() => {
+    const token = searchParams.get("token");
+    const verifyEmailAction = async () => {
+      const res = await verifyEmail(token);
+      if (res?.success) {
+        toast.success(res.success);
+        setStatus("success");
+        push("/auth/signin");
+      } else if (res?.error) {
+        setStatus("error");
+      }
+    };
+
+    verifyEmailAction();
+  }, []);
   return (
     <div className="bg-gray-100 w-full flex flex-col justify-center items-center h-fit p-20">
       <Image
@@ -17,24 +35,25 @@ function page() {
         alt="email verification logo"
         className="max-w-[200px]"
       />
-      {error && (
+      {status == "error" && (
         <h1 className="text-3xl font-bold">
           Email verification link seems expired.
         </h1>
       )}
-      {data && (
+      {status == "success" && (
         <h1 className="text-3xl font-bold mb-40 text-center">
-          your email has been verified. <br /> <span className="text-2xl">Please login to your account</span>
+          your email has been verified. <br />{" "}
+          <span className="text-2xl">Please login to your account</span>
         </h1>
       )}
-      {isLoading && (
+      {status == "loading" && (
         <p className="text-3xl font-bold mb-40">
           Your email is being verified please wait...
         </p>
       )}
-      {isLoading && <Spinner />}
+      {status == "loading" && <Spinner />}
     </div>
   );
 }
 
-export default page;
+export default usePage;

@@ -5,11 +5,14 @@ import { useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 import { registerUser } from "@/lib/actions/users";
 import { toast } from "react-toastify";
+import { useFormStatus } from "react-dom";
+import Spinner from "./Spinner";
 
 function SignupForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [state, formAction] = useFormState(registerUser, null);
+
   useEffect(() => {
     if (state?.success) {
       toast.success(state.success);
@@ -17,6 +20,15 @@ function SignupForm() {
       toast.error(state?.error);
     }
   }, [state]);
+
+  const Submit = () => {
+    const { pending } = useFormStatus();
+    return (
+      <Button type="submit" disabled={pending} className="relative">
+        {pending ? <Spinner height={30} /> : "Sign up"}
+      </Button>
+    );
+  };
   return (
     <form action={formAction} className="flex flex-col w-full gap-3">
       <span className="flex flex-col gap-2">
@@ -48,9 +60,15 @@ function SignupForm() {
             className="border py-2 bg-slate-50 w-full h-full rounded-md indent-2 outline-none focus:bg-white"
           />
           {showPassword ? (
-            <IoEyeOff className="absolute top-0 bottom-0 my-auto right-2 text-xl" />
+            <IoEyeOff
+              className="absolute top-0 bottom-0 my-auto right-2 text-xl"
+              onClick={() => setShowPassword(!showPassword)}
+            />
           ) : (
-            <IoEye className="absolute top-0 bottom-0 my-auto right-2 text-xl" />
+            <IoEye
+              className="absolute top-0 bottom-0 my-auto right-2 text-xl"
+              onClick={() => setShowPassword(!showPassword)}
+            />
           )}
         </span>
       </span>
@@ -66,7 +84,7 @@ function SignupForm() {
           {showConfirmPassword ? (
             <IoEyeOff
               className="absolute top-0 bottom-0 my-auto right-2 text-xl"
-              onClick={() => setShowPassword(!showConfirmPassword)}
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             />
           ) : (
             <IoEye
@@ -76,7 +94,7 @@ function SignupForm() {
           )}
         </span>
       </span>
-      <Button type="submit">Sign up</Button>
+      <Submit />
     </form>
   );
 }
