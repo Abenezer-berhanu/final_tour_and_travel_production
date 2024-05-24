@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { verifyToken } from "@/lib/VerifyToken";
-import { findUserById } from "@/lib/actions/users";
+import { findUserById, signUserOut } from "@/lib/actions/users";
 import Link from "next/link";
 
 async function NavbarUser() {
@@ -41,14 +41,18 @@ async function NavbarUser() {
               </DropdownMenuItem>
             )}
             <DropdownMenuItem className="hover:bg-none font-semibold">
-              <button className="w-full my-2">Log out</button>
+              <form action={signUserOut}>
+                <button className="w-full my-2" type="submit">
+                  Log out
+                </button>
+              </form>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (
         <div className="mx-2 flex gap-3 items-center h-full">
           <Link
-            className="font-semibold text-black hover:underline"
+            className="font-semibold text-white hover:underline"
             href={"login"}
           >
             Log in

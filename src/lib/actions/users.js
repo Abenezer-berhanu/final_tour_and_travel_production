@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import z from "zod";
 import { sendMail } from "../createHashedTokenAndSendMail";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export const fetchAllUsers = async () => {
   try {
@@ -123,7 +124,6 @@ export const verifyEmail = async (token) => {
   }
 };
 
-
 export const findUserById = async (id) => {
   try {
     await connectDB();
@@ -133,5 +133,16 @@ export const findUserById = async (id) => {
     }
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const signUserOut = () => {
+  const existToken = cookies().get("adventure_hub_jwt");
+  if (existToken) {
+    cookies().delete("adventure_hub_jwt");
+    redirect("/auth/signin");
+    return true;
+  } else {
+    return true;
   }
 };
