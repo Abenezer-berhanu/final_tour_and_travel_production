@@ -7,22 +7,27 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { verifyToken } from "@/lib/VerifyToken";
+import { findUserById } from "@/lib/actions/users";
 import Link from "next/link";
 
-const userInfo = true
-function NavbarUser() {
+async function NavbarUser() {
+  const userInfo = await verifyToken();
+  const user = userInfo && (await findUserById(userInfo?.userId));
   return (
     <section className="max-md:hidden">
       {userInfo ? (
         <DropdownMenu>
           <DropdownMenuTrigger className="outline-none">
             <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" />
-              <AvatarFallback>AV</AvatarFallback>
+              <AvatarImage
+                src={user?.photo || "https://github.com/shadcn.png"}
+              />
+              <AvatarFallback>B</AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuLabel>My Profile</DropdownMenuLabel>
+            <DropdownMenuLabel>{user?.name}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <Link href={"/user/profile"}>Profile</Link>
@@ -31,9 +36,7 @@ function NavbarUser() {
               <Link href={"/user/tours"}>My tours</Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="hover:bg-none font-semibold">
-              <button className="w-full my-2">
-                Log out
-              </button>
+              <button className="w-full my-2">Log out</button>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

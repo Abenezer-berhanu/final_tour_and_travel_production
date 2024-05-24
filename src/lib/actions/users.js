@@ -122,3 +122,16 @@ export const verifyEmail = async (token) => {
     console.log(error);
   }
 };
+
+
+export const findUserById = async (id) => {
+  try {
+    await connectDB();
+    const user = await userModel.findById(id).lean();
+    if (user) {
+      return user;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
