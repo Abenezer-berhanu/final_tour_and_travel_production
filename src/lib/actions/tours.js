@@ -11,3 +11,15 @@ export const fetchAllTours = async () => {
     console.log(error);
   }
 };
+
+export const fetchTourById = async (id) => {
+  "use server";
+  try {
+    await connectDB();
+    const tours = await tourModel
+      .findById(id)
+      .populate("guides", "name email")
+      .lean();
+    return tours ? JSON.stringify(tours) : false;
+  } catch (error) {}
+};

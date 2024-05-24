@@ -1,18 +1,29 @@
 "use client";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import { Button } from "../ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useFormState } from "react-dom";
+import { registerUser } from "@/lib/actions/users";
+import { toast } from "react-toastify";
 
 function SignupForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [state, formAction] = useFormState(registerUser, null);
+  useEffect(() => {
+    if (state?.success) {
+      toast.success(state.success);
+    } else {
+      toast.error(state?.error);
+    }
+  }, [state]);
   return (
-    <form className="flex flex-col w-full gap-3">
+    <form action={formAction} className="flex flex-col w-full gap-3">
       <span className="flex flex-col gap-2">
         <p className="font-semibold">Full Name:</p>
         <input
           type="text"
-          name="fullName"
+          name="name"
           placeholder="Full Name"
           className="border py-2 bg-slate-50 rounded-md indent-2 outline-none focus:bg-white"
         />

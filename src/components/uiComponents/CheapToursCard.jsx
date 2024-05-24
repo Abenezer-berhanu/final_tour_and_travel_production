@@ -9,8 +9,8 @@ function CheapToursCard({ data }) {
       className="group relative block bg-black h-[300px] rounded-xl w-[280px] flex-shrink-0"
     >
       <Image
-        width={200}
-        height={200}
+        width={500}
+        height={500}
         alt={data.name}
         src={data.imageCover}
         className="absolute inset-0 h-full w-full object-cover opacity-75 rounded-xl transition-opacity group-hover:opacity-50"

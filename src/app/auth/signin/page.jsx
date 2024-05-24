@@ -6,7 +6,7 @@ import React from "react";
 
 function page() {
   return (
-    <div className="h-dvh flex items-start justify-center">
+    <div className="h-dvh flex items-start justify-center w-full max-w-[400px] mx-auto">
       {/* {isLoading && (
     <div className="absolute left-0 right-0 bottom-0 top-0 m-auto w-dvw h-dvh flex items-center justify-center">
       <Spinner />

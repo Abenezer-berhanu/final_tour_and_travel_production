@@ -5,7 +5,7 @@ import Link from "next/link";
 
 function page() {
   return (
-    <div className="min-h-screen flex items-start justify-center h-dvh relative">
+    <div className="min-h-screen flex items-start justify-center h-dvh relative w-full max-w-[400px] mx-auto">
       {/* {isLoading && (
         <div className="absolute left-0 right-0 bottom-0 top-0 m-auto w-dvw h-dvh flex items-center justify-center">
           <Spinner />

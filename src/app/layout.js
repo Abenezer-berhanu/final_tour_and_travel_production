@@ -3,6 +3,8 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/uiComponents/Navbar";
 import Footer from "@/components/uiComponents/Footer";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -24,8 +26,20 @@ export default function RootLayout({ children }) {
         )}
       >
         <Navbar />
-        <div className="max-w-[1400px] mx-auto flex-1">{children}</div>
+        <div className="max-w-[1400px] mx-auto">{children}</div>
         <Footer />
+        <ToastContainer
+          position="top-center"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
       </body>
     </html>
   );
