@@ -30,14 +30,14 @@ async function NavbarUser() {
             <DropdownMenuLabel>{user?.name}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link href={"/user/profile"}>Profile</Link>
+              <Link href={"/user/profile"} className="h-full w-full">Profile</Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link href={"/user/tours"}>My tours</Link>
+              <Link href={"/user/tours"} className="h-full w-full">My tours</Link>
             </DropdownMenuItem>
             {user?.role.toLowerCase() == "admin" && (
               <DropdownMenuItem>
-                <Link href={"/user/tours"}>Dashboard</Link>
+                <Link href={"/user/tours"} className="h-full w-full">Dashboard</Link>
               </DropdownMenuItem>
             )}
             <DropdownMenuItem className="hover:bg-none font-semibold">
