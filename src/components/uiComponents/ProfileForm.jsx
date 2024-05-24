@@ -4,44 +4,52 @@ import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { FaCloudUploadAlt } from "react-icons/fa";
+import { useFormStatus, useFormState } from "react-dom";
+import Spinner from "./Spinner";
+import { toast } from "react-toastify";
+import { updateUser } from "@/lib/actions/users";
 
-function ProfileForm() {
-  const [active, setActive] = useState(true);
-  const [inputs, setInputs] = useState({
-    name: "",
-    email: "",
-    photo: "",
-  });
+function ProfileForm({ userId, user }) {
+  const [state, formAction] = useFormState(updateUser, null);
+  const [photo, setPhoto] = useState(false);
+
   useEffect(() => {
-    if (inputs.name || inputs.email || inputs.photo) {
-      setActive(false);
+    if (state?.success) {
+      toast.success(state.success);
+      window.location.reload();
     }
-  }, [inputs.name, inputs.email, inputs.photo]);
+    if (state?.error) {
+      toast.error(state.error);
+    }
+  }, [state]);
+
   const onDrop = useCallback((acceptedFiles) => {
-    setInputs((state) => ({ ...state, [state.photo]: acceptedFiles[0] }));
+    const changeFileFormat = new FileReader();
+    changeFileFormat.readAsDataURL(acceptedFiles[0]);
+    changeFileFormat.onload = () => {
+      setPhoto(changeFileFormat.result);
+    };
   }, []);
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
-  const handleChange = async (event) => {
-    setInputs((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+  const Submit = () => {
+    const { pending } = useFormStatus();
+    return (
+      <Button type="submit" disabled={pending} className="relative">
+        {pending ? <Spinner height={30} /> : "Update"}
+      </Button>
+    );
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      const res = await updateMe(inputs).unwrap();
-      if (!res.error) {
-        toast.success("your profile has been updated successfully");
-      }
-    } catch (err) {
-      console.log(err);
-    }
-    if (error) {
-      toast.error("An error has occurred please try again");
-    }
-  };
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+    <form action={formAction} className="flex flex-col gap-5">
+      <input type="hidden" name="id" value={userId} />
+      <input
+        type="hidden"
+        name="photo"
+        value={photo ? JSON.stringify(photo) : false}
+      />
       <div className="p-5 bg-white grid grid-cols-4 gap-2 sm:gap-1 rounded-lg border">
         <div className="col-span-4 sm:col-span-1">
           <b className="">Personal Information</b>
@@ -56,8 +64,7 @@ function ProfileForm() {
               type="name"
               id="fullname"
               name="name"
-              onChange={handleChange}
-              placeholder={"Name"}
+              placeholder={user?.name}
               className="border-b border-black/50 bg-transparent outline-none py-1 text-sm focus:border-green-600"
             />
           </label>
@@ -67,9 +74,9 @@ function ProfileForm() {
             <input
               type="email"
               name="email"
+              disabled
               id="UserEmail"
-              onChange={handleChange}
-              placeholder={"Email"}
+              placeholder={user?.email}
               className="border-b border-black/50 bg-transparent outline-none py-1 text-sm focus:border-green-600"
             />
           </label>
@@ -87,10 +94,10 @@ function ProfileForm() {
           <div className="col-span-6 sm:col-span-1">
             <Avatar className="size-14 overflow-hidden">
               <AvatarImage
-                src={"https://github.com/shadcn.png"}
+                src={user?.photo || "https://github.com/shadcn.png"}
                 className="size-14 rounded-full"
               />
-              <AvatarFallback>AV</AvatarFallback>
+              <AvatarFallback>B</AvatarFallback>
             </Avatar>
           </div>
           <div className="col-span-6 sm:col-span-5 bg-white p-5 rounded-lg font-medium">
@@ -118,7 +125,8 @@ function ProfileForm() {
           <Button
             className="bg-slate-500 hover:bg-slate-400 text-white w-fit px-2 py-2 ml-auto col-span-6"
             size="small"
-            disabled
+            disabled={!photo}
+            onClick={() => setPhoto("")}
           >
             Cancel
           </Button>
@@ -137,8 +145,9 @@ function ProfileForm() {
             <span className="font-semibold">Current Password</span>
             <input
               type="password"
+              name="currentPassword"
               id="password"
-              placeholder="password"
+              placeholder="current password"
               className="border-b border-black/50 bg-transparent outline-none py-1 text-sm focus:border-green-600"
             />
           </label>
@@ -146,20 +155,15 @@ function ProfileForm() {
           <label htmlFor="newPassword" className="flex flex-col">
             <span className="font-semibold">New Password</span>
             <input
-              type="newPassword"
+              type="password"
               id="newPassword"
+              name="newPassword"
               placeholder="New Password"
               className="border-b border-black/50 bg-transparent outline-none py-1 text-sm focus:border-green-600"
             />
           </label>
         </div>
-        <Button
-          className="my-2 ml-auto col-span-6"
-          disabled={active}
-          type="submit"
-        >
-          Update profile
-        </Button>
+        <Submit />
       </div>
     </form>
   );

@@ -8,6 +8,15 @@ import { sendMail } from "../createHashedTokenAndSendMail";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
+const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
+
+const passwordSchema = z
+  .string()
+  .refine((password) => passwordRegex.test(password), {
+    message:
+      "Password must contain at least one uppercase letter, one number, one special character, and be at least 8 characters long.",
+  });
+
 export const fetchAllUsers = async () => {
   try {
     await connectDB();
@@ -61,14 +70,7 @@ export const registerUser = async (currentState, formData) => {
   if (password !== confirmPassword) {
     return { error: "password doesn't match to confirm password." };
   }
-  const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
 
-  const passwordSchema = z
-    .string()
-    .refine((password) => passwordRegex.test(password), {
-      message:
-        "Password must contain at least one uppercase letter, one number, one special character, and be at least 8 characters long.",
-    });
   const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
   if (!emailRegex.test(email)) {
     return { error: "Invalid email" };
@@ -178,6 +180,51 @@ export const getInactiveUsers = async () => {
       return users;
     }
   } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateUser = async (currentState, formData) => {
+  const { name, photo, currentPassword, newPassword, id } =
+    Object.fromEntries(formData);
+
+  if (!name && !JSON.parse(photo) && !newPassword && !currentPassword) {
+    return { error: "Atleast on field is required." };
+  }
+
+  if ((currentPassword && !newPassword) || (!currentPassword && newPassword)) {
+    return {
+      error: "Please Provide both a New password and Existing Password",
+    };
+  }
+
+  try {
+    if (newPassword) {
+      passwordSchema.parse(newPassword);
+    }
+    const userInfo = {
+      name,
+      photo: JSON.parse(photo),
+      currentPassword,
+      newPassword,
+    };
+
+    console.log(userInfo);
+    Object.keys(userInfo).forEach(
+      (key) =>
+        (userInfo[key] == "" || undefined || null) && delete userInfo[key]
+    );
+
+    await connectDB();
+    const updatedUser = await userModel.findByIdAndUpdate(id, userInfo);
+
+    if (updatedUser) {
+      return { success: "Your account has been updated successfully." };
+    }
+  } catch (error) {
+    if (error?.name == "ZodError") {
+      return { error: error?.issues[0].message };
+    }
     console.log(error);
   }
 };
