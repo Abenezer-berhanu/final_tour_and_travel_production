@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import ErrorAlert from "@/components/uiComponents/ErrorAlert";
 import HomeCarousel from "@/components/uiComponents/HomeCarousel";
 import Spinner from "@/components/uiComponents/Spinner";
+import Top5Cheap from "@/components/uiComponents/Top5Cheap";
 import TourCard from "@/components/uiComponents/TourCard";
 import CheapToursCard from "@/components/uiComponents/cheapToursCard";
 import { fetchAllTours, fetchTop5Cheap } from "@/lib/actions/tours";
@@ -18,20 +19,7 @@ async function page() {
       <HomeCarousel />
       {tours && top5Cheap ? (
         <div className="mt-20 max-w-7xl mx-auto flex flex-col gap-3">
-          <div className="my-5">
-            <span className="flex justify-between items-center">
-              <b className="text-lg">Cheap Tours</b>
-            </span>
-
-            <Suspense fallback={<Spinner />}>
-              {" "}
-              <div className="flex overflow-x-auto overflow-y-hidden height-[300px] py-3 gap-3 scrollbox">
-                {top5Cheap.map((tour, idx) => (
-                  <CheapToursCard key={idx} data={tour} />
-                ))}
-              </div>
-            </Suspense>
-          </div>
+          <Top5Cheap top5Cheap={top5Cheap} />
 
           <>
             <span className="flex justify-between items-center">

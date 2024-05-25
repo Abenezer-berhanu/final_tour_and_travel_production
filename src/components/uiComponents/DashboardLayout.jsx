@@ -61,9 +61,9 @@ function DashboardLayout() {
           </div>
         </Link>
         <Link
-          href={"/admin/tours"}
+          href={"/admin/dashboard/newTour"}
           className={`flex w-full items-center justify-center ${
-            pathname == "/admin/tours"
+            pathname == "/admin/dashboard/newTour"
               ? "bg-primary_orange"
               : "bg-white text-primary"
           } text-black rounded-md p-1 cursor-pointer hover:bg-primary_orange duration-200`}
