@@ -3,8 +3,11 @@ import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "../ui/button";
+import { deleteAccount } from "@/lib/actions/users";
+import { useFormState } from "react-dom";
 
 export default function AdminAllUsersTable({ users }) {
+  const [state, formAction] = useFormState(deleteAccount, null);
   return (
     <Table>
       <Thead>
@@ -29,8 +32,9 @@ export default function AdminAllUsersTable({ users }) {
             <Td className="text-sm font-semibold py-1">{user.email}</Td>
             <Td className="text-sm font-semibold py-1">{user.role}</Td>
             <Td className="text-sm font-semibold py-1">
-              <form action="">
+              <form action={formAction}>
                 <input type="hidden" name="id" value={user?._id} />
+                <input type="hidden" name="purpose" value={"permanent"} />
                 <Button
                   variant="ghost"
                   className="bg-transparent hover:bg-transparent p-0 text-red-500 hover:underline hover:text-red-600"

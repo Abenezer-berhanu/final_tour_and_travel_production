@@ -8,6 +8,7 @@ import { sendMail } from "../createHashedTokenAndSendMail";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import cloudinary from "../cloudinaryConfig";
+import { revalidateTag } from "next/cache";
 
 const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
 
@@ -155,7 +156,10 @@ export const signUserOut = () => {
 export const getAllUsers = async () => {
   try {
     await connectDB();
-    const user = await userModel.find({}).lean();
+    const userRes = await fetch(`${process.env.FRONTEND_DOMAIN}/api/users`, {
+      next: { tags: ["users"] },
+    });
+    const { user } = await userRes.json();
     if (user) {
       return JSON.stringify(user);
     }
@@ -257,6 +261,7 @@ export const deleteAccount = async (currentState, formData) => {
     if (purpose == "permanent") {
       await userModel.findByIdAndDelete(id);
       signUserOut();
+      revalidateTag("users");
       return { success: true };
     } else if (purpose == "temporary") {
       await userModel.findByIdAndUpdate(id, { isActive: false });
