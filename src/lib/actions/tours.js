@@ -1,3 +1,5 @@
+"use server";
+import { revalidateTag } from "next/cache";
 import connectDB from "../db/config";
 import tourModel from "../db/model/tourModel";
 
@@ -35,11 +37,25 @@ export const fetchTop5Cheap = async () => {
 
 export const getAllTours = async () => {
   try {
-    await connectDB();
-    const tours = await tourModel.find({}).lean();
-    if (tours) {
-      return JSON.stringify(tours);
+    const tourRes = await fetch(`${process.env.FRONTEND_DOMAIN}/api/tours`, {
+      cache: "no-cache",
+      next: { tags: ["tours"] },
+    });
+    const { tour } = await tourRes.json();
+    if (tour) {
+      return JSON.stringify(tour);
     }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteTour = async (formData) => {
+  const { id } = Object.fromEntries(formData);
+  try {
+    await tourModel.findByIdAndDelete(id);
+    revalidateTag("tours");
+    return { success: true };
   } catch (error) {
     console.log(error);
   }

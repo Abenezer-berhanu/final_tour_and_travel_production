@@ -155,8 +155,8 @@ export const signUserOut = () => {
 
 export const getAllUsers = async () => {
   try {
-    await connectDB();
     const userRes = await fetch(`${process.env.FRONTEND_DOMAIN}/api/users`, {
+      cache: "no-cache",
       next: { tags: ["users"] },
     });
     const { user } = await userRes.json();
