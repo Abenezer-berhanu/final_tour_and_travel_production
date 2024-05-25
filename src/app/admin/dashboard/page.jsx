@@ -89,7 +89,9 @@ async function page() {
         </div>
         {/* for the right pie chart */}
         <div className="col-span-3 w-full border mt-10">
-          <AdminPieChart tours={tours} />
+          <Suspense fallback={<Spinner height={50} />}>
+            <AdminPieChart tours={tours} />
+          </Suspense>
         </div>
       </div>
     </div>
