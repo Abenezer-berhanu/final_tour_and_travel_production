@@ -10,12 +10,15 @@ import {
   getInactiveUsers,
 } from "@/lib/actions/users";
 import { getAllTours } from "@/lib/actions/tours";
+import { Suspense } from "react";
+import Spinner from "@/components/uiComponents/Spinner";
+import AdminSmallToursTable from "@/components/uiComponents/AdminSmallToursTable";
 
 async function page() {
   const usersRes = await getAllUsers();
-  const users = usersRes && JSON.parse(usersRes);
+  const users = usersRes ? JSON.parse(usersRes) : [];
   const toursRes = await getAllTours();
-  const tours = toursRes && JSON.parse(toursRes);
+  const tours = toursRes ? await JSON.parse(toursRes) : [];
   const activeUsersRes = await getActiveUsers();
   const activeUsers = activeUsersRes && JSON.parse(activeUsersRes);
   const inactiveUsersRes = await getInactiveUsers();
@@ -62,8 +65,12 @@ async function page() {
                 Sell all
               </Link>
             </span>
-            <AdminSmallUsersTable />
+            <Suspense fallback={<Spinner height={50} />}>
+              {" "}
+              <AdminSmallUsersTable users={users} />
+            </Suspense>
           </span>
+
           <span>
             <span className="flex justify-between items-center py-1">
               <h1 className="text-xl font-bold">Tours</h1>{" "}
@@ -75,12 +82,14 @@ async function page() {
               </Link>
             </span>
 
-            <AdminSmallUsersTable />
+            <Suspense fallback={<Spinner height={50} />}>
+              <AdminSmallToursTable tours={tours} />
+            </Suspense>
           </span>
         </div>
         {/* for the right pie chart */}
         <div className="col-span-3 w-full border mt-10">
-          <AdminPieChart />
+          <AdminPieChart tours={tours} />
         </div>
       </div>
     </div>
