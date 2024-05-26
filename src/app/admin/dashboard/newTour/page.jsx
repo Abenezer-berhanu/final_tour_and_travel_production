@@ -1,7 +1,12 @@
 import AdminTourForm from "@/components/uiComponents/AdminTourForm";
-import React from "react";
+import ErrorAlert from "@/components/uiComponents/ErrorAlert";
+import Spinner from "@/components/uiComponents/Spinner";
+import { fetchGuides } from "@/lib/actions/users";
+import React, { Suspense } from "react";
 
-function page() {
+async function page() {
+  const guidesRes = await fetchGuides();
+  const guides = guidesRes ? JSON.parse(guidesRes) : [];
   return (
     <div className="flex flex-col gap-3">
       <div className="w-full pl-5 py-4 flex flex-col bg-slate-100">
@@ -10,9 +15,17 @@ function page() {
           please fill all required fields.
         </p>
       </div>
-      <div>
-        <AdminTourForm />
-      </div>
+      {guides.length > 0 ? (
+        <Suspense fallback={<Spinner />}>
+          <AdminTourForm guides={guides} />
+        </Suspense>
+      ) : (
+        <ErrorAlert
+          description={
+            "Couldn't find the necessary data please check your connection!"
+          }
+        />
+      )}
     </div>
   );
 }

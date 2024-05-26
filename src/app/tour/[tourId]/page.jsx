@@ -93,7 +93,10 @@ async function page({ params }) {
               <b>Location:</b>
               <span className="w-full flex flex-col gap-2 bg-white shadow-sm border px-2 rounded-md text-sm mb-2 py-2">
                 <span className="flex gap-2 ">
-                  <b>From:</b> <b>{data.startLocation.description}</b>
+                  <b>From:</b>{" "}
+                  <b className="whitespace-pre-line">
+                    {data.startLocation.description}
+                  </b>
                 </span>
                 <Separator />
                 <span>

@@ -272,3 +272,15 @@ export const deleteAccount = async (currentState, formData) => {
     console.log(error);
   }
 };
+
+export const fetchGuides = async () => {
+  try {
+    await connectDB();
+    const guides = await userModel.find({ role: "lead-guide" }).lean();
+    if (guides) {
+      return JSON.stringify(guides);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};

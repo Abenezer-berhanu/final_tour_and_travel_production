@@ -1,13 +1,24 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
 import { Button } from "../ui/button";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
+import { useDispatch } from "react-redux";
+import { addStartingDate } from "@/slices/imagesSlice";
 
 function AdminDatePicker() {
+  const dispatch = useDispatch();
   const [date, setDate] = useState(null);
+
+  useEffect(() => {
+    if (date) {
+      const isoString = date.toISOString();
+      dispatch(addStartingDate(isoString));
+    }
+  }, [date]);
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -27,8 +38,8 @@ function AdminDatePicker() {
           mode="single"
           selected={date}
           onSelect={setDate}
-          disabled={(date) => date > new Date() - 1}
-             initialFocus
+          disabled={(date) => date < new Date()}
+          initialFocus
         />
       </PopoverContent>
     </Popover>
