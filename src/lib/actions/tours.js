@@ -209,3 +209,33 @@ export const createTour = async (currentState, formData) => {
     return { error: "something went wrong please try again." };
   }
 };
+
+export const fetchClosestTour = async (lat, long) => {
+  try {
+    await connectDB();
+    const closeTours = await tourModel
+      .find({
+        startLocation: {
+          $near: {
+            $geometry: {
+              type: "Point",
+              coordinates: [Number(lat), Number(long)],
+            },
+            $maxDistance: 500000,
+          },
+        },
+      })
+      .lean();
+
+    console.log(closeTours);
+    if (closeTours.length > 0) {
+      return { success: closeTours };
+    }
+    if (closeTours.length == 0) {
+      return { error: "No close tour has been found." };
+    }
+  } catch (error) {
+    console.log(error);
+    return { error: "something went wrong please try again." };
+  }
+};
