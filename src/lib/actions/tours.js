@@ -3,6 +3,8 @@ import { revalidateTag } from "next/cache";
 import connectDB from "../db/config";
 import tourModel from "../db/model/tourModel";
 import cloudinary from "../cloudinaryConfig";
+import { bookTour } from "./book";
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 //check if the object has falsy value
 const checkForFalsyValues = (obj) => {
@@ -237,5 +239,69 @@ export const fetchClosestTour = async (lat, long) => {
   } catch (error) {
     console.log(error);
     return { error: "something went wrong please try again." };
+  }
+};
+
+export const fetchAllTourFromStripe = async () => {
+  const checkTours = await stripe.products.list();
+  console.log(checkTours);
+  return checkTours.data;
+};
+
+export const payWithStripe = async (currentState, formData) => {
+  const { userId, tourId, image, name, price, quantity } =
+    Object.fromEntries(formData);
+
+  console.log(userId, tourId, image, name, price, quantity);
+  try {
+    const savedTour = await bookTour({ tourId, userId, price });
+
+    if (savedTour) {
+      console.log(savedTour);
+
+      let activeTours = await fetchAllTourFromStripe();
+      const stripeTour = activeTours?.find(
+        (item) => item?.name?.toLowerCase() == name?.toLowerCase()
+      );
+      console.log(stripeTour);
+      if (stripeTour == undefined) {
+        await stripe.products.create({
+          name: name,
+          default_price_data: {
+            unit_amount: Number(price) * 100,
+            currency: "etb",
+          },
+          images: [image],
+        });
+      }
+
+      //depending on the quantity generate the session
+      const existStripeTour = activeTours?.find(
+        (item) => item?.name?.toLowerCase() == name?.toLowerCase()
+      );
+
+      const bookingTour = [
+        {
+          price: existStripeTour?.default_price,
+          quantity: 1,
+        },
+      ];
+
+      const session = await stripe.checkout.sessions.create({
+        line_items: bookingTour,
+        mode: "payment",
+        success_url: `${process.env.FRONTEND_DOMAIN}/checkout/success`,
+        cancel_url: `${process.env.FRONTEND_DOMAIN}/checkout/cancel?id=${savedTour?._id}`,
+        metadata: { bookedTourId: savedTour?._id.toString() },
+      });
+
+      return { url: session?.url };
+    } else {
+      return { error: "Something went wrong please try again." };
+    }
+  } catch (error) {
+    console.log(
+      `error occurred here at the product registering to stripe ${error}`
+    );
   }
 };

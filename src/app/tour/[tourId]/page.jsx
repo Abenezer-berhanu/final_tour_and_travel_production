@@ -118,13 +118,21 @@ async function page({ params }) {
                 <h1 className="text-xl font-bold tracking-tighter">
                   ${data.price}
                 </h1>
-                {data.priceDiscount > 0 && <h1 className="font-bold text-slate-500">
-                  $<s>{data.price + data.priceDiscount}</s>
-                </h1>}
+                {data.priceDiscount > 0 && (
+                  <h1 className="font-bold text-slate-500">
+                    $<s>{data.price + data.priceDiscount}</s>
+                  </h1>
+                )}
               </div>
               <div className="flex item-center gap-2 outline-none">
                 <b>Amount: </b>
-                <BookForm size={data.maxGroupSize} />
+                <BookForm
+                  tourId={data._id}
+                  image={data.imageCover}
+                  price={data.price}
+                  name={data.name}
+                  size={data.maxGroupSize}
+                />
               </div>
               <hr />
               <hr />
