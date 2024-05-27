@@ -2,19 +2,18 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import BookForm from "@/components/uiComponents/BookForm";
 import DetailPageMap from "@/components/uiComponents/DetailPageMap";
 import ErrorAlert from "@/components/uiComponents/ErrorAlert";
 import Rating from "@/components/uiComponents/Rating";
 import TourCard from "@/components/uiComponents/TourCard";
 import { fetchTourById } from "@/lib/actions/tours";
-import { fetchAllUsers } from "@/lib/actions/users";
 import tours from "@/lib/tour";
 import Image from "next/image";
 
 async function page({ params }) {
   const { tourId: id } = params;
   const res = await fetchTourById(id);
-  const users = await fetchAllUsers();
   const data = res ? JSON.parse(res) : null;
   return (
     <div className="min-h-screen">
@@ -101,7 +100,9 @@ async function page({ params }) {
                 <Separator />
                 <span>
                   <b>To:</b>{" "}
-                  <b className="text-slate-500">{data.location.address} - {data.location.description}</b>
+                  <b className="text-slate-500">
+                    {data.location.address || data.location[0].address}
+                  </b>
                 </span>
               </span>
               <span className="w-full flex gap-5 bg-white shadow-sm border px-2 rounded-md text-sm my-2 py-2">
@@ -117,31 +118,20 @@ async function page({ params }) {
                 <h1 className="text-xl font-bold tracking-tighter">
                   ${data.price}
                 </h1>
-                <h1 className="font-bold text-slate-500">
+                {data.priceDiscount > 0 && <h1 className="font-bold text-slate-500">
                   $<s>{data.price + data.priceDiscount}</s>
-                </h1>
+                </h1>}
               </div>
-              <span className="flex item-center gap-2 outline-none">
+              <div className="flex item-center gap-2 outline-none">
                 <b>Amount: </b>
-                <select className="border px-2 py-2">
-                  {Array.from({ length: 10 }).map((_, idx) => (
-                    <option
-                      key={idx}
-                      value={idx + 1}
-                      className="text-sm outline-none"
-                    >
-                      {idx + 1}
-                    </option>
-                  ))}
-                </select>
-              </span>
-              <Button className="w-full">Reserve</Button>
+                <BookForm size={data.maxGroupSize} />
+              </div>
               <hr />
               <hr />
 
               <div className="flex flex-col gap-2 relative">
                 <b>Summary:</b>
-                <span className="max-h-[300px] overflow-y-auto w-full bg-white no-scrollbar p-1 whitespace-pre-line">
+                <span className="max-h-[300px] overflow-y-auto w-full bg-white no-scrollbar p-1 whitespace-pre-line pb-5">
                   {data.summary}
                 </span>
                 <div className="w-full h-6 bg-gradient-to-t from-white to-white/30 absolute bottom-0"></div>
@@ -175,7 +165,7 @@ async function page({ params }) {
 
               <div className="flex flex-col gap-2 relative my-3 bg-slate-50 p-1 rounded-md">
                 <b>Description:</b>
-                <span className="max-h-[300px] overflow-y-auto w-full no-scrollbar p-1 whitespace-pre-line">
+                <span className="max-h-[300px] overflow-y-auto w-full no-scrollbar p-1 whitespace-pre-line pb-5">
                   {data.description}
                 </span>
                 <div className="w-full h-6 bg-gradient-to-t from-white to-white/30 absolute bottom-0"></div>
@@ -183,9 +173,7 @@ async function page({ params }) {
             </div>
           </div>
           <div className="w-full my-10">
-            <div className="w-full">
-              <DetailPageMap />
-            </div>
+            <div className="w-full">{/* <DetailPageMap /> */}</div>
             <hr />
             <h1 className="font-bold text-lg py-3">Related Tours</h1>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
