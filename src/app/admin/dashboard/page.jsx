@@ -26,7 +26,7 @@ async function page() {
 
   return (
     <div className="flex flex-col p-2">
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
         <DashboardStatCards
           title={"Total Tours"}
           amount={tours?.length}
@@ -47,14 +47,14 @@ async function page() {
         />
         <DashboardStatCards
           title={"InActive Users"}
-          amount={inactiveUsers.length}
+          amount={inactiveUsers?.length}
           link={"users?type=inactive"}
           icon={<FaUserMinus size={20} />}
         />
       </div>
       <div className="grid grid-cols-11 gap-2">
         {/* for the 5 users and tours */}
-        <div className="flex flex-col gap-4 col-span-8">
+        <div className="flex flex-col gap-4 col-span-11 sm:col-span-8">
           <span className="py-3">
             <span className="flex justify-between items-center py-1">
               <h1 className="text-xl font-bold">Users</h1>{" "}
@@ -88,7 +88,7 @@ async function page() {
           </span>
         </div>
         {/* for the right pie chart */}
-        <div className="col-span-3 w-full border mt-10">
+        <div className="col-span-11 sm:col-span-3 w-full border mt-10">
           <Suspense fallback={<Spinner height={50} />}>
             <AdminPieChart tours={tours} />
           </Suspense>
