@@ -101,7 +101,7 @@ async function page({ params }) {
                 <Separator />
                 <span>
                   <b>To:</b>{" "}
-                  <b className="text-slate-500">{data.startLocation.address}</b>
+                  <b className="text-slate-500">{data.location.address} - {data.location.description}</b>
                 </span>
               </span>
               <span className="w-full flex gap-5 bg-white shadow-sm border px-2 rounded-md text-sm my-2 py-2">
