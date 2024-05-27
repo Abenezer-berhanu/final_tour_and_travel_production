@@ -251,19 +251,14 @@ export const fetchAllTourFromStripe = async () => {
 export const payWithStripe = async (currentState, formData) => {
   const { userId, tourId, image, name, price, quantity } =
     Object.fromEntries(formData);
-
-  console.log(userId, tourId, image, name, price, quantity);
   try {
     const savedTour = await bookTour({ tourId, userId, price });
 
     if (savedTour) {
-      console.log(savedTour);
-
       let activeTours = await fetchAllTourFromStripe();
       const stripeTour = activeTours?.find(
         (item) => item?.name?.toLowerCase() == name?.toLowerCase()
       );
-      console.log(stripeTour);
       if (stripeTour == undefined) {
         await stripe.products.create({
           name: name,
@@ -283,7 +278,7 @@ export const payWithStripe = async (currentState, formData) => {
       const bookingTour = [
         {
           price: existStripeTour?.default_price,
-          quantity: 1,
+          quantity: Number(quantity),
         },
       ];
 
@@ -294,7 +289,6 @@ export const payWithStripe = async (currentState, formData) => {
         cancel_url: `${process.env.FRONTEND_DOMAIN}/checkout/cancel?id=${savedTour?._id}`,
         metadata: { bookedTourId: savedTour?._id.toString() },
       });
-
       return { url: session?.url };
     } else {
       return { error: "Something went wrong please try again." };

@@ -1,12 +1,17 @@
 "use client";
 
+import { changeBookedTourStatus } from "@/lib/actions/book";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
 export default function Error() {
   const searchParam = useSearchParams();
   useEffect(() => {
-    searchParam.get("id");
+    const id = searchParam.get("id");
+    const cancelBook = async () => {
+      await changeBookedTourStatus(id, "canceled");
+    };
+    cancelBook();
   }, []);
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center">
