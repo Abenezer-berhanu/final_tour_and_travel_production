@@ -6,7 +6,7 @@ import DetailPageMap from "@/components/uiComponents/DetailPageMap";
 import ErrorAlert from "@/components/uiComponents/ErrorAlert";
 import Rating from "@/components/uiComponents/Rating";
 import TourCard from "@/components/uiComponents/TourCard";
-import { fetchAllTours, fetchTourById } from "@/lib/actions/tours";
+import { fetchTourById } from "@/lib/actions/tours";
 import { fetchAllUsers } from "@/lib/actions/users";
 import tours from "@/lib/tour";
 import Image from "next/image";
