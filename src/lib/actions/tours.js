@@ -495,3 +495,120 @@ export const generateInvoicePdf = async ({ dataForReciept }) => {
     console.log(error);
   }
 };
+
+export const updateTour = async (currentState, formData) => {
+  const {
+    tourId,
+    name,
+    duration,
+    maxGroupSize,
+    difficulty,
+    price,
+    discount,
+    summary,
+    description,
+    startingDate,
+    isSecrete,
+    startCountry,
+    startAddress,
+    startDescription,
+    landingCountry,
+    landingAddress,
+    landingDescription,
+    guides,
+    coverImage,
+    images,
+  } = Object.fromEntries(formData);
+
+  console.log(maxGroupSize);
+
+  try {
+    //find tour by id
+    await connectDB();
+    const existTour = await tourModel.findById(tourId).lean();
+
+    // upload the images if they exist
+    let primaryImage;
+    let secondaryImages = [];
+    if (coverImage) {
+      const uploadResult = await cloudinary.uploader.upload(coverImage);
+      primaryImage = uploadResult.secure_url;
+    }
+
+    const imagesList = images ? JSON.parse(images) : null;
+    if (imagesList) {
+      for (let i = 0; i < imagesList.length; i++) {
+        const uploadResult = await cloudinary.uploader.upload(imagesList[i]);
+        secondaryImages.push(uploadResult.secure_url);
+      }
+    }
+
+    //give each fields value if that is sent through req if not give it existing value
+
+    const dataToBeSaved = {
+      name: name || existTour.name,
+      duration: duration || existTour.duration,
+      maxGroupSize: maxGroupSize || existTour.maxGroupSize,
+      difficulty: difficulty || existTour.difficulty,
+      price: price || existTour.price,
+      summary: summary || existTour.summary,
+      description: description || existTour.description,
+      secretTour: isSecrete || existTour.secretTour,
+      priceDiscount: discount || existTour.priceDiscount,
+      startDate: startingDate || existTour.startDate,
+      startLocation: {
+        type: "Point",
+        coordinates:
+          startCountry ||
+          existTour.startLocation.coordinates ||
+          existTour.startLocation[0].coordinates,
+        address:
+          startAddress ||
+          existTour.startLocation.address ||
+          existTour.startLocation[0].address,
+        description:
+          startDescription ||
+          existTour.startLocation.description ||
+          existTour.startLocation[0].description,
+      },
+      location: {
+        type: "Point",
+        coordinates:
+          landingCountry ||
+          existTour.location.coordinates ||
+          existTour.location[0].coordinates,
+        address:
+          landingAddress ||
+          existTour.location.address ||
+          existTour.location[0].address,
+        description:
+          landingDescription ||
+          existTour.location.description ||
+          existTour.location[0].description,
+      },
+      guides: guides || existTour.guides,
+      imageCover: primaryImage || existTour.imageCover,
+      images: secondaryImages.length > 0 ? secondaryImages : existTour.images,
+    };
+    //save it to db
+
+    await connectDB();
+    const updatedValue = await tourModel.findByIdAndUpdate(
+      tourId,
+      dataToBeSaved
+    );
+
+    revalidateTag("tours");
+
+    // return the message with success and let the user redirect to tours list
+
+    if (updatedValue) {
+      return { success: "Tour successfully updated." };
+    } else {
+      return { error: "error occurred at updating tour please try again" };
+    }
+  } catch (error) {
+    console.log(error);
+    return { error: "error occurred at updating tour please try again" };
+  }
+};

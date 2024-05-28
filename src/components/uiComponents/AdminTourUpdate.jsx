@@ -14,7 +14,7 @@ import ImagesUpload from "./ImagesUpload";
 import PrimaryImageUpload from "./PrimaryImageUpload";
 import { useSelector } from "react-redux";
 import { Button } from "../ui/button";
-import { createTour } from "@/lib/actions/tours";
+import { updateTour } from "@/lib/actions/tours";
 import { useFormState, useFormStatus } from "react-dom";
 import MultipleSelect from "./MultipleSelect";
 import { useEffect } from "react";
@@ -24,7 +24,7 @@ import { toast } from "react-toastify";
 
 function AdminTourUpdate({ tour }) {
   const { push } = useRouter();
-  const [state, formAction] = useFormState(createTour, null);
+  const [state, formAction] = useFormState(updateTour, null);
   const { images, coverImage, startingDate, chosenGuides } = useSelector(
     (state) => state.images
   );
@@ -52,6 +52,7 @@ function AdminTourUpdate({ tour }) {
       <input type="hidden" name="images" value={JSON.stringify(images)} />
       <input type="hidden" name="startingDate" value={startingDate} />
       <input type="hidden" name="guides" value={chosenGuides} />
+      <input type="hidden" name="tourId" value={tour._id} />
       <div className="grid grid-cols-3 gap-3">
         <span className="flex flex-col gap-1">
           <label
@@ -99,7 +100,7 @@ function AdminTourUpdate({ tour }) {
             type="number"
             id="maxGroupSize"
             name="maxGroupSize"
-            placeholder={tour.maxGroupSeize}
+            placeholder={tour.maxGroupSize}
             className="text-sm py-2 indent-2 outline-none border border-black/20 rounded-md"
           />
         </span>
