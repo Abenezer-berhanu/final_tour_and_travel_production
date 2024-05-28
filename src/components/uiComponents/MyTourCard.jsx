@@ -1,14 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
+import { formatDistance } from "date-fns";
 
-function MyTourCard({item}) {
-
+function MyTourCard({ item }) {
+  console.log(item);
   return (
     <div className="flex bg-white transition border hover:shadow-xl">
       <div className="rotate-180 p-2 [writing-mode:_vertical-lr]">
         <div className="flex items-center justify-between gap-4 text-xs font-bold uppercase text-gray-900">
-          <span>{item.year}</span>
-          <span>{item.date}</span>
+          <span>{item.createdAt.split("-")[0]}</span>
+          <span>
+            {formatDistance(new Date(), item.createdAt, {
+              addSuffix: true,
+            })}
+          </span>
         </div>
       </div>
 
@@ -16,8 +21,8 @@ function MyTourCard({item}) {
         <Image
           width={500}
           height={500}
-          alt={item.title}
-          src={item.image}
+          alt={item.tour.name}
+          src={item.tour.imageCover}
           className="aspect-square h-full w-full object-cover"
         />
       </div>
@@ -25,14 +30,34 @@ function MyTourCard({item}) {
       <div className="flex flex-1 flex-col justify-between">
         <div className="border-s border-gray-900/10 p-4 sm:border-l-transparent sm:p-6">
           <Link href="#">
-            <h3 className="font-bold uppercase text-gray-900">{item.title}</h3>
-            <h5 className="font-semibold uppercase text-slate-700">${item.price}</h5>
+            <h3 className="font-bold uppercase text-gray-900">
+              {item.tour.name}
+            </h3>
+            <h5 className="font-semibold uppercase text-slate-700">
+              ${item.price}
+            </h5>
+            <h5 className="font-semibold text-slate-700">Status: Booked</h5>
+            <h5 className="font-semibold text-slate-700">
+              Invoice: {item.pdfLink ? "YES" : "NO"}
+            </h5>
+            <h5 className="font-semibold text-slate-700">
+              Payment: {item.pdfLink ? "PAID" : "PENDING"}
+            </h5>
           </Link>
 
           <p className="mt-2 line-clamp-5 text-sm/relaxed text-gray-700">
             {item.description}
           </p>
         </div>
+        {item.pdfLink && (
+          <Link
+            href={item.pdfLink}
+            target="_blank"
+            className="w-fit ml-auto block bg-yellow-300 px-2 py-2 text-center text-xs font-bold uppercase text-gray-900 transition hover:bg-yellow-400"
+          >
+            find PDF
+          </Link>
+        )}
       </div>
     </div>
   );

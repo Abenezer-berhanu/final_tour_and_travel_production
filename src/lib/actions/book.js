@@ -40,3 +40,13 @@ export const findBookById = async (id) => {
     console.log(error);
   }
 };
+
+export const findBooks = async () => {
+  try {
+    await connectDB();
+    const book = await bookModel.find({}).populate("tour").lean();
+    return JSON.stringify(book);
+  } catch (error) {
+    console.log(error);
+  }
+};
