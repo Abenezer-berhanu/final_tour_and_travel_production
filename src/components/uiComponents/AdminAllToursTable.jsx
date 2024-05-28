@@ -45,7 +45,7 @@ export default function AdminAllToursTable({ tours }) {
                 </Button>
               </form>
               <Link
-                href={`/admin/tour/${tour?._id}`}
+                href={`/admin/tours/${tour?._id}`}
                 className="text-primary hover:underline flex items-center"
               >
                 Update

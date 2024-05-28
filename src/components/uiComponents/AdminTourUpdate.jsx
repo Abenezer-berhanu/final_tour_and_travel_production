@@ -22,7 +22,7 @@ import { useRouter } from "next/navigation";
 import Spinner from "./Spinner";
 import { toast } from "react-toastify";
 
-function AdminTourForm({ guides }) {
+function AdminTourUpdate({ tour }) {
   const { push } = useRouter();
   const [state, formAction] = useFormState(createTour, null);
   const { images, coverImage, startingDate, chosenGuides } = useSelector(
@@ -32,7 +32,6 @@ function AdminTourForm({ guides }) {
   useEffect(() => {
     if (state?.success) {
       toast.success("New Tour created successfully");
-      window.location.reload();
       push(`/admin/tours`);
     } else if (state?.error) {
       toast.error(state?.error);
@@ -66,8 +65,7 @@ function AdminTourForm({ guides }) {
             type="text"
             id="name"
             name="name"
-            required
-            placeholder="Tour name"
+            placeholder={tour.name}
             className="text-sm py-2 indent-2 outline-none border border-black/20 rounded-md"
           />
         </span>
@@ -84,8 +82,7 @@ function AdminTourForm({ guides }) {
             type="number"
             id="duration"
             name="duration"
-            required
-            placeholder="Tour duration"
+            placeholder={tour.duration}
             className="text-sm py-2 indent-2 outline-none border border-black/20 rounded-md"
           />
         </span>
@@ -102,13 +99,12 @@ function AdminTourForm({ guides }) {
             type="number"
             id="maxGroupSize"
             name="maxGroupSize"
-            required
-            placeholder="Max Groupe Size"
+            placeholder={tour.maxGroupSeize}
             className="text-sm py-2 indent-2 outline-none border border-black/20 rounded-md"
           />
         </span>
       </div>
-
+      {/* //////////////////////////////////////// */}
       <div className="grid grid-cols-3 gap-3">
         <span className="flex flex-col gap-1">
           <label
@@ -118,9 +114,9 @@ function AdminTourForm({ guides }) {
             Difficulty
           </label>
 
-          <Select name="difficulty" required>
+          <Select name="difficulty">
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Difficulty" />
+              <SelectValue placeholder={tour.difficulty} />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="easy">Easy</SelectItem>
@@ -142,8 +138,7 @@ function AdminTourForm({ guides }) {
             type="number"
             id="price"
             name="price"
-            required
-            placeholder="Tour Price"
+            placeholder={tour.price}
             className="text-sm py-2 indent-2 outline-none border border-black/20 rounded-md"
           />
         </span>
@@ -160,11 +155,12 @@ function AdminTourForm({ guides }) {
             type="number"
             id="priceDiscount"
             name="discount"
-            placeholder="Price Discount"
+            placeholder={tour.priceDiscount}
             className="text-sm py-2 indent-2 outline-none border border-black/20 rounded-md"
           />
         </span>
       </div>
+
       <Separator />
       <div className="grid grid-cols-2 gap-3">
         <span className="flex flex-col gap-1">
@@ -178,10 +174,9 @@ function AdminTourForm({ guides }) {
           <textarea
             id="summary"
             name="summary"
-            required
             className="text-sm py-2 indent-2 outline-none border border-black/20 rounded-md"
             rows="4"
-            placeholder="Enter Summary"
+            placeholder={tour.summary}
           ></textarea>
         </span>
 
@@ -196,10 +191,9 @@ function AdminTourForm({ guides }) {
           <textarea
             id="description"
             name="description"
-            required
             className="text-sm py-2 indent-2 outline-none border border-black/20 rounded-md"
             rows="4"
-            placeholder="Enter Description"
+            placeholder={tour.description}
           ></textarea>
         </span>
       </div>
@@ -225,7 +219,11 @@ function AdminTourForm({ guides }) {
             Is this tour Secret?
           </label>
           <div className="flex items-center space-x-2 h-full">
-            <Checkbox name="isSecrete" id="secreteTour" />
+            <Checkbox
+              name="isSecrete"
+              id="secreteTour"
+              checked={tour.secretTour}
+            />
             <label
               htmlFor="secreteTour"
               className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -247,9 +245,9 @@ function AdminTourForm({ guides }) {
             Country
           </label>
 
-          <Select name="startCountry" required>
+          <Select name="startCountry">
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="country" />
+              <SelectValue placeholder={"Country"} />
             </SelectTrigger>
             <SelectContent>
               {countries.map((item, idx) => (
@@ -275,8 +273,7 @@ function AdminTourForm({ guides }) {
           <input
             type="text"
             id="startAddress"
-            name="startAddress"
-            required
+            name={tour.startLocation.address || tour.startLocation[0].address}
             placeholder="Start Address"
             className="text-sm py-2 indent-2 outline-none border border-black/20 rounded-md"
           />
@@ -293,10 +290,12 @@ function AdminTourForm({ guides }) {
           <textarea
             id="startingDescription"
             name="startDescription"
-            required
             className="text-sm py-2 indent-2 outline-none border border-black/20 rounded-md"
             rows="4"
-            placeholder="Description about starting location and address"
+            placeholder={
+              tour.startLocation.description ||
+              tour.startLocation[0].description
+            }
           ></textarea>
         </span>
       </div>
@@ -312,7 +311,7 @@ function AdminTourForm({ guides }) {
             Landing Country
           </label>
 
-          <Select name="landingCountry" required>
+          <Select name="landingCountry">
             <SelectTrigger className="w-full">
               <SelectValue placeholder="landingCountry" />
             </SelectTrigger>
@@ -337,9 +336,8 @@ function AdminTourForm({ guides }) {
           <input
             type="text"
             name="landingAddress"
-            required
             id="landingAddress"
-            placeholder="Landing Address"
+            placeholder={tour.location.address || tour.location[0].address}
             className="text-sm py-2 indent-2 outline-none border border-black/20 rounded-md"
           />
         </span>
@@ -355,10 +353,11 @@ function AdminTourForm({ guides }) {
           <textarea
             id="landingDescription"
             name="landingDescription"
-            required
             className="text-sm py-2 indent-2 outline-none border border-black/20 rounded-md"
             rows="4"
-            placeholder="Description about Landing address and location"
+            placeholder={
+              tour.location.description || tour.location[0].description
+            }
           ></textarea>
         </span>
       </div>
@@ -366,7 +365,7 @@ function AdminTourForm({ guides }) {
       <Separator />
       <h1 className="text-lg font-semibold">Choose Guides</h1>
       <div>
-        <MultipleSelect guides={guides} />
+        <MultipleSelect guides={tour.guides} />
       </div>
 
       <Separator />
@@ -390,4 +389,4 @@ function AdminTourForm({ guides }) {
   );
 }
 
-export default AdminTourForm;
+export default AdminTourUpdate;
