@@ -43,6 +43,7 @@ function BookForm({ tourId, image, name, price, size }) {
       <input type="hidden" name="image" value={image} />
       <input type="hidden" name="price" value={price} />
       <input type="hidden" name="tourId" value={tourId} />
+      <input type="hidden" name="maxGroupSize" value={size} />
 
       <Select name="quantity" required>
         <SelectTrigger className="w-[180px]">
