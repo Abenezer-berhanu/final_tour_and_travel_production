@@ -19,7 +19,6 @@ import { toast } from "react-toastify";
 function BookForm({ tourId, image, name, price, size }) {
   const { push } = useRouter();
   const [state, formAction] = useFormState(payWithStripe, null);
-  console.log(tourId);
 
   useEffect(() => {
     if (state?.error) {

@@ -14,6 +14,9 @@ const bookSchema = new mongoose.Schema(
       type: Number,
       required: [true, "Booking must have a price"],
     },
+    pdfLink: {
+      type: String,
+    },
     status: {
       type: String,
       enum: {

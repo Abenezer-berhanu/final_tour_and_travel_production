@@ -26,3 +26,17 @@ export const changeBookedTourStatus = async (id, status) => {
     console.log(error);
   }
 };
+
+export const findBookById = async (id) => {
+  try {
+    await connectDB();
+    const tour = await bookModel
+      .findById(id)
+      .populate("user")
+      .populate("tour")
+      .lean();
+    return tour;
+  } catch (error) {
+    console.log(error);
+  }
+};

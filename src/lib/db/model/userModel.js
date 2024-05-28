@@ -33,6 +33,7 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    
     forgotPasswordToken: String,
     forgotPasswordTokenExpiry: Date,
     verifyToken: String,

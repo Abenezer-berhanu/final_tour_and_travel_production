@@ -1,9 +1,12 @@
 "use server";
 import { revalidateTag } from "next/cache";
 import connectDB from "../db/config";
-import tourModel from "../db/model/tourModel";
-import cloudinary from "../cloudinaryConfig";
 import { bookTour } from "./book";
+import { PDFDocument, rgb } from "pdf-lib";
+import fs from "fs";
+import { v4 as uuidv4 } from "uuid";
+import cloudinary from "../cloudinaryConfig";
+import tourModel from "../db/model/tourModel";
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 //check if the object has falsy value
@@ -29,7 +32,6 @@ const uploadImageToCloudinary = async (photo) => {
 };
 
 export const fetchAllTours = async () => {
-  "use server";
   try {
     await connectDB();
     const tours = await tourModel.find({}).lean();
@@ -40,7 +42,6 @@ export const fetchAllTours = async () => {
 };
 
 export const fetchTourById = async (id) => {
-  "use server";
   try {
     await connectDB();
     const tours = await tourModel
@@ -52,7 +53,6 @@ export const fetchTourById = async (id) => {
 };
 
 export const fetchTop5Cheap = async () => {
-  "use server";
   try {
     await connectDB();
     const tours = await tourModel.find({}).sort({ price: 1 }).limit(5).lean();
@@ -244,7 +244,6 @@ export const fetchClosestTour = async (lat, long) => {
 
 export const fetchAllTourFromStripe = async () => {
   const checkTours = await stripe.products.list();
-  console.log(checkTours);
   return checkTours.data;
 };
 
@@ -275,15 +274,13 @@ export const payWithStripe = async (currentState, formData) => {
         (item) => item?.name?.toLowerCase() == name?.toLowerCase()
       );
 
-      const bookingTour = [
-        {
-          price: existStripeTour?.default_price,
-          quantity: Number(quantity),
-        },
-      ];
+      const bookingTour = {
+        price: existStripeTour?.default_price,
+        quantity: Number(quantity),
+      };
 
       const session = await stripe.checkout.sessions.create({
-        line_items: bookingTour,
+        line_items: [bookingTour],
         mode: "payment",
         success_url: `${process.env.FRONTEND_DOMAIN}/checkout/success`,
         cancel_url: `${process.env.FRONTEND_DOMAIN}/checkout/cancel?id=${savedTour?._id}`,
@@ -297,5 +294,202 @@ export const payWithStripe = async (currentState, formData) => {
     console.log(
       `error occurred here at the product registering to stripe ${error}`
     );
+  }
+};
+
+export const generateInvoicePdf = async ({ dataForReciept }) => {
+  try {
+    const pdfDoc = await PDFDocument.create();
+    const page = pdfDoc.addPage([800, 350]);
+    let img = fs.readFileSync("./public/assets/recieptHeading.png");
+    let footerImg = fs.readFileSync("./public/assets/recieptFooter.png");
+    img = await pdfDoc.embedPng(img);
+    footerImg = await pdfDoc.embedPng(footerImg);
+
+    const fontSize = 12;
+    const fontBig = 18;
+    const { height } = page.getSize();
+
+    page.drawImage(img, {
+      x: 0,
+      y: height - 50,
+    });
+
+    page.drawImage(footerImg, {
+      x: 0,
+      y: 0,
+    });
+    //support
+    page.drawText("Support: joshrde2002@gmail.com", {
+      x: 550,
+      y: 50,
+      size: fontSize,
+      color: rgb(0, 0, 0),
+    });
+
+    //user title
+    page.drawText("Users", {
+      x: 50,
+      y: height - 5.5 * fontSize,
+      size: fontBig,
+      color: rgb(0, 0, 0),
+    });
+
+    //name
+    page.drawText(`Name: ${dataForReciept.username}`, {
+      x: 50,
+      y: height - 7 * fontSize,
+      size: fontSize,
+      color: rgb(0, 0, 0),
+    });
+
+    //email
+    page.drawText(`Email: ${dataForReciept.userEmail}`, {
+      x: 50,
+      y: height - 8.5 * fontSize,
+      size: fontSize,
+      color: rgb(0, 0, 0),
+    });
+
+    //date
+    page.drawText(`Date: ${dataForReciept.date}`, {
+      x: 50,
+      y: height - 10 * fontSize,
+      size: fontSize,
+      color: rgb(0, 0, 0),
+    });
+
+    //userId
+    page.drawText(`UserId: ${dataForReciept.userId}`, {
+      x: 50,
+      y: height - 11.5 * fontSize,
+      size: fontSize,
+      color: rgb(0, 0, 0),
+    });
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    //transaction title
+    page.drawText("Transaction Detail", {
+      x: 50,
+      y: height - 14 * fontSize,
+      size: fontBig,
+      color: rgb(0, 0, 0),
+    });
+
+    //transaction id
+    page.drawText(`Status: ${dataForReciept.transactionStatus}`, {
+      x: 50,
+      y: height - 15.5 * fontSize,
+      size: fontSize,
+      color: rgb(0, 0, 0),
+    });
+
+    //date
+    page.drawText(`Date: ${dataForReciept.date}`, {
+      x: 50,
+      y: height - 17 * fontSize,
+      size: fontSize,
+      color: rgb(0, 0, 0),
+    });
+
+    //paid amount
+    page.drawText(`Amount: ${dataForReciept.amountPaid}`, {
+      x: 50,
+      y: height - 18.5 * fontSize,
+      size: fontSize,
+      color: rgb(0, 0, 0),
+    });
+
+    //payment status
+    page.drawText(`TransactionId: ${dataForReciept.transactionId}`, {
+      x: 50,
+      y: height - 20 * fontSize,
+      size: fontSize,
+      color: rgb(0, 0, 0),
+    });
+
+    //currency
+    page.drawText(`Currency: ${dataForReciept.currency}`, {
+      x: 50,
+      y: height - 21.5 * fontSize,
+      size: fontSize,
+      color: rgb(0, 0, 0),
+    });
+
+    //PAYMENT INTENT
+    page.drawText(`Payment Intent: ${dataForReciept.paymentIntent}`, {
+      x: 50,
+      y: height - 23 * fontSize,
+      size: fontSize,
+      color: rgb(0, 0, 0),
+    });
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    //Tour title
+    page.drawText("Tour Detail", {
+      x: 400,
+      y: height - 5.5 * fontSize,
+      size: fontBig,
+      color: rgb(0, 0, 0),
+    });
+
+    //tour id
+    page.drawText(`Tour Id: ${dataForReciept.tourId}`, {
+      x: 400,
+      y: height - 7 * fontSize,
+      size: fontSize,
+      color: rgb(0, 0, 0),
+    });
+
+    //tour is Active
+    page.drawText(`Tour Status: ${dataForReciept.tourStatus}`, {
+      x: 400,
+      y: height - 8.5 * fontSize,
+      size: fontSize,
+      color: rgb(0, 0, 0),
+    });
+
+    //start address
+    page.drawText(`Staring Address: ${dataForReciept.startingAddress}`, {
+      x: 400,
+      y: height - 10 * fontSize,
+      size: fontSize,
+      color: rgb(0, 0, 0),
+    });
+
+    //end address
+    page.drawText(`End Address: ${dataForReciept.endAddress}`, {
+      x: 400,
+      y: height - 11.5 * fontSize,
+      size: fontSize,
+      color: rgb(0, 0, 0),
+    });
+
+    //Price
+    page.drawText(`Price: $${dataForReciept.tourPrice}`, {
+      x: 400,
+      y: height - 13 * fontSize,
+      size: fontSize,
+      color: rgb(0, 0, 0),
+    });
+
+    //qty
+    page.drawText(`Quantity: ${dataForReciept.quantity}`, {
+      x: 400,
+      y: height - 14.5 * fontSize,
+      size: fontSize,
+      color: rgb(0, 0, 0),
+    });
+
+    const uid = uuidv4();
+    fs.writeFileSync(`./storePdf/${uid}-reciept.pdf`, await pdfDoc.save());
+
+    const res = await cloudinary.uploader.upload(
+      `./storePdf/${uid}-reciept.pdf`
+    );
+
+    return res.secure_url;
+  } catch (error) {
+    console.log(error);
   }
 };

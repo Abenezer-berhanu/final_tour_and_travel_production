@@ -5,7 +5,11 @@ import Spinner from "@/components/uiComponents/Spinner";
 import Top5Cheap from "@/components/uiComponents/Top5Cheap";
 import TourCard from "@/components/uiComponents/TourCard";
 import CheapToursCard from "@/components/uiComponents/cheapToursCard";
-import { fetchAllTours, fetchTop5Cheap } from "@/lib/actions/tours";
+import {
+  fetchAllTours,
+  fetchTop5Cheap,
+  generateInvoicePdf,
+} from "@/lib/actions/tours";
 import { Suspense } from "react";
 
 async function page() {
