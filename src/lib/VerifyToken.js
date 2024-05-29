@@ -1,17 +1,33 @@
 import { cookies } from "next/headers";
-import jwt from "jsonwebtoken";
+import { jwtVerify } from "jose";
 
 export const verifyToken = async () => {
-  const tokenString = cookies().get("adventure_hub_jwt")?.value || "";
+  try {
+    const tokenString = cookies().get("adventure_hub_jwt")?.value || "";
+    if (tokenString) {
+      const key = new TextEncoder().encode(process.env.JWT_SECRET_KEY);
+      const { payload } = await jwtVerify(tokenString, key, {
+        algorithms: ["HS256"],
+      });
 
-  if (tokenString) {
-    const decoded = jwt.verify(tokenString, process.env.JWT_SECRET_KEY);
-    if (decoded) {
-      return decoded;
+      if (payload) {
+        return {
+          isValid: true,
+          userInfo: payload,
+        };
+      }
     } else {
-      return false;
+      console.log("returning token");
+      return {
+        isValid: false,
+        userInfo: null,
+      };
     }
-  } else {
-    return false;
+  } catch (error) {
+    console.log(error);
+    return {
+      isValid: false,
+      userInfo: null,
+    };
   }
 };

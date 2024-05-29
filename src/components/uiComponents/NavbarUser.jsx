@@ -12,7 +12,7 @@ import { findUserById, signUserOut } from "@/lib/actions/users";
 import Link from "next/link";
 
 async function NavbarUser() {
-  const userInfo = await verifyToken();
+  const { userInfo } = await verifyToken();
   const userRes = userInfo && (await findUserById(userInfo?.userId));
   const user = userRes && JSON.parse(userRes);
   return (

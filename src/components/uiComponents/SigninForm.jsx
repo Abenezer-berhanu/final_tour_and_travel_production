@@ -6,17 +6,16 @@ import { useFormState, useFormStatus } from "react-dom";
 import { loginUser } from "@/lib/actions/users";
 import Spinner from "./Spinner";
 import { IoEyeOff, IoEye } from "react-icons/io5";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { toast } from "react-toastify";
 
 export default function SigninForm() {
   const [showPassword, setShowPassword] = useState(false);
-  const { push } = useRouter();
   const [state, formAction] = useFormState(loginUser, null);
   useEffect(() => {
     if (state?.success) {
       toast.success(state.success);
-      push("/");
+      redirect("/");
     } else {
       toast.error(state?.error);
     }
@@ -47,7 +46,7 @@ export default function SigninForm() {
           type={showPassword ? "text" : "password"}
           name="password"
           placeholder="Password"
-          className="border py-2 bg-slate-50 w-full h-full rounded-md indent-2 outline-none focus:bg-white"
+          className="border py-2 bg-slate-50 w-full rounded-md indent-2 outline-none focus:bg-white"
         />
         {showPassword ? (
           <IoEyeOff

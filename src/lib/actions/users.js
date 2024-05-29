@@ -9,6 +9,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import cloudinary from "../cloudinaryConfig";
 import { revalidateTag } from "next/cache";
+import { SignJWT } from "jose";
 
 const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
 
@@ -47,15 +48,24 @@ export const loginUser = async (currentState, formData) => {
         if (!user.isAdmin) {
           await userModel.findByIdAndUpdate(user?._id, { isActive: true });
         }
-        const token = jwt.sign(userInfo, process.env.JWT_SECRET_KEY, {
-          expiresIn: "1d",
-        });
-        cookies().set({
-          name: "adventure_hub_jwt",
-          value: token,
+
+        const key = new TextEncoder().encode(process.env.JWT_SECRET_KEY);
+
+        const token = await new SignJWT(userInfo)
+          .setProtectedHeader({ alg: "HS256" })
+          .setIssuedAt()
+          .setExpirationTime("3d")
+          .sign(key);
+
+        const millisecondsInADay = 24 * 60 * 60 * 1000;
+        const millisecondsInThreeDays = 3 * millisecondsInADay;
+        const expires = new Date(Date.now() + millisecondsInThreeDays);
+
+        cookies().set("adventure_hub_jwt", token, {
+          expires,
           httpOnly: true,
-          maxAge: 24 * 60 * 60,
         });
+
         return { success: "logged in successfully" };
       } else {
         return { error: "invalid email or password" };

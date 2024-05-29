@@ -11,7 +11,9 @@ export default function Error() {
     const cancelBook = async () => {
       await changeBookedTourStatus(id, "canceled");
     };
-    cancelBook();
+    if (id) {
+      cancelBook();
+    }
   }, []);
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center">

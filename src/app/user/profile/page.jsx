@@ -1,12 +1,11 @@
-import { Button } from "@/components/ui/button";
 import DeleteMeForm from "@/components/uiComponents/DeleteMeForm";
 import ProfileForm from "@/components/uiComponents/ProfileForm";
 import { verifyToken } from "@/lib/VerifyToken";
 import { findUserById } from "@/lib/actions/users";
 
 async function Profile() {
-  const { userId } = await verifyToken();
-  const userRes = await findUserById(userId);
+  const { userInfo } = await verifyToken();
+  const userRes = await findUserById(userInfo?.userId);
   const user = userRes && JSON.parse(userRes);
 
   return (
