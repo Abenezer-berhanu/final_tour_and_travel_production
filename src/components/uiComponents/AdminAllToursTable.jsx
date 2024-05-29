@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { deleteTour } from "@/lib/actions/tours";
+import ReviewPopUp from "./ReviewPopUp";
 
 export default function AdminAllToursTable({ tours }) {
   return (
@@ -50,6 +51,7 @@ export default function AdminAllToursTable({ tours }) {
               >
                 Update
               </Link>
+              <ReviewPopUp tourId={tour?._id} />
             </Td>
           </Tr>
         ))}

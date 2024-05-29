@@ -47,7 +47,7 @@ export default function ReviewPopUp({ tourId }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Edit Profile</Button>
+        <Button variant="outline">Review</Button>
       </DialogTrigger>
       <DialogContent className="">
         <DialogHeader>
