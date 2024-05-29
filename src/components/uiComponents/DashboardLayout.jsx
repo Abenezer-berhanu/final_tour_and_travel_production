@@ -87,6 +87,20 @@ function DashboardLayout() {
               <b>New Tour</b>
             </div>
           </Link>
+
+          <Link
+            href={"/admin/dashboard/newUser"}
+            className={`flex w-full items-center justify-center ${
+              pathname == "/admin/dashboard/newUser"
+                ? "bg-primary_orange"
+                : "bg-white text-primary"
+            } text-black rounded-md p-1 cursor-pointer hover:bg-primary_orange duration-200`}
+          >
+            <div className="flex gap-3 items-center py-5 min-w-[120px] max-h-[30px]">
+              <GiSubway size={25} />
+              <b>New User</b>
+            </div>
+          </Link>
         </div>
       )}
     </div>

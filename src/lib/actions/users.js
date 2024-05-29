@@ -284,3 +284,52 @@ export const fetchGuides = async () => {
     console.log(error);
   }
 };
+
+export const adminCreateAccount = async (currentState, formData) => {
+  const { name, email, role, password, confirmPassword, photo } =
+    Object.fromEntries(formData);
+
+  if (password !== confirmPassword) {
+    return { error: "password doesn't match to confirm password." };
+  }
+
+  const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+  if (!emailRegex.test(email)) {
+    return { error: "Invalid email" };
+  }
+
+  try {
+    passwordSchema.parse(password);
+    await connectDB();
+    const existUser = await userModel.findOne({ email });
+    if (existUser) {
+      return { error: "Email already registered" };
+    } else {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      //upload image if it exists
+      let image;
+      if (photo) {
+        const uploadRes = await cloudinary.uploader.upload(photo);
+        image = uploadRes.secure_url;
+      }
+      await userModel.create({
+        name,
+        email,
+        password: hashedPassword,
+        isEmailVerified: true,
+        role,
+        photo:
+          image || "https://staging.svgrepo.com/show/213788/avatar-user.svg",
+      });
+      return { success: `${role} successfully created.` };
+    }
+  } catch (error) {
+    console.log(error);
+    if (error?.name == "ZodError") {
+      return { error: error?.issues[0].message };
+    } else {
+      return { error: "Something went wrong please try again." };
+    }
+  }
+};
