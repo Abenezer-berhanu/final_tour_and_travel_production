@@ -1,9 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { formatDistance } from "date-fns";
+import { Button } from "../ui/button";
+import ReviewPopUp from "./ReviewPopUp";
 
 function MyTourCard({ item }) {
-  console.log(item);
   return (
     <div className="flex bg-white transition border hover:shadow-xl">
       <div className="rotate-180 p-2 [writing-mode:_vertical-lr]">
@@ -29,7 +30,7 @@ function MyTourCard({ item }) {
 
       <div className="flex flex-1 flex-col justify-between">
         <div className="border-s border-gray-900/10 p-4 sm:border-l-transparent sm:p-6">
-          <Link href="#">
+          <div>
             <h3 className="font-bold uppercase text-gray-900">
               {item.tour.name}
             </h3>
@@ -43,21 +44,26 @@ function MyTourCard({ item }) {
             <h5 className="font-semibold text-slate-700">
               Payment: {item.pdfLink ? "PAID" : "PENDING"}
             </h5>
-          </Link>
+          </div>
 
           <p className="mt-2 line-clamp-5 text-sm/relaxed text-gray-700">
             {item.description}
           </p>
         </div>
-        {item.pdfLink && (
-          <Link
-            href={item.pdfLink}
-            target="_blank"
-            className="w-fit ml-auto block bg-yellow-300 px-2 py-2 text-center text-xs font-bold uppercase text-gray-900 transition hover:bg-yellow-400"
-          >
-            find PDF
-          </Link>
-        )}
+        <div className="flex gap-2 items-center w-full ">
+          <div className="ml-auto">
+            <ReviewPopUp tourId={item._id} />
+          </div>
+          {item.pdfLink && (
+            <Link
+              href={item.pdfLink}
+              target="_blank"
+              className="w-fit block h-fit px-2 py-2 text-center text-xs font-bold uppercase text-gray-900 transition hover:text-primary"
+            >
+              find PDF
+            </Link>
+          )}
+        </div>
       </div>
     </div>
   );

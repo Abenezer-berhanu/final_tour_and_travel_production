@@ -612,3 +612,4 @@ export const updateTour = async (currentState, formData) => {
     return { error: "error occurred at updating tour please try again" };
   }
 };
+
