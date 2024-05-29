@@ -7,6 +7,7 @@ import Link from "next/link";
 import { deleteTour } from "@/lib/actions/tours";
 import ReviewPopUp from "./ReviewPopUp";
 
+
 export default function AdminAllToursTable({ tours }) {
   return (
     <Table>
@@ -31,8 +32,12 @@ export default function AdminAllToursTable({ tours }) {
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
             </Td>
-            <Td className="text-sm font-semibold py-1">{tour.name}</Td>
-            <Td className="text-sm font-semibold py-1">{tour.price}</Td>
+            <Td className="text-sm font-semibold py-1">
+              <Link href={`/tour/${tour._id}`}>{tour.name}</Link>
+            </Td>
+            <Td className="text-sm font-semibold py-1">
+              <Link href={`/tour/${tour._id}`}>{tour.price}</Link>
+            </Td>
             <Td className="text-sm font-semibold py-1">{tour.difficulty}</Td>
             <Td className="text-sm font-semibold py-1">{tour.duration} Days</Td>
             <Td className="text-sm font-semibold py-1 flex gap-4">
