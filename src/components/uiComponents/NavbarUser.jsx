@@ -40,9 +40,9 @@ async function NavbarUser() {
                 My tours
               </Link>
             </DropdownMenuItem>
-            {user?.role.toLowerCase() == "admin" && (
+            {user?.role.toLowerCase() != "user" && (
               <DropdownMenuItem>
-                <Link href={"/user/tours"} className="h-full w-full">
+                <Link href={"/admin/dashboard"} className="h-full w-full">
                   Dashboard
                 </Link>
               </DropdownMenuItem>

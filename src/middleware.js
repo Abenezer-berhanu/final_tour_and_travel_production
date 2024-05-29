@@ -9,6 +9,10 @@ export async function middleware(request) {
   const isOnAdminPath = path.startsWith("/admin");
 
   const isOnAuthPath = path === "/auth/signin" || path === "/auth/signup";
+
+  const adminToursPathRegex = /^\/admin\/tours\/.*$/;
+  const isGuideHidden = adminToursPathRegex.test(path);
+
   const isOnAuthenticatedPath =
     path.startsWith("/tour") ||
     path.startsWith("/user/profile") ||
@@ -46,7 +50,10 @@ export async function middleware(request) {
   }
 
   if (isValid) {
-    if (userInfo?.role !== "admin" && path === "/admin/dashboard/newUser") {
+    if (
+      (userInfo?.role !== "admin" && path === "/admin/dashboard/newUser") ||
+      path === "/admin/users"
+    ) {
       return NextResponse.redirect(new URL("/admin/dashboard", request.url));
     }
   }
@@ -58,7 +65,7 @@ export async function middleware(request) {
   }
 
   if (isValid) {
-    if (userInfo?.role === "guide" && path === "/admin/tours/:path*") {
+    if (userInfo?.role === "guide" && isGuideHidden) {
       return NextResponse.redirect(new URL("/admin/dashboard", request.url));
     }
   }
