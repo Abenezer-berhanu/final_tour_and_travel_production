@@ -1,4 +1,5 @@
 import AdminAllUsersTable from "@/components/uiComponents/AdminAllUsersTable";
+import AdminUserSearchInput from "@/components/uiComponents/AdminUserSearchInput";
 import Spinner from "@/components/uiComponents/Spinner";
 import { getAllUsers } from "@/lib/actions/users";
 import React, { Suspense } from "react";
@@ -8,8 +9,11 @@ async function page() {
   const users = usersRes ? JSON.parse(usersRes) : [];
   return (
     <div className="flex flex-col gap-3">
-      <h1 className="text-2xl font-bold">All Users</h1>
-      <Suspense fallback={<Spinner height={50}/>}>
+      <span className="flex justify-between">
+        <h1 className="text-2xl font-bold">All Users</h1>
+        <AdminUserSearchInput />
+      </span>
+      <Suspense fallback={<Spinner height={50} />}>
         <AdminAllUsersTable users={users} />
       </Suspense>
     </div>

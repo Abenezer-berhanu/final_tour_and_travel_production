@@ -15,8 +15,8 @@ export default function SigninForm() {
   const [state, formAction] = useFormState(loginUser, null);
   useEffect(() => {
     if (state?.success) {
-      push("/");
       toast.success(state.success);
+      push("/");
     } else {
       toast.error(state?.error);
     }

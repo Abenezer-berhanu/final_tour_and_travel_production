@@ -6,6 +6,7 @@ import MarkerIcon from "../../../node_modules/leaflet/dist/images/marker-icon.pn
 import MarkerShadow from "../../../node_modules/leaflet/dist/images/marker-shadow.png";
 
 function DetailPageMap({ position}) {
+
   return (
     <div>
       <MapContainer

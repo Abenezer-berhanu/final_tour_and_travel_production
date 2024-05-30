@@ -5,9 +5,25 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "../ui/button";
 import { deleteAccount } from "@/lib/actions/users";
 import { useFormState } from "react-dom";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 export default function AdminAllUsersTable({ users }) {
   const [state, formAction] = useFormState(deleteAccount, null);
+  const [usersData, setUsersData] = useState(users);
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    let user = searchParams.get("user");
+    if (user) {
+      const filteredUsers = usersData.filter((item) =>
+        item.name.toLowerCase().includes(user.toLowerCase())
+      );
+      setUsersData(filteredUsers);
+    } else {
+      setUsersData(users);
+    }
+  }, [searchParams]);
+
   return (
     <Table>
       <Thead>
@@ -20,7 +36,7 @@ export default function AdminAllUsersTable({ users }) {
         </Tr>
       </Thead>
       <Tbody>
-        {users?.slice(0, 15).map((user, idx) => (
+        {usersData?.map((user, idx) => (
           <Tr key={idx} className={`${idx % 2 === 0 && "bg-slate-100"}`}>
             <Td className="text-sm font-semibold py-3">
               <Avatar className="size-6 border">

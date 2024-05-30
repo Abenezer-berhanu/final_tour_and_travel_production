@@ -6,9 +6,23 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { deleteTour } from "@/lib/actions/tours";
 import ReviewPopUp from "./ReviewPopUp";
-
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function AdminAllToursTable({ tours }) {
+  const [toursData, setToursData] = useState(tours);
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    let tour = searchParams.get("tour");
+    if (tour) {
+      const filteredTours = toursData.filter((item) =>
+        item.name.toLowerCase().includes(tour.toLowerCase())
+      );
+      setToursData(filteredTours);
+    } else {
+      setToursData(tours);
+    }
+  }, [searchParams]);
   return (
     <Table>
       <Thead>
@@ -22,7 +36,7 @@ export default function AdminAllToursTable({ tours }) {
         </Tr>
       </Thead>
       <Tbody>
-        {tours?.map((tour, idx) => (
+        {toursData?.map((tour, idx) => (
           <Tr key={idx} className={`${idx % 2 === 0 && "bg-slate-100"}`}>
             <Td className="text-sm font-semibold py-3">
               <Avatar className="size-6 border">

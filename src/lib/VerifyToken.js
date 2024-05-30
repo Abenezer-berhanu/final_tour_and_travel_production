@@ -9,7 +9,6 @@ export const verifyToken = async () => {
       const { payload } = await jwtVerify(tokenString, key, {
         algorithms: ["HS256"],
       });
-
       if (payload) {
         return {
           isValid: true,
