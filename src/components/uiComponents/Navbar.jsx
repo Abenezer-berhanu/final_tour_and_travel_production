@@ -1,10 +1,13 @@
+import { fetchAllToursToSearch } from "@/lib/actions/tours";
 import NavbarLinks from "./NavbarLinks";
 import NavbarLogo from "./NavbarLogo";
 import NavbarSearchInput from "./NavbarSearchInput";
 import NavbarSheet from "./NavbarSheet";
 import NavbarUser from "./NavbarUser";
 
-function Navbar() {
+async function Navbar() {
+  const toursRes = await fetchAllToursToSearch();
+  const tours = toursRes ? JSON.parse(toursRes) : [];
   return (
     <div className="flex w-full min-h-[70px] mb-10 items-center justify-between lg:px-20 md:px-10 px-2 bg-primary text-white">
       <div className="flex gap-3 items-center mr-4">
@@ -19,7 +22,7 @@ function Navbar() {
         </span>
       </div>
       <div className="flex-1 max-w-[500px] flex gap-3">
-        <NavbarSearchInput />
+        <NavbarSearchInput tours={tours} />
         <NavbarUser />
       </div>
     </div>

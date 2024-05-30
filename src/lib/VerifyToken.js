@@ -17,7 +17,6 @@ export const verifyToken = async () => {
         };
       }
     } else {
-      console.log("returning token");
       return {
         isValid: false,
         userInfo: null,

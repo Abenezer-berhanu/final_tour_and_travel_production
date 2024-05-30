@@ -1,9 +1,31 @@
+"use client";
 import Link from "next/link";
 import NavbarLogo from "../../../components/uiComponents/NavbarLogo";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { forgotPassword } from "@/lib/actions/users";
+import Spinner from "@/components/uiComponents/Spinner";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
+import { useFormState, useFormStatus } from "react-dom";
 
 function page() {
+  const [state, formAction] = useFormState(forgotPassword, null);
+  useEffect(() => {
+    if (state?.success) {
+      toast.success(state.success);
+    } else if (state?.error) {
+      toast.error(state.error);
+    }
+  }, [state]);
+  const Submit = () => {
+    const { pending } = useFormStatus();
+    return (
+      <Button className="w-full text-white p-2 rounded-md" disabled={pending}>
+        {pending ? <Spinner height={30} /> : "Send code"}
+      </Button>
+    );
+  };
   return (
     <div className="w-full bg-slate-50 p-6 rounded-md shadow-md  max-h-[800px] flex flex-col md:flex-row items-center justify-between">
       <div className="w-full md:w-1/2">
@@ -11,20 +33,19 @@ function page() {
           <NavbarLogo />
           <h2 className="text-lg font-bold mb-4">Forgot password</h2>
           <p className="mb-1">Reset your password here.</p>
-          <form>
+          <form action={formAction}>
             <label htmlFor="email" className="block mt-2 text-sm font-bold">
               E-mail
             </label>
             <input
               type="email"
+              name="email"
               required
               id="email"
               className="w-full p-2 border border-gray-300 rounded-md mb-4"
               placeholder="Enter your e-mail"
             />
-            <Button className="w-full text-white p-2 rounded-md">
-              Send code
-            </Button>
+            <Submit />
           </form>
           <Link href="/login" className="block mt-4 text-primary">
             Go back to login

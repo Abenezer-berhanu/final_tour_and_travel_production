@@ -5,6 +5,7 @@ import ejs from "ejs";
 import path from "path";
 
 export const sendMail = async ({ emailType, userId, email }) => {
+  console.log(emailType, userId, email);
   try {
     const hashedToken = await bcrypt.hash(userId.toString(), 10);
     const twentyFourHoursInMillis = 24 * 60 * 60 * 1000;
@@ -29,8 +30,17 @@ export const sendMail = async ({ emailType, userId, email }) => {
     });
 
     const templatePath = path.join(process.cwd(), "views", "emailTemplate.ejs");
+    const forgotPasswordPath = path.join(
+      process.cwd(),
+      "views",
+      "forgotPasswordTemplate.ejs"
+    );
     const domain = process.env.FRONTEND_DOMAIN;
     const emailTemplate = await ejs.renderFile(templatePath, {
+      domain,
+      hashedToken,
+    });
+    const forgotPasswordTemplate = await ejs.renderFile(forgotPasswordPath, {
       domain,
       hashedToken,
     });
@@ -42,7 +52,7 @@ export const sendMail = async ({ emailType, userId, email }) => {
         emailType == "verifyEmail"
           ? "Verify Your Password"
           : "Reset Your Password",
-      html: emailTemplate,
+      html: emailType == "verifyEmail" ? emailTemplate : forgotPasswordTemplate,
     };
 
     const mailRes = await transporter.sendMail(mailOptions);

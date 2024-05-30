@@ -17,7 +17,7 @@ const ReviewComp = ({ review }) => {
         <span className="flex justify-between">
           <b>{review?.user?.name}</b>
           <small>
-            <b>{format(new Date(2014, 1, 11), "MM/dd/yyyy")}</b>
+            <b>{format(new Date(review.createdAt), "MM/dd/yyyy")}</b>
           </small>
         </span>
         <Rating value={review.rating} />

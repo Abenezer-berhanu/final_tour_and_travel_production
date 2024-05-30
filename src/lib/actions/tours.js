@@ -622,3 +622,14 @@ export const fetchRelatedTours = async (difficulty) => {
     console.log(error);
   }
 };
+
+export const fetchAllToursToSearch = async () => {
+  try {
+    await connectDB();
+    const tours = await tourModel.find({}).select("_id name imageCover").lean();
+    return tours ? JSON.stringify(tours) : false;
+  } catch (error) {
+    console.log(error);
+  }
+};
+

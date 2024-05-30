@@ -12,6 +12,7 @@ import { revalidateTag } from "next/cache";
 import { SignJWT } from "jose";
 
 const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
+const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
 const passwordSchema = z
   .string()
@@ -86,7 +87,6 @@ export const registerUser = async (currentState, formData) => {
     return { error: "password doesn't match to confirm password." };
   }
 
-  const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
   if (!emailRegex.test(email)) {
     return { error: "Invalid email" };
   }
@@ -340,6 +340,71 @@ export const adminCreateAccount = async (currentState, formData) => {
       return { error: error?.issues[0].message };
     } else {
       return { error: "Something went wrong please try again." };
+    }
+  }
+};
+
+export const forgotPassword = async (currentStatus, formData) => {
+  const email = formData.get("email");
+  try {
+    await connectDB();
+    const existUser = await userModel.findOne({ email }).lean();
+    if (!existUser) {
+      return { error: "User doesn't exist with this email please register" };
+    } else {
+      if (!emailRegex.test(email)) {
+        return { error: "Invalid email" };
+      } else {
+        await sendMail({
+          emailType: "forgotPassword",
+          userId: existUser?._id,
+          email: existUser?.email,
+        });
+
+        return { success: "Verification email has been sent to your email." };
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    return {
+      error: "something went wrong please check your connection and try again",
+    };
+  }
+};
+
+export const changePassword = async (currentStatus, formData) => {
+  const { token, password, confirmPassword } = Object.fromEntries(formData);
+
+  if (password !== confirmPassword) {
+    return { error: "Password must match." };
+  }
+
+  try {
+    passwordSchema.parse(password);
+    const user = await userModel.findOne({
+      forgotPasswordToken: token,
+      forgotPasswordTokenExpiry: { $gt: Date.now() },
+    });
+
+    if (!user)
+      return { error: "Email verification token is invalid or has expired" };
+    //hash the password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    user.password = hashedPassword;
+    user.isEmailVerified = true;
+    user.forgotPasswordToken = undefined;
+    user.forgotPasswordTokenExpiry = undefined;
+    await user.save();
+    return { success: "password has successfully changed." };
+  } catch (error) {
+    if (error?.name == "ZodError") {
+      return { error: error?.issues[0].message };
+    } else {
+      return {
+        error:
+          "Something went wrong please check you connection and try again.",
+      };
     }
   }
 };

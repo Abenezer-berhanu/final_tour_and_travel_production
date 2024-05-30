@@ -15,6 +15,7 @@ import tours from "@/lib/tour";
 import Image from "next/image";
 import { fetchReviewById } from "@/lib/actions/review";
 import TourReview from "@/components/uiComponents/TourReview";
+import { format } from "date-fns";
 
 async function page({ params }) {
   const { tourId: id } = params;
@@ -24,9 +25,10 @@ async function page({ params }) {
   const reviews = reviewRes ? JSON.parse(reviewRes) : null;
   const relatedRes = await fetchRelatedTours(data.difficulty);
   const relatedTours = relatedRes ? JSON.parse(relatedRes) : [];
-  const rating = reviews
-    ? reviews.reduce((acc, cur) => acc + cur.rating, 0) / reviews.length
-    : 4.5;
+  const rating =
+    reviews.length > 0
+      ? reviews.reduce((acc, cur) => acc + cur.rating, 0) / reviews.length
+      : 0;
 
   return (
     <div className="min-h-screen">
@@ -113,6 +115,15 @@ async function page({ params }) {
                 <span className="flex flex-col">
                   <b>Max Group:</b> <b>{data.maxGroupSize}</b>
                 </span>
+              </span>
+              <span className="flex text-sm">
+                the tour starts on &nbsp;
+                <b>
+                  {format(
+                    new Date(data.startDate || data.startDates[0]),
+                    "MM/dd/yyyy"
+                  )}
+                </b>
               </span>
               <div className="flex items-end gap-1">
                 <h1 className="text-xl font-bold tracking-tighter">
