@@ -10,7 +10,7 @@ const DetailPageMap = dynamic(
 import ErrorAlert from "@/components/uiComponents/ErrorAlert";
 import Rating from "@/components/uiComponents/Rating";
 import TourCard from "@/components/uiComponents/TourCard";
-import { fetchTourById } from "@/lib/actions/tours";
+import { fetchRelatedTours, fetchTourById } from "@/lib/actions/tours";
 import tours from "@/lib/tour";
 import Image from "next/image";
 import { fetchReviewById } from "@/lib/actions/review";
@@ -22,9 +22,12 @@ async function page({ params }) {
   const data = res ? JSON.parse(res) : null;
   const reviewRes = await fetchReviewById(id);
   const reviews = reviewRes ? JSON.parse(reviewRes) : null;
+  const relatedRes = await fetchRelatedTours(data.difficulty);
+  const relatedTours = relatedRes ? JSON.parse(relatedRes) : [];
   const rating = reviews
     ? reviews.reduce((acc, cur) => acc + cur.rating, 0) / reviews.length
     : 4.5;
+
   return (
     <div className="min-h-screen">
       {!data ? (
@@ -185,14 +188,28 @@ async function page({ params }) {
             </div>
             <div className="w-full">
               {" "}
-              <DetailPageMap />
+              <DetailPageMap
+                position={
+                  data?.startLocation?.coordinates ||
+                  data?.startLocation[0]?.coordinates
+                }
+              />
             </div>
             <hr />
             <h1 className="font-bold text-lg">Related Tours</h1>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {tours.map((data, idx) => (
-                <TourCard data={data} key={idx} />
-              ))}
+              {relatedTours.length > 0 ? (
+                relatedTours.map((data, idx) => (
+                  <TourCard data={data} key={idx} />
+                ))
+              ) : (
+                <div className="col-span-2 md:col-span-4">
+                  <ErrorAlert
+                    info={true}
+                    description={"No related tours has been found."}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>

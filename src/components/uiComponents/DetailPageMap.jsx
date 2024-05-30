@@ -5,8 +5,7 @@ import L from "leaflet";
 import MarkerIcon from "../../../node_modules/leaflet/dist/images/marker-icon.png";
 import MarkerShadow from "../../../node_modules/leaflet/dist/images/marker-shadow.png";
 
-function DetailPageMap() {
-  const position = [51.505, -0.09];
+function DetailPageMap({ position}) {
   return (
     <div>
       <MapContainer
@@ -32,7 +31,9 @@ function DetailPageMap() {
             })
           }
           position={position}
-        ></Marker>
+        >
+          <Popup>Start location</Popup>
+        </Marker>
       </MapContainer>
     </div>
   );

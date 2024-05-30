@@ -613,3 +613,12 @@ export const updateTour = async (currentState, formData) => {
   }
 };
 
+export const fetchRelatedTours = async (difficulty) => {
+  try {
+    await connectDB();
+    const tours = await tourModel.find({ difficulty }).select('_id imageCover price name').lean();
+    return JSON.stringify(tours);
+  } catch (error) {
+    console.log(error);
+  }
+};
