@@ -1,20 +1,30 @@
+import dynamic from "next/dynamic";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import BookForm from "@/components/uiComponents/BookForm";
-import DetailPageMap from "@/components/uiComponents/DetailPageMap";
+// const DetailPageMap = dynamic(
+//   () => import("@/components/uiComponents/DetailPageMap"),
+//   { ssr: false }
+// );
 import ErrorAlert from "@/components/uiComponents/ErrorAlert";
 import Rating from "@/components/uiComponents/Rating";
 import TourCard from "@/components/uiComponents/TourCard";
 import { fetchTourById } from "@/lib/actions/tours";
 import tours from "@/lib/tour";
 import Image from "next/image";
+import { fetchReviewById } from "@/lib/actions/review";
+import TourReview from "@/components/uiComponents/TourReview";
 
 async function page({ params }) {
   const { tourId: id } = params;
   const res = await fetchTourById(id);
   const data = res ? JSON.parse(res) : null;
+  const reviewRes = await fetchReviewById(id);
+  const reviews = reviewRes ? JSON.parse(reviewRes) : null;
+  const rating = reviews
+    ? reviews.reduce((acc, cur) => acc + cur.rating, 0) / reviews.length
+    : 4.5;
   return (
     <div className="min-h-screen">
       {!data ? (
@@ -48,16 +58,6 @@ async function page({ params }) {
                     className="max-w-[130px] rounded-md"
                   />
                 ))}
-                {data.images.map((image, idx) => (
-                  <Image
-                    width={500}
-                    height={500}
-                    alt={data.name}
-                    src={image}
-                    key={idx}
-                    className="max-w-[130px] rounded-md"
-                  />
-                ))}
               </div>
             </div>
 
@@ -65,10 +65,7 @@ async function page({ params }) {
               <div className="flex max-sm:flex-col gap-3 sm:justify-between sm:items-center">
                 <div className="flex flex-col gap-2">
                   <h1 className="text-2xl font-bold">{data.name}</h1>
-                  <Rating
-                    value={data.ratingsAverage}
-                    text={data.ratingsAverage}
-                  />
+                  <Rating value={rating} text={rating} />
                 </div>
                 <span>
                   <Badge
@@ -180,10 +177,15 @@ async function page({ params }) {
               </div>
             </div>
           </div>
-          <div className="w-full my-10">
+
+          <div className="w-full my-10 flex flex-col gap-3">
+            <div className="max-w-[800px] flex flex-col gap-5">
+              <h1 className="font-bold text-lg">Reviews</h1>
+              <TourReview reviews={reviews} />
+            </div>
             <div className="w-full">{/* <DetailPageMap /> */}</div>
             <hr />
-            <h1 className="font-bold text-lg py-3">Related Tours</h1>
+            <h1 className="font-bold text-lg">Related Tours</h1>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {tours.map((data, idx) => (
                 <TourCard data={data} key={idx} />

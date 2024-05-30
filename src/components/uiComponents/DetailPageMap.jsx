@@ -1,5 +1,5 @@
-'use client'
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+"use client";
+import { MapContainer, TileLayer, Popup, Marker } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
 function DetailPageMap() {
@@ -9,16 +9,15 @@ function DetailPageMap() {
       center={position}
       zoom={13}
       scrollWheelZoom={false}
-      className="w-full h-[300px]"
+      style={{ height: "200px", width: "100%" }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <Marker position={position}>
-        <Popup>
-          A pretty CSS3 popup. <br /> Easily customizable.
-        </Popup>
+        A pretty CSS3 popup. <br /> Easily customizable.
+        <Popup></Popup>
       </Marker>
     </MapContainer>
   );

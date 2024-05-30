@@ -48,7 +48,7 @@ const Rating = ({ value, text }) => {
           <FaRegStar />
         )}
       </span>
-      <span className="font-semibold">({text && text}Rating)</span>
+      {text && <span className="font-semibold">({text}Rating)</span>}
     </div>
   );
 };

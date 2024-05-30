@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { formatDistance } from "date-fns";
-import { Button } from "../ui/button";
 import ReviewPopUp from "./ReviewPopUp";
 
 function MyTourCard({ item }) {
@@ -52,7 +51,7 @@ function MyTourCard({ item }) {
         </div>
         <div className="flex gap-2 items-center w-full ">
           <div className="ml-auto">
-            <ReviewPopUp tourId={item._id} />
+            <ReviewPopUp tourId={item.tour._id} />
           </div>
           {item.pdfLink && (
             <Link

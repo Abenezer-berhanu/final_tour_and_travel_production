@@ -1,5 +1,4 @@
 "use server";
-
 import connectDB from "../db/config";
 import reviewModel from "../db/model/reviewModel";
 
@@ -18,18 +17,26 @@ export const giveReview = async (currentState, formData) => {
   try {
     await connectDB();
     const reviewExist = await reviewModel.findOne({ user: reviewInfo.user });
-    console.log(reviewExist);
     if (reviewExist) {
       return { error: "Your already gave review." };
     } else {
       const reviewStatus = await reviewModel.create(reviewInfo);
       if (reviewStatus) {
-        console.log(reviewStatus);
         return { success: "Review Added successfully." };
       } else {
         return { error: "Something went wrong please try again" };
       }
     }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const fetchReviewById = async (id) => {
+  try {
+    await connectDB();
+    const review = await reviewModel.find({ tour: id }).populate("user").lean();
+    return JSON.stringify(review);
   } catch (error) {
     console.log(error);
   }
