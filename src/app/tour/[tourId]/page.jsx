@@ -3,10 +3,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import BookForm from "@/components/uiComponents/BookForm";
-// const DetailPageMap = dynamic(
-//   () => import("@/components/uiComponents/DetailPageMap"),
-//   { ssr: false }
-// );
+const DetailPageMap = dynamic(
+  () => import("@/components/uiComponents/DetailPageMap"),
+  { ssr: false }
+);
 import ErrorAlert from "@/components/uiComponents/ErrorAlert";
 import Rating from "@/components/uiComponents/Rating";
 import TourCard from "@/components/uiComponents/TourCard";
@@ -37,7 +37,7 @@ async function page({ params }) {
         </div>
       ) : (
         <div className="w-full max-w-[1300px] px-3 h-full mx-auto">
-          <div className="grid grid-cols-8 gap-5">
+          <div className="grid grid-cols-8 gap-5 mb-4">
             <div className="col-span-8 sm:col-span-3 flex flex-col gap-4">
               <Image
                 width={500}
@@ -177,13 +177,16 @@ async function page({ params }) {
               </div>
             </div>
           </div>
-
+          <Separator />
           <div className="w-full my-10 flex flex-col gap-3">
             <div className="max-w-[800px] flex flex-col gap-5">
               <h1 className="font-bold text-lg">Reviews</h1>
               <TourReview reviews={reviews} />
             </div>
-            <div className="w-full">{/* <DetailPageMap /> */}</div>
+            <div className="w-full">
+              {" "}
+              <DetailPageMap />
+            </div>
             <hr />
             <h1 className="font-bold text-lg">Related Tours</h1>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
