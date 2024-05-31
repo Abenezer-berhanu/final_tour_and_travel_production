@@ -55,7 +55,8 @@ const LocationComponent = () => {
           ) : (
             <ErrorAlert
               info={true}
-              description={"No close tour has been found."}
+              description={"No close tour has found."}
+              safe={true}
             />
           )}
         </div>

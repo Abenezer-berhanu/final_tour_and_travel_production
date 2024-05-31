@@ -1,6 +1,6 @@
 import React from "react";
 
-function ErrorAlert({ description, info, error }) {
+function ErrorAlert({ description, info, safe }) {
   return (
     <>
       {!info ? (
@@ -19,7 +19,7 @@ function ErrorAlert({ description, info, error }) {
           role="alert"
           className="rounded border-s-4 border-blue-500 bg-blue-50 p-4"
         >
-          {!error && (
+          {!safe && (
             <strong className="block font-medium text-blue-800">
               Something went wrong
             </strong>

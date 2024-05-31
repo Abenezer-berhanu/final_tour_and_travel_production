@@ -192,12 +192,16 @@ async function page({ params }) {
           </div>
           <Separator />
           <div className="w-full my-10 flex flex-col gap-3">
-            <div className="max-w-[800px] flex flex-col gap-5">
+            <div className="max-w-[800px] flex flex-col gap-5 mb-5">
               <h1 className="font-bold text-lg">Reviews</h1>
               {reviews.length > 0 ? (
                 <TourReview reviews={reviews} />
               ) : (
-                <ErrorAlert description={"No reviews yet."} info={true} error={false} />
+                <ErrorAlert
+                  description={"No reviews yet."}
+                  info={true}
+                  safe={true}
+                />
               )}
             </div>
             <div className="w-full">
@@ -221,6 +225,7 @@ async function page({ params }) {
                   <ErrorAlert
                     info={true}
                     description={"No related tours has been found."}
+                    safe={true}
                   />
                 </div>
               )}

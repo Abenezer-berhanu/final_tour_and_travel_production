@@ -5,7 +5,6 @@ import AdminSmallUsersTable from "@/components/uiComponents/AdminSmallUsersTable
 import { AdminPieChart } from "@/components/uiComponents/AdminPieChart";
 import Link from "next/link";
 import {
-  findUserById,
   getActiveUsers,
   getAllUsers,
   getInactiveUsers,
