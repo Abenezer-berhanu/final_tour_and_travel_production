@@ -11,7 +11,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Spinner from "@/components/uiComponents/Spinner";
 
-function page() {
+function usePage() {
   const [state, formAction] = useFormState(changePassword, null);
   const [token, setToken] = useState("");
   const searchParams = useSearchParams();
@@ -91,4 +91,4 @@ function page() {
   );
 }
 
-export default page;
+export default usePage;
