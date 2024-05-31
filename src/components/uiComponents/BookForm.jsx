@@ -29,11 +29,17 @@ function BookForm({ tourId, image, name, price, size }) {
     }
   }, [state]);
 
-  const Submit = () => {
+  const Submit = ({ size }) => {
     const { pending } = useFormStatus();
     return (
-      <Button className="w-full">
-        {pending ? <Spinner height={30} /> : "Reserve"}
+      <Button className="w-full" disabled={!size}>
+        {pending ? (
+          <Spinner height={30} />
+        ) : size == 0 ? (
+          "Out of stock"
+        ) : (
+          "Reserve"
+        )}
       </Button>
     );
   };
@@ -59,7 +65,7 @@ function BookForm({ tourId, image, name, price, size }) {
           </SelectGroup>
         </SelectContent>
       </Select>
-      <Submit />
+      <Submit size={size} />
     </form>
   );
 }

@@ -11,7 +11,6 @@ import ErrorAlert from "@/components/uiComponents/ErrorAlert";
 import Rating from "@/components/uiComponents/Rating";
 import TourCard from "@/components/uiComponents/TourCard";
 import { fetchRelatedTours, fetchTourById } from "@/lib/actions/tours";
-import tours from "@/lib/tour";
 import Image from "next/image";
 import { fetchReviewById } from "@/lib/actions/review";
 import TourReview from "@/components/uiComponents/TourReview";

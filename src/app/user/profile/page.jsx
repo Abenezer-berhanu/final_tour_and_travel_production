@@ -1,11 +1,9 @@
 import DeleteMeForm from "@/components/uiComponents/DeleteMeForm";
 import ProfileForm from "@/components/uiComponents/ProfileForm";
-import { verifyToken } from "@/lib/VerifyToken";
 import { findUserById } from "@/lib/actions/users";
 
 async function Profile() {
-  const { userInfo } = await verifyToken();
-  const userRes = await findUserById(userInfo?.userId);
+  const userRes = await findUserById();
   const user = userRes && JSON.parse(userRes);
 
   return (
@@ -16,8 +14,8 @@ async function Profile() {
           <p className="text-slate-700 text-sm">Update Your Profile</p>
         </div>
         <hr />
-        <ProfileForm userId={userId} user={user} />
-        <DeleteMeForm userId={userId} />
+        <ProfileForm user={user} />
+        <DeleteMeForm />
       </div>
     </div>
   );

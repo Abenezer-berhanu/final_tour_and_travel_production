@@ -9,7 +9,7 @@ import Spinner from "./Spinner";
 import { toast } from "react-toastify";
 import { updateUser } from "@/lib/actions/users";
 
-function ProfileForm({ userId, user }) {
+function ProfileForm({ user }) {
   const [state, formAction] = useFormState(updateUser, null);
   const [photo, setPhoto] = useState(false);
 
@@ -44,7 +44,6 @@ function ProfileForm({ userId, user }) {
 
   return (
     <form action={formAction} className="flex flex-col gap-5">
-      <input type="hidden" name="id" value={userId} />
       <input
         type="hidden"
         name="photo"

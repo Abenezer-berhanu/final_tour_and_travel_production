@@ -3,14 +3,14 @@
 import connectDB from "../db/config";
 import bookModel from "../db/model/bookModel";
 
-export const bookTour = async ({ tourId, userId, price }) => {
+export const bookTour = async ({ tourId, price }) => {
   try {
     await connectDB();
     const newBookedTour = await bookModel.create({
       tour: tourId,
       user: "6650b6be8d63639bac1b2070",
       price: price,
-    });
+    })
 
     return newBookedTour._doc;
   } catch (error) {

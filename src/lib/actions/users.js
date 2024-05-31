@@ -2,7 +2,6 @@
 import connectDB from "../db/config";
 import userModel from "../db/model/userModel";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import z from "zod";
 import { sendMail } from "../createHashedTokenAndSendMail";
 import { cookies } from "next/headers";
@@ -10,6 +9,7 @@ import { redirect } from "next/navigation";
 import cloudinary from "../cloudinaryConfig";
 import { revalidateTag } from "next/cache";
 import { SignJWT } from "jose";
+import { verifyToken } from "../VerifyToken";
 
 const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
@@ -20,6 +20,7 @@ const passwordSchema = z
     message:
       "Password must contain at least one uppercase letter, one number, one special character, and be at least 8 characters long.",
   });
+
 
 export const fetchAllUsers = async () => {
   try {
@@ -141,10 +142,11 @@ export const verifyEmail = async (token) => {
   }
 };
 
-export const findUserById = async (id) => {
+export const findUserById = async () => {
+  const { userInfo } = await verifyToken();
   try {
     await connectDB();
-    const user = await userModel.findById(id).lean();
+    const user = await userModel.findById(userInfo.userId).lean();
     if (user) {
       return JSON.stringify(user);
     }
@@ -203,9 +205,10 @@ export const getInactiveUsers = async () => {
 };
 
 export const updateUser = async (currentState, formData) => {
-  const { name, photo, currentPassword, newPassword, id } =
+  const { userInfo } = await verifyToken();
+  const { name, photo, currentPassword, newPassword } =
     Object.fromEntries(formData);
-
+  const id = userInfo.userId;
   if (!name && !JSON.parse(photo) && !newPassword && !currentPassword) {
     return { error: "Atleast on field is required." };
   }
@@ -265,7 +268,9 @@ export const updateUser = async (currentState, formData) => {
 };
 
 export const deleteAccount = async (currentState, formData) => {
-  const { id, purpose } = Object.fromEntries(formData);
+  const { userInfo } = await verifyToken();
+  const { purpose } = Object.fromEntries(formData);
+  const id = userInfo.userId;
   try {
     await connectDB();
     if (purpose == "permanent") {

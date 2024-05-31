@@ -7,17 +7,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { verifyToken } from "@/lib/VerifyToken";
 import { findUserById, signUserOut } from "@/lib/actions/users";
 import Link from "next/link";
 
 async function NavbarUser() {
-  const { userInfo } = await verifyToken();
-  const userRes = userInfo && (await findUserById(userInfo?.userId));
+  const userRes = await findUserById();
   const user = userRes && JSON.parse(userRes);
   return (
     <section className="max-md:hidden">
-      {userInfo ? (
+      {user ? (
         <DropdownMenu>
           <DropdownMenuTrigger className="outline-none">
             <Avatar>

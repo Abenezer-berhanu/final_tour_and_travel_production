@@ -49,7 +49,6 @@ export default function AdminAllUsersTable({ users }) {
             <Td className="text-sm font-semibold py-1">{user.role}</Td>
             <Td className="text-sm font-semibold py-1">
               <form action={formAction}>
-                <input type="hidden" name="id" value={user?._id} />
                 <input type="hidden" name="purpose" value={"permanent"} />
                 <Button
                   variant="ghost"

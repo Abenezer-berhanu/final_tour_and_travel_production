@@ -229,7 +229,6 @@ export const fetchClosestTour = async (lat, long) => {
       })
       .lean();
 
-    console.log(closeTours);
     if (closeTours.length > 0) {
       return { success: closeTours };
     }
@@ -252,7 +251,7 @@ export const payWithStripe = async (currentState, formData) => {
     Object.fromEntries(formData);
   try {
     const savedTour = await bookTour({ tourId, userId, price });
-    const sizeToBe = Number(maxGroupSize) - 1;
+    const sizeToBe = Number(maxGroupSize) - quantity;
 
     if (savedTour) {
       await tourModel.findByIdAndUpdate(tourId, { maxGroupSize: sizeToBe });
@@ -616,7 +615,10 @@ export const updateTour = async (currentState, formData) => {
 export const fetchRelatedTours = async (difficulty) => {
   try {
     await connectDB();
-    const tours = await tourModel.find({ difficulty }).select('_id imageCover price name').lean();
+    const tours = await tourModel
+      .find({ difficulty })
+      .select("_id imageCover price name")
+      .lean();
     return JSON.stringify(tours);
   } catch (error) {
     console.log(error);
@@ -632,4 +634,3 @@ export const fetchAllToursToSearch = async () => {
     console.log(error);
   }
 };
-
