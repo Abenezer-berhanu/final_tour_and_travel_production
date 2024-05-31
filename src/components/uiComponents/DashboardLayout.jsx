@@ -8,7 +8,7 @@ import { GiSubway } from "react-icons/gi";
 import { Button } from "../ui/button";
 import { ArrowBigDown, ArrowBigUp } from "lucide-react";
 
-function DashboardLayout() {
+function DashboardLayout({ myInfo }) {
   const [viewList, setViewList] = useState(true);
   const pathname = usePathname();
   return (
@@ -16,11 +16,13 @@ function DashboardLayout() {
       <h1 className="text-xl font-bold mx-auto">My Dashboard</h1>
       <div className="flex flex-col gap-1 items-center justify-center">
         <Avatar className="size-24">
-          <AvatarImage src="https://github.com/shadcn.png" />
-          <AvatarFallback className="ring-2 ring-primary_orange bg-primary"></AvatarFallback>
+          <AvatarImage src={myInfo?.photo || "https://github.com/shadcn.png"} />
+          <AvatarFallback className="ring-2 ring-primary_orange bg-primary">
+            AY
+          </AvatarFallback>
         </Avatar>
-        <h1 className="text-xl font-semibold">John Doe</h1>
-        <p className="text-md">johndoe@gmail.com</p>
+        <h1 className="text-xl font-semibold">{myInfo?.name}</h1>
+        <p className="text-md">{myInfo?.email}</p>
       </div>
       <span>
         <Button

@@ -5,6 +5,7 @@ import AdminSmallUsersTable from "@/components/uiComponents/AdminSmallUsersTable
 import { AdminPieChart } from "@/components/uiComponents/AdminPieChart";
 import Link from "next/link";
 import {
+  findUserById,
   getActiveUsers,
   getAllUsers,
   getInactiveUsers,
@@ -23,6 +24,7 @@ async function page() {
   const activeUsers = activeUsersRes && JSON.parse(activeUsersRes);
   const inactiveUsersRes = await getInactiveUsers();
   const inactiveUsers = activeUsersRes && JSON.parse(inactiveUsersRes);
+
 
   return (
     <div className="flex flex-col p-2">

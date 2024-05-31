@@ -1,10 +1,9 @@
 import ErrorAlert from "@/components/uiComponents/ErrorAlert";
 import MyTourCard from "@/components/uiComponents/MyTourCard";
-import { findBooks } from "@/lib/actions/book";
-import { myTours } from "@/lib/myTours";
+import { findMyBooks } from "@/lib/actions/book";
 
 async function page() {
-  const booksRes = await findBooks();
+  const booksRes = await findMyBooks();
   const books = (booksRes && JSON.parse(booksRes)) || null;
   return (
     <>

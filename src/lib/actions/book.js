@@ -1,16 +1,17 @@
 "use server";
-
+import { verifyToken } from "../VerifyToken";
 import connectDB from "../db/config";
 import bookModel from "../db/model/bookModel";
 
 export const bookTour = async ({ tourId, price }) => {
+  const { userInfo } = await verifyToken();
   try {
     await connectDB();
     const newBookedTour = await bookModel.create({
       tour: tourId,
-      user: "6650b6be8d63639bac1b2070",
+      user: userInfo?.userId,
       price: price,
-    })
+    });
 
     return newBookedTour._doc;
   } catch (error) {
@@ -46,6 +47,20 @@ export const findBooks = async () => {
     await connectDB();
     const book = await bookModel.find({}).populate("tour").lean();
     return JSON.stringify(book);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const findMyBooks = async () => {
+  const { userInfo } = await verifyToken();
+  try {
+    await connectDB();
+    const myBooks = await bookModel
+      .find({ user: userInfo.userId })
+      .populate("tour")
+      .lean();
+    return JSON.stringify(myBooks);
   } catch (error) {
     console.log(error);
   }

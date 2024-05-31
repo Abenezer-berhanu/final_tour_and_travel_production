@@ -7,11 +7,22 @@ import Link from "next/link";
 import { deleteTour } from "@/lib/actions/tours";
 import ReviewPopUp from "./ReviewPopUp";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
+import { findUserById } from "@/lib/actions/users";
 
 export default function AdminAllToursTable({ tours }) {
   const [toursData, setToursData] = useState(tours);
   const searchParams = useSearchParams();
+  const [userInfo, setUserInfo] = useState();
+  useLayoutEffect(() => {
+    const fetchUserInfo = async () => {
+      const user = await findUserById();
+      const json = user ? JSON.parse(user) : {};
+      setUserInfo(json);
+    };
+
+    fetchUserInfo();
+  }, []);
   useEffect(() => {
     let tour = searchParams.get("tour");
     if (tour) {
@@ -70,7 +81,7 @@ export default function AdminAllToursTable({ tours }) {
               >
                 Update
               </Link>
-              <ReviewPopUp tourId={tour?._id} />
+              {userInfo?.role == "guide" && <ReviewPopUp tourId={tour?._id} />}
             </Td>
           </Tr>
         ))}

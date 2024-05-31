@@ -16,7 +16,10 @@ export const giveReview = async (currentState, formData) => {
   };
   try {
     await connectDB();
-    const reviewExist = await reviewModel.findOne({ user: reviewInfo.user });
+    const reviewExist = await reviewModel.findOne({
+      user: reviewInfo.user,
+      tour: reviewInfo.tour,
+    });
     if (reviewExist) {
       return { error: "Your already gave review." };
     } else {

@@ -21,7 +21,6 @@ const passwordSchema = z
       "Password must contain at least one uppercase letter, one number, one special character, and be at least 8 characters long.",
   });
 
-
 export const fetchAllUsers = async () => {
   try {
     await connectDB();
@@ -243,21 +242,26 @@ export const updateUser = async (currentState, formData) => {
         (userInfo[key] == "" || undefined || null) && delete userInfo[key]
     );
 
+    console.log(userInfo);
     await connectDB();
     const user = await userModel.findById(id).lean();
     if (user) {
-      const passwordCompare = await bcrypt.compare(
-        userInfo.currentPassword,
-        user.password
-      );
-      if (passwordCompare) {
+      if (userInfo.password) {
+        if (passwordCompare) {
+          const updatedUser = await userModel.findByIdAndUpdate(id, userInfo);
+          if (updatedUser) {
+            return { success: "Your account has been updated successfully." };
+          }
+          return { error: "something went wrong please try again." };
+        }
+        return { error: "Current password is not correct." };
+      } else {
         const updatedUser = await userModel.findByIdAndUpdate(id, userInfo);
         if (updatedUser) {
           return { success: "Your account has been updated successfully." };
         }
         return { error: "something went wrong please try again." };
       }
-      return { error: "Current password is not correct." };
     }
   } catch (error) {
     if (error?.name == "ZodError") {
@@ -270,7 +274,7 @@ export const updateUser = async (currentState, formData) => {
 export const deleteAccount = async (currentState, formData) => {
   const { userInfo } = await verifyToken();
   const { purpose } = Object.fromEntries(formData);
-  const id = userInfo.userId;
+  const id = userInfo?.userId;
   try {
     await connectDB();
     if (purpose == "permanent") {

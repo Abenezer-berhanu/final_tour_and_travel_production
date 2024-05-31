@@ -194,7 +194,11 @@ async function page({ params }) {
           <div className="w-full my-10 flex flex-col gap-3">
             <div className="max-w-[800px] flex flex-col gap-5">
               <h1 className="font-bold text-lg">Reviews</h1>
-              <TourReview reviews={reviews} />
+              {reviews.length > 0 ? (
+                <TourReview reviews={reviews} />
+              ) : (
+                <ErrorAlert description={"No reviews yet."} info={true} error={false} />
+              )}
             </div>
             <div className="w-full">
               {" "}
