@@ -9,7 +9,7 @@ import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { useFormState, useFormStatus } from "react-dom";
 
-function page() {
+function usePage() {
   const [state, formAction] = useFormState(forgotPassword, null);
   useEffect(() => {
     if (state?.success) {
@@ -65,4 +65,4 @@ function page() {
   );
 }
 
-export default page;
+export default usePage;
