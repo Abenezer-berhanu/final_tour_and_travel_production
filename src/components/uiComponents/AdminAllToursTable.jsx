@@ -25,10 +25,23 @@ export default function AdminAllToursTable({ tours }) {
   }, []);
   useEffect(() => {
     let tour = searchParams.get("tour");
+    let diff = searchParams.get("diff");
     if (tour) {
       const filteredTours = toursData.filter((item) =>
         item.name.toLowerCase().includes(tour.toLowerCase())
       );
+      setToursData(filteredTours);
+    } else if (diff) {
+      //?diff=easy,difficult [easy, difficult]
+      const diffArray = diff.split(",");
+      const filteredTours = tours.filter((item) => {
+        for (let i = 0; i < diffArray.length; i++) {
+          if (item.difficulty == diffArray[i]) {
+            return item;
+          }
+        }
+      });
+      console.log(filteredTours.length);
       setToursData(filteredTours);
     } else {
       setToursData(tours);
