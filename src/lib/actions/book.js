@@ -65,3 +65,17 @@ export const findMyBooks = async () => {
     console.log(error);
   }
 };
+
+export const adminFindBooks = async () => {
+  try {
+    await connectDB();
+    const book = await bookModel
+      .find({})
+      .populate("tour")
+      .populate("user")
+      .lean();
+    return JSON.stringify(book);
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -109,6 +109,22 @@ function DashboardLayout({ myInfo }) {
               </div>
             </Link>
           )}
+
+          {myInfo?.role == "admin" && (
+            <Link
+              href={"/admin/dashboard/bookings"}
+              className={`flex w-full items-center justify-center ${
+                pathname == "/admin/dashboard/bookings"
+                  ? "bg-primary_orange"
+                  : "bg-white text-primary"
+              } text-black rounded-md p-1 cursor-pointer hover:bg-primary_orange duration-200`}
+            >
+              <div className="flex gap-3 items-center py-5 min-w-[120px] max-h-[30px]">
+                <GiSubway size={25} />
+                <b>Bookings</b>
+              </div>
+            </Link>
+          )}
         </div>
       )}
     </div>
