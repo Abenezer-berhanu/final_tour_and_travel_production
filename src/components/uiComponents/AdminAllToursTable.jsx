@@ -79,21 +79,25 @@ export default function AdminAllToursTable({ tours }) {
             <Td className="text-sm font-semibold py-1">{tour.difficulty}</Td>
             <Td className="text-sm font-semibold py-1">{tour.duration} Days</Td>
             <Td className="text-sm font-semibold py-1 flex gap-4">
-              <form action={deleteTour}>
-                <input type="hidden" name="id" value={tour?._id} />
-                <Button
-                  variant="ghost"
-                  className="bg-transparent hover:bg-transparent p-0 text-red-500 hover:underline hover:text-red-600"
+              {userInfo?.role == "admin" && (
+                <form action={deleteTour}>
+                  <input type="hidden" name="id" value={tour?._id} />
+                  <Button
+                    variant="ghost"
+                    className="bg-transparent hover:bg-transparent p-0 text-red-500 hover:underline hover:text-red-600"
+                  >
+                    Delete
+                  </Button>
+                </form>
+              )}
+              {userInfo?.role != "guide" && (
+                <Link
+                  href={`/admin/tours/${tour?._id}`}
+                  className="text-primary hover:underline flex items-center"
                 >
-                  Delete
-                </Button>
-              </form>
-              <Link
-                href={`/admin/tours/${tour?._id}`}
-                className="text-primary hover:underline flex items-center"
-              >
-                Update
-              </Link>
+                  Update
+                </Link>
+              )}
               {userInfo?.role == "guide" && <ReviewPopUp tourId={tour?._id} />}
             </Td>
           </Tr>

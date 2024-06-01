@@ -50,19 +50,21 @@ function DashboardLayout({ myInfo }) {
               <b className="">Home</b>
             </div>
           </Link>
-          <Link
-            href={"/admin/users"}
-            className={`flex w-full items-center justify-center ${
-              pathname == "/admin/users"
-                ? "bg-primary_orange"
-                : "bg-white text-primary"
-            } text-black rounded-md p-1 cursor-pointer hover:bg-primary_orange duration-200`}
-          >
-            <div className="flex gap-3 items-center py-5 min-w-[120px] max-h-[30px]">
-              <FaUser size={25} />
-              <b>Users</b>
-            </div>
-          </Link>
+          {myInfo?.role == "admin" && (
+            <Link
+              href={"/admin/users"}
+              className={`flex w-full items-center justify-center ${
+                pathname == "/admin/users"
+                  ? "bg-primary_orange"
+                  : "bg-white text-primary"
+              } text-black rounded-md p-1 cursor-pointer hover:bg-primary_orange duration-200`}
+            >
+              <div className="flex gap-3 items-center py-5 min-w-[120px] max-h-[30px]">
+                <FaUser size={25} />
+                <b>Users</b>
+              </div>
+            </Link>
+          )}
           <Link
             href={"/admin/tours"}
             className={`flex w-full items-center justify-center ${
@@ -76,33 +78,37 @@ function DashboardLayout({ myInfo }) {
               <b>Tours</b>
             </div>
           </Link>
-          <Link
-            href={"/admin/dashboard/newTour"}
-            className={`flex w-full items-center justify-center ${
-              pathname == "/admin/dashboard/newTour"
-                ? "bg-primary_orange"
-                : "bg-white text-primary"
-            } text-black rounded-md p-1 cursor-pointer hover:bg-primary_orange duration-200`}
-          >
-            <div className="flex gap-3 items-center py-5 min-w-[120px] max-h-[30px]">
-              <GiSubway size={25} />
-              <b>New Tour</b>
-            </div>
-          </Link>
+          {myInfo?.role != "guide" && (
+            <Link
+              href={"/admin/dashboard/newTour"}
+              className={`flex w-full items-center justify-center ${
+                pathname == "/admin/dashboard/newTour"
+                  ? "bg-primary_orange"
+                  : "bg-white text-primary"
+              } text-black rounded-md p-1 cursor-pointer hover:bg-primary_orange duration-200`}
+            >
+              <div className="flex gap-3 items-center py-5 min-w-[120px] max-h-[30px]">
+                <GiSubway size={25} />
+                <b>New Tour</b>
+              </div>
+            </Link>
+          )}
 
-          <Link
-            href={"/admin/dashboard/newUser"}
-            className={`flex w-full items-center justify-center ${
-              pathname == "/admin/dashboard/newUser"
-                ? "bg-primary_orange"
-                : "bg-white text-primary"
-            } text-black rounded-md p-1 cursor-pointer hover:bg-primary_orange duration-200`}
-          >
-            <div className="flex gap-3 items-center py-5 min-w-[120px] max-h-[30px]">
-              <GiSubway size={25} />
-              <b>New User</b>
-            </div>
-          </Link>
+          {myInfo?.role == "admin" && (
+            <Link
+              href={"/admin/dashboard/newUser"}
+              className={`flex w-full items-center justify-center ${
+                pathname == "/admin/dashboard/newUser"
+                  ? "bg-primary_orange"
+                  : "bg-white text-primary"
+              } text-black rounded-md p-1 cursor-pointer hover:bg-primary_orange duration-200`}
+            >
+              <div className="flex gap-3 items-center py-5 min-w-[120px] max-h-[30px]">
+                <GiSubway size={25} />
+                <b>New User</b>
+              </div>
+            </Link>
+          )}
         </div>
       )}
     </div>
