@@ -6,7 +6,8 @@ function NavbarLogo() {
       href={"/"}
       className="text-xl md:text-2xl lg:text-3xl max-ssm:hidden font-bold"
     >
-      <span className="text-primary_orange">Adventure</span> Hub
+      <span className="text-primary_orange">Adventure</span>
+      <b className="font-bold md:text-3xl lg:text-4xl">Hub</b>
     </Link>
   );
 }

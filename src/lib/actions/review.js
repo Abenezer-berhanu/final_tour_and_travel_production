@@ -39,7 +39,6 @@ export const fetchReviewById = async (id) => {
   try {
     await connectDB();
     const review = await reviewModel.find({ tour: id }).populate("user").lean();
-    console.log(review);
     return JSON.stringify(review);
   } catch (error) {
     console.log(error);
