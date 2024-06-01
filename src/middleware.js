@@ -49,8 +49,6 @@ export async function middleware(request) {
     }
   }
 
- 
-
   if (isValid) {
     if (userInfo?.role === "guide" && path === "/admin/dashboard/newTour") {
       return NextResponse.redirect(new URL("/admin/dashboard", request.url));
@@ -59,6 +57,12 @@ export async function middleware(request) {
 
   if (isValid) {
     if (userInfo?.role === "guide" && isGuideHidden) {
+      return NextResponse.redirect(new URL("/admin/dashboard", request.url));
+    }
+  }
+
+  if (isValid) {
+    if (userInfo?.role !== "admin" && path === "/admin/dashboard/bookings") {
       return NextResponse.redirect(new URL("/admin/dashboard", request.url));
     }
   }
