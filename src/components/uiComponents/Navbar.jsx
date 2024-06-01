@@ -6,7 +6,7 @@ import NavbarSheet from "./NavbarSheet";
 import NavbarUser from "./NavbarUser";
 
 async function Navbar() {
-  const toursRes = await fetchAllToursToSearch();
+  const {toursRes} = await fetchAllToursToSearch();
   const tours = toursRes ? JSON.parse(toursRes) : [];
   return (
     <div className="flex w-full min-h-[70px] mb-10 items-center justify-between lg:px-20 md:px-10 px-2 bg-primary text-white">
