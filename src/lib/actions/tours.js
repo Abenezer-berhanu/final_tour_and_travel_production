@@ -46,10 +46,13 @@ export const fetchTourById = async (id) => {
     await connectDB();
     const tours = await tourModel
       .findById(id)
-      .populate("guides", "name email")
+      .populate("guides", "name email photo")
+      .populate("leadGuides", "name email photo")
       .lean();
     return tours ? JSON.stringify(tours) : false;
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const fetchTop5Cheap = async () => {

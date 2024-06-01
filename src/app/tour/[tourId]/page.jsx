@@ -169,7 +169,7 @@ async function page({ params }) {
                           <AvatarImage
                             src={item.photo || "https://github.com/shadcn.png"}
                           />
-                          <AvatarFallback>CN</AvatarFallback>
+                          <AvatarFallback>B</AvatarFallback>
                         </AvatarFallback>
                       </Avatar>
                       <span className="p-2">
@@ -180,6 +180,32 @@ async function page({ params }) {
                   </div>
                 ))}
               </div>
+
+              {data?.leadGuides.length > 0 && (
+                <div className="flex flex-col gap-3 border p-2">
+                  {" "}
+                  <b>Lead Guides: </b>
+                  {data.leadGuides.map((item, idx) => (
+                    <div
+                      className="bg-slate-50 shadow-md w-full px-1"
+                      key={idx}
+                    >
+                      <span className="flex items-center justify-start px-2">
+                        <Avatar>
+                          <AvatarImage
+                            src={item?.photo || "https://github.com/shadcn.png"}
+                          />
+                          <AvatarFallback>B</AvatarFallback>
+                        </Avatar>
+                        <span className="p-2">
+                          <b>{item.name}</b>
+                          <p className="text-sm">{item.email}</p>
+                        </span>
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
 
               <div className="flex flex-col gap-2 relative my-3 bg-slate-50 p-1 rounded-md">
                 <b>Description:</b>
