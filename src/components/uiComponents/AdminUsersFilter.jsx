@@ -3,9 +3,7 @@ import {
   useRouter,
   useSearchParams,
   usePathname,
-  redirect,
 } from "next/navigation";
-import { useEffect, useState } from "react";
 
 export default function AdminUsersFilter() {
   const { replace } = useRouter();

@@ -31,11 +31,19 @@ const uploadImageToCloudinary = async (photo) => {
   }
 };
 
-export const fetchAllTours = async () => {
+export const fetchAllTours = async (page) => {
   try {
     await connectDB();
-    const tours = await tourModel.find({}).lean();
-    return tours ? JSON.stringify(tours) : false;
+    const totalTours = await tourModel.countDocuments({});
+    const tours = await tourModel
+      .find({})
+      .limit(process.env.PAGINATION_MAX_TOUR)
+      .skip(process.env.PAGINATION_MAX_TOUR * (page - 1))
+      .lean();
+    const totalPage = Math.ceil(
+      Number(totalTours / process.env.PAGINATION_MAX_TOUR)
+    );
+    return { totalPage, tours };
   } catch (error) {
     console.log(error);
   }

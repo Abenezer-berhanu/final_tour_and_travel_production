@@ -1,18 +1,15 @@
 import { Button } from "@/components/ui/button";
 import ErrorAlert from "@/components/uiComponents/ErrorAlert";
 import HomeCarousel from "@/components/uiComponents/HomeCarousel";
+import Pagination from "@/components/uiComponents/HomePagePagination";
 import Spinner from "@/components/uiComponents/Spinner";
 import Top5Cheap from "@/components/uiComponents/Top5Cheap";
 import TourCard from "@/components/uiComponents/TourCard";
-import {
-  fetchAllTours,
-  fetchTop5Cheap,
-} from "@/lib/actions/tours";
+import { fetchAllTours, fetchTop5Cheap } from "@/lib/actions/tours";
 import { Suspense } from "react";
-
-async function page() {
-  const res = await fetchAllTours();
-  const tours = res ? JSON.parse(res) : null;
+async function page({ searchParams }) {
+  const page = searchParams.page || 1;
+  const { tours, totalPage } = await fetchAllTours(page);
   const cheapToursRes = await fetchTop5Cheap();
   const top5Cheap = cheapToursRes ? JSON.parse(cheapToursRes) : null;
 
@@ -38,6 +35,7 @@ async function page() {
                 ))}
               </div>
             </Suspense>
+            {totalPage > 1 && <Pagination totalPage={totalPage} />}
           </>
         </div>
       ) : (
