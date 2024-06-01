@@ -42,7 +42,7 @@ function usePage() {
       )}
       {status == "success" && (
         <h1 className="text-3xl font-bold mb-40 text-center">
-          your email has been verified. <br />{" "}
+          your email is verified. <br />{" "}
           <span className="text-2xl">Please login to your account</span>
         </h1>
       )}

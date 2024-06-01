@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { findUserById, signUserOut } from "@/lib/actions/users";
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge"
 
 async function NavbarUser() {
   const userRes = await findUserById();
@@ -26,7 +27,7 @@ async function NavbarUser() {
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuLabel>{user?.name}</DropdownMenuLabel>
+            <DropdownMenuLabel className="flex gap-2">{user?.name}<Badge variant="secondary">{user?.role}</Badge></DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <Link href={"/user/profile"} className="h-full w-full">

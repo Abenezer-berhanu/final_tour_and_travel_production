@@ -3,13 +3,14 @@ import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "../ui/button";
-import { deleteAccount } from "@/lib/actions/users";
-import { useFormState } from "react-dom";
+import { adminDeleteAccount } from "@/lib/actions/users";
+import { useFormState, useFormStatus } from "react-dom";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import Spinner from "./Spinner";
 
 export default function AdminAllUsersTable({ users }) {
-  const [state, formAction] = useFormState(deleteAccount, null);
+  const [state, formAction] = useFormState(adminDeleteAccount, null);
   const [usersData, setUsersData] = useState(users);
   const searchParams = useSearchParams();
   useEffect(() => {
@@ -23,6 +24,19 @@ export default function AdminAllUsersTable({ users }) {
       setUsersData(users);
     }
   }, [searchParams]);
+
+  const Submit = () => {
+    const { pending } = useFormStatus();
+    return (
+      <Button
+        variant="ghost"
+        disabled={pending}
+        className="bg-transparent hover:bg-transparent p-0 text-red-500 hover:underline hover:text-red-600 w-full"
+      >
+        {pending ? <Spinner height={10} /> : "Delete"}
+      </Button>
+    );
+  };
 
   return (
     <Table>
@@ -49,13 +63,8 @@ export default function AdminAllUsersTable({ users }) {
             <Td className="text-sm font-semibold py-1">{user.role}</Td>
             <Td className="text-sm font-semibold py-1">
               <form action={formAction}>
-                <input type="hidden" name="purpose" value={"permanent"} />
-                <Button
-                  variant="ghost"
-                  className="bg-transparent hover:bg-transparent p-0 text-red-500 hover:underline hover:text-red-600"
-                >
-                  Delete
-                </Button>
+                <input type="hidden" name="id" value={user._id} />
+                <Submit />
               </form>
             </Td>
           </Tr>

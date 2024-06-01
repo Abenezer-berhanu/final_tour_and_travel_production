@@ -66,7 +66,6 @@ export const loginUser = async (currentState, formData) => {
           expires,
           httpOnly: true,
         });
-
         return { success: "logged in successfully" };
       } else {
         return { error: "invalid email or password" };
@@ -280,7 +279,6 @@ export const deleteAccount = async (currentState, formData) => {
     if (purpose == "permanent") {
       await userModel.findByIdAndDelete(id);
       signUserOut();
-      revalidateTag("users");
       return { success: true };
     } else if (purpose == "temporary") {
       await userModel.findByIdAndUpdate(id, { isActive: false });
@@ -415,5 +413,18 @@ export const changePassword = async (currentStatus, formData) => {
           "Something went wrong please check you connection and try again.",
       };
     }
+  }
+};
+
+export const adminDeleteAccount = async (currentStatus, formData) => {
+  try {
+    const id = formData.get("id");
+    await connectDB();
+    await userModel.findByIdAndDelete(id);
+    revalidateTag("users");
+    return { success: "user deleted" };
+  } catch (error) {
+    console.log(error);
+    return { error: "something went wrong please check your connection" };
   }
 };
