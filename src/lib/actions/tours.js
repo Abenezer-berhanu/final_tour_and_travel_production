@@ -99,16 +99,21 @@ export const createTour = async (currentState, formData) => {
       description,
       startingDate,
       isSecrete,
-      startCountry,
+      startLong,
+      startLat,
       startAddress,
       startDescription,
-      landingCountry,
+      landLong,
+      landLat,
       landingAddress,
       landingDescription,
       guides,
+      leadGuides,
       coverImage,
       images,
     } = Object.fromEntries(formData);
+    const startCountry = startLat + "," + startLong;
+    const landingCountry = landLat + "," + landLong;
 
     const tourInfo = {
       name,
@@ -128,6 +133,7 @@ export const createTour = async (currentState, formData) => {
       landingAddress,
       landingDescription,
       guides: guides.split(","),
+      leadGuides: leadGuides.split(","),
       coverImage,
       images: JSON.parse(images),
     };
@@ -148,12 +154,12 @@ export const createTour = async (currentState, formData) => {
       landingAddress,
       landingDescription,
       guides: guides.split(","),
+      leadGuides: leadGuides.split(","),
       coverImage,
       images: JSON.parse(images).length,
     };
 
     //check validation
-    console.log(dataToBeValidate);
     const { error, message } = checkForFalsyValues(dataToBeValidate);
     if (error) {
       return { error: message };
@@ -168,9 +174,6 @@ export const createTour = async (currentState, formData) => {
       let url = await uploadImageToCloudinary(tourInfo.images[i]);
       imagesUrl.push(url);
     }
-
-    //change data format
-    console.log(coverImageUrl);
 
     const dataToBeSaved = {
       name,
@@ -194,6 +197,7 @@ export const createTour = async (currentState, formData) => {
         description: tourInfo.landingDescription,
       },
       guides: tourInfo.guides,
+      leadGuides: tourInfo.leadGuides,
       imageCover: coverImageUrl,
       images: imagesUrl,
     };
@@ -201,9 +205,8 @@ export const createTour = async (currentState, formData) => {
     //save it to db
 
     await connectDB();
-    const newTour = await tourModel.create(dataToBeSaved).lean();
+    const newTour = await tourModel.create(dataToBeSaved);
     if (newTour) {
-      console.log(newTour);
       return { success: true, id: newTour._id };
     }
   } catch (error) {
@@ -508,18 +511,19 @@ export const updateTour = async (currentState, formData) => {
     description,
     startingDate,
     isSecrete,
-    startCountry,
+    startLong,
+    startLat,
     startAddress,
     startDescription,
-    landingCountry,
+    landLong,
+    landLat,
     landingAddress,
     landingDescription,
     guides,
+    leadGuides,
     coverImage,
     images,
   } = Object.fromEntries(formData);
-
-  console.log(maxGroupSize);
 
   try {
     //find tour by id
@@ -542,6 +546,8 @@ export const updateTour = async (currentState, formData) => {
       }
     }
 
+    const startCountry = startLat + "," + startLong;
+    const landingCountry = landLat + "," + landLong;
     //give each fields value if that is sent through req if not give it existing value
 
     const dataToBeSaved = {
@@ -558,7 +564,7 @@ export const updateTour = async (currentState, formData) => {
       startLocation: {
         type: "Point",
         coordinates:
-          startCountry ||
+          startCountry?.split(",") ||
           existTour.startLocation.coordinates ||
           existTour.startLocation[0].coordinates,
         address:
@@ -573,7 +579,7 @@ export const updateTour = async (currentState, formData) => {
       location: {
         type: "Point",
         coordinates:
-          landingCountry ||
+          landingCountry?.split(",") ||
           existTour.location.coordinates ||
           existTour.location[0].coordinates,
         address:

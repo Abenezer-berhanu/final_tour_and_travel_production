@@ -6,6 +6,7 @@ const initialState = {
   coverImage: null,
   startingDate: null,
   chosenGuides: null,
+  chosenLeadGuides: null,
 };
 
 const imageSlice = createSlice({
@@ -24,9 +25,17 @@ const imageSlice = createSlice({
     addGuides: (state, action) => {
       state.chosenGuides = action.payload;
     },
+    addLeadGuides: (state, action) => {
+      state.chosenLeadGuides = action.payload;
+    },
   },
 });
 
-export const { addImages, addCoverImage, addStartingDate, addGuides } =
-  imageSlice.actions;
+export const {
+  addImages,
+  addCoverImage,
+  addStartingDate,
+  addGuides,
+  addLeadGuides,
+} = imageSlice.actions;
 export default imageSlice.reducer;

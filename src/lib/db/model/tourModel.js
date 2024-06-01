@@ -72,7 +72,7 @@ const tourSchema = new mongoose.Schema(
       address: String,
       description: String,
     },
-    location:  {
+    location: {
       type: {
         type: String,
         default: "Point",
@@ -88,9 +88,14 @@ const tourSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
+    leadGuides: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   { timestamps: true }
 );
 
 export default mongoose.models?.Tour || mongoose.model("Tour", tourSchema);
-

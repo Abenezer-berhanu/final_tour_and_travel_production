@@ -9,7 +9,6 @@ import {
 import { Separator } from "../ui/separator";
 import AdminDatePicker from "./AdminDatePicker";
 import { Checkbox } from "../ui/checkbox";
-import { countries } from "@/lib/countries";
 import ImagesUpload from "./ImagesUpload";
 import PrimaryImageUpload from "./PrimaryImageUpload";
 import { useSelector } from "react-redux";
@@ -21,13 +20,14 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Spinner from "./Spinner";
 import { toast } from "react-toastify";
+import MultipleLeadGuidesSelect from "./MultipleLeadGuidesSelect";
+import Link from "next/link";
 
-function AdminTourForm({ guides }) {
+function AdminTourForm({ guides, leadGuides }) {
   const { push } = useRouter();
   const [state, formAction] = useFormState(createTour, null);
-  const { images, coverImage, startingDate, chosenGuides } = useSelector(
-    (state) => state.images
-  );
+  const { images, coverImage, startingDate, chosenGuides, chosenLeadGuides } =
+    useSelector((state) => state.images);
 
   useEffect(() => {
     if (state?.success) {
@@ -53,6 +53,7 @@ function AdminTourForm({ guides }) {
       <input type="hidden" name="images" value={JSON.stringify(images)} />
       <input type="hidden" name="startingDate" value={startingDate} />
       <input type="hidden" name="guides" value={chosenGuides} />
+      <input type="hidden" name="leadGuides" value={chosenLeadGuides} />
       <div className="grid grid-cols-3 gap-3">
         <span className="flex flex-col gap-1">
           <label
@@ -237,32 +238,80 @@ function AdminTourForm({ guides }) {
       </div>
       <Separator />
 
-      <h1 className="text-lg font-semibold">Starting Location</h1>
-      <div className="grid grid-cols-3 gap-3">
-        <span className="flex flex-col gap-1">
-          <label
-            htmlFor="name"
-            className="block text-sm font-medium text-form_text"
+      <h1 className="text-lg font-semibold">
+        Starting Location{" "}
+        <small>
+          <Link
+            href={"https://positionstack.com/"}
+            target="_blanc"
+            className="text-xs text-primary"
           >
-            Country
-          </label>
+            Get long&lat
+          </Link>
+        </small>
+      </h1>
+      <div className="grid grid-cols-3 gap-3">
+        <div className="flex gap-2 border border-slate-200 p-3">
+          <div className="">
+            <label htmlFor="startLong" className="text-xs">
+              Longitude
+            </label>
 
-          <Select name="startCountry" required>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="country" />
-            </SelectTrigger>
-            <SelectContent>
-              {countries.map((item, idx) => (
-                <SelectItem
-                  key={idx}
-                  value={[item.lat.toString() + "," + item.lon.toString()]}
-                >
-                  {item.countryName}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </span>
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                className="size-10 leading-10 text-gray-600 transition hover:opacity-75"
+              >
+                -
+              </button>
+
+              <input
+                type="text"
+                required
+                id="startLong"
+                name="startLong"
+                className="h-10 w-16 rounded outline-none border border-gray-500 text-center [-moz-appearance:_textfield] sm:text-sm [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+              />
+
+              <button
+                type="button"
+                className="size-10 leading-10 text-gray-600 transition hover:opacity-75"
+              >
+                +
+              </button>
+            </div>
+          </div>
+          <Separator orientation="vertical" />
+          <div className="">
+            <label htmlFor="startLat" className="text-xs">
+              Latitude
+            </label>
+
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                className="size-10 leading-10 text-gray-600 transition hover:opacity-75"
+              >
+                -
+              </button>
+
+              <input
+                type="text"
+                id="startLat"
+                required
+                name="startLat"
+                className="h-10 w-16 rounded outline-none border border-gray-500 text-center [-moz-appearance:_textfield] sm:text-sm [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+              />
+
+              <button
+                type="button"
+                className="size-10 leading-10 text-gray-600 transition hover:opacity-75"
+              >
+                +
+              </button>
+            </div>
+          </div>
+        </div>
 
         <span className="flex flex-col gap-1">
           <label
@@ -302,29 +351,80 @@ function AdminTourForm({ guides }) {
       </div>
 
       <Separator />
-      <h1 className="text-lg font-semibold">Location</h1>
-      <div className="grid grid-cols-3 gap-3">
-        <span className="flex flex-col gap-1">
-          <label
-            htmlFor="landingCountry"
-            className="block text-sm font-medium text-form_text"
+      <h1 className="text-lg font-semibold">
+        Location{" "}
+        <small>
+          <Link
+            href={"https://positionstack.com/"}
+            target="_blanc"
+            className="text-xs text-primary"
           >
-            Landing Country
-          </label>
+            Get long&lat
+          </Link>
+        </small>
+      </h1>
+      <div className="grid grid-cols-3 gap-3">
+        <div className="flex gap-2 border border-slate-200 p-3">
+          <div className="">
+            <label htmlFor="landLong" className="text-xs">
+              Longitude
+            </label>
 
-          <Select name="landingCountry" required>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="landingCountry" />
-            </SelectTrigger>
-            <SelectContent>
-              {countries.map((item, idx) => (
-                <SelectItem key={idx} value={[item.lat + "," + item.lon]}>
-                  {item.countryName}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </span>
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                className="size-10 leading-10 text-gray-600 transition hover:opacity-75"
+              >
+                -
+              </button>
+
+              <input
+                type="text"
+                id="landLong"
+                required
+                name="landLong"
+                className="h-10 w-16 rounded outline-none border border-gray-500 text-center [-moz-appearance:_textfield] sm:text-sm [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+              />
+
+              <button
+                type="button"
+                className="size-10 leading-10 text-gray-600 transition hover:opacity-75"
+              >
+                +
+              </button>
+            </div>
+          </div>
+          <Separator orientation="vertical" />
+          <div className="">
+            <label htmlFor="landLat" className="text-xs">
+              Latitude
+            </label>
+
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                className="size-10 leading-10 text-gray-600 transition hover:opacity-75"
+              >
+                -
+              </button>
+
+              <input
+                type="text"
+                id="landLat"
+                required
+                name="landLat"
+                className="h-10 w-16 rounded outline-none border border-gray-500 text-center [-moz-appearance:_textfield] sm:text-sm [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+              />
+
+              <button
+                type="button"
+                className="size-10 leading-10 text-gray-600 transition hover:opacity-75"
+              >
+                +
+              </button>
+            </div>
+          </div>
+        </div>
 
         <span className="flex flex-col gap-1">
           <label
@@ -343,7 +443,6 @@ function AdminTourForm({ guides }) {
             className="text-sm py-2 indent-2 outline-none border border-black/20 rounded-md"
           />
         </span>
-
         <span className="flex flex-col gap-1">
           <label
             htmlFor="landingDescription"
@@ -365,8 +464,19 @@ function AdminTourForm({ guides }) {
 
       <Separator />
       <h1 className="text-lg font-semibold">Choose Guides</h1>
-      <div>
-        <MultipleSelect guides={guides} />
+      <div className="grid grid-cols-2 gap-3">
+        <span>
+          <small>
+            <b>Guides</b>
+          </small>
+          <MultipleSelect guides={guides} />
+        </span>
+        <span>
+          <small>
+            <b>Lead Guides</b>
+          </small>
+          <MultipleLeadGuidesSelect guides={leadGuides} />
+        </span>
       </div>
 
       <Separator />

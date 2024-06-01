@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { addGuides } from "@/slices/imagesSlice";
+import { addLeadGuides } from "@/slices/imagesSlice";
 
-function MultipleSelect({ guides }) {
+function MultipleLeadGuidesSelect({ guides }) {
   const dispatch = useDispatch();
 
   const handleChange = (event) => {
@@ -14,7 +14,7 @@ function MultipleSelect({ guides }) {
         selected.push(options[i].value);
       }
     }
-    dispatch(addGuides(selected));
+    dispatch(addLeadGuides(selected));
   };
 
   return (
@@ -34,4 +34,4 @@ function MultipleSelect({ guides }) {
   );
 }
 
-export default MultipleSelect;
+export default MultipleLeadGuidesSelect;
