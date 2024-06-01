@@ -181,7 +181,7 @@ async function page({ params }) {
                 ))}
               </div>
 
-              {data?.leadGuides.length > 0 && (
+              {data?.leadGuides?.length > 0 && (
                 <div className="flex flex-col gap-3 border p-2">
                   {" "}
                   <b>Lead Guides: </b>
