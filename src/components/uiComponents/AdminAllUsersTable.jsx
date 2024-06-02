@@ -15,7 +15,16 @@ export default function AdminAllUsersTable({ users }) {
   const searchParams = useSearchParams();
   useEffect(() => {
     let user = searchParams.get("user");
-    if (user) {
+    let userRole = searchParams.get("userRole");
+    let userRoleQuery = userRole ? userRole.split(",") : [];
+    if (userRole) {
+      const filteredUsers = users.filter((item) => {
+        if (userRoleQuery.includes(item.role)) {
+          return item;
+        }
+      });
+      setUsersData(filteredUsers);
+    } else if (user) {
       const filteredUsers = usersData.filter((item) =>
         item.name.toLowerCase().includes(user.toLowerCase())
       );
@@ -31,7 +40,7 @@ export default function AdminAllUsersTable({ users }) {
       <Button
         variant="ghost"
         disabled={pending}
-        className="bg-transparent hover:bg-transparent p-0 text-red-500 hover:underline hover:text-red-600 w-full"
+        className="bg-transparent hover:bg-transparent px-0 text-red-500 hover:underline hover:text-red-600 w-full"
       >
         {pending ? <Spinner height={10} /> : "Delete"}
       </Button>
@@ -46,7 +55,7 @@ export default function AdminAllUsersTable({ users }) {
           <Th className="text-white text-start">Name</Th>
           <Th className="text-white text-start">Email</Th>
           <Th className="text-white text-start">Role</Th>
-          <Th className="text-white text-start">Action</Th>
+          <Th className="text-white text-center">Action</Th>
         </Tr>
       </Thead>
       <Tbody>

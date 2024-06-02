@@ -20,6 +20,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Spinner from "./Spinner";
 import { toast } from "react-toastify";
+import Link from "next/link";
 
 function AdminTourUpdate({ tour }) {
   const { push } = useRouter();
