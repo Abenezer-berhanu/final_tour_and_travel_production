@@ -6,16 +6,17 @@ import { useFormState, useFormStatus } from "react-dom";
 import { loginUser } from "@/lib/actions/users";
 import Spinner from "./Spinner";
 import { IoEyeOff, IoEye } from "react-icons/io5";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
 export default function SigninForm() {
+  const { replace } = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [state, formAction] = useFormState(loginUser, null);
   useEffect(() => {
     if (state?.success) {
       toast.success(state.success);
-      redirect("/");
+      replace("/");
     } else {
       toast.error(state?.error);
     }

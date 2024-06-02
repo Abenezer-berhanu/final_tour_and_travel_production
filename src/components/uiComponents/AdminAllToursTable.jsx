@@ -26,10 +26,19 @@ export default function AdminAllToursTable({ tours }) {
   useEffect(() => {
     let tour = searchParams.get("tour");
     let diff = searchParams.get("diff");
+    let price = Number(searchParams.get("price"));
     if (tour) {
-      const filteredTours = toursData.filter((item) =>
+      const filteredTours = tours.filter((item) =>
         item.name.toLowerCase().includes(tour.toLowerCase())
       );
+      setToursData(filteredTours);
+    } else if (price) {
+      const minPrice = 500;
+      const filteredTours = tours.filter((item) => {
+        if (item.price >= minPrice && item.price <= price) {
+          return item;
+        }
+      });
       setToursData(filteredTours);
     } else if (diff) {
       //?diff=easy,difficult [easy, difficult]
@@ -41,7 +50,6 @@ export default function AdminAllToursTable({ tours }) {
           }
         }
       });
-      console.log(filteredTours.length);
       setToursData(filteredTours);
     } else {
       setToursData(tours);

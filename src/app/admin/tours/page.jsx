@@ -1,4 +1,5 @@
 import AdminAllToursTable from "@/components/uiComponents/AdminAllToursTable";
+import AdminPriceSliderFilter from "@/components/uiComponents/AdminPriceSliderFilter";
 import AdminTourSearchInput from "@/components/uiComponents/AdminToursSearchInput";
 import AdminUsersFilter from "@/components/uiComponents/AdminUsersFilter";
 import Spinner from "@/components/uiComponents/Spinner";
@@ -13,6 +14,7 @@ async function page() {
       <span className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">All Tours</h1>
         <AdminUsersFilter />
+        <AdminPriceSliderFilter />
         <AdminTourSearchInput />
       </span>
 
