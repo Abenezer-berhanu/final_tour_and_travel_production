@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 import cloudinary from "../cloudinaryConfig";
 import tourModel from "../db/model/tourModel";
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+import { verifyToken } from "../VerifyToken";
 
 //check if the object has falsy value
 const checkForFalsyValues = (obj) => {
@@ -71,15 +72,24 @@ export const fetchTop5Cheap = async () => {
   } catch (error) {}
 };
 
-export const getAllTours = async () => {
+export const getAllTours = async ({ tours }) => {
+  const { userInfo } = await verifyToken();
   try {
-    const tourRes = await fetch(`${process.env.FRONTEND_DOMAIN}/api/tours`, {
-      cache: "no-cache",
-      next: { tags: ["tours"] },
-    });
-    const { tour } = await tourRes.json();
-    if (tour) {
-      return JSON.stringify(tour);
+    if (userInfo.role !== "guide") {
+      const tourRes = await fetch(`${process.env.FRONTEND_DOMAIN}/api/tours`, {
+        cache: "no-cache",
+        next: { tags: ["tours"] },
+      });
+      const { tour } = await tourRes.json();
+      if (tour) {
+        return JSON.stringify(tour);
+      }
+    } else if (userInfo.role == "guide" && tours) {
+      await connectDB();
+      const tour = await tourModel.find({ guides: userInfo.userId });
+      if (tour) {
+        return JSON.stringify(tour);
+      }
     }
   } catch (error) {
     console.log(error);

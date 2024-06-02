@@ -7,7 +7,7 @@ import { getAllTours } from "@/lib/actions/tours";
 import { Suspense } from "react";
 
 async function page() {
-  const toursRes = await getAllTours();
+  const toursRes = await getAllTours({ tours: true });
   const tours = toursRes ? await JSON.parse(toursRes) : [];
   return (
     <div className="flex flex-col gap-3">
