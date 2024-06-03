@@ -1,30 +1,100 @@
-import {
-    Sheet,
-    SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
-  } from "@/components/ui/sheet";
-  import { AlignJustify } from "lucide-react";
-  
-  function NavbarSheet() {
-    return (
-      <div className="h-fit">
-        <Sheet>
-          <SheetTrigger className="flex items-center justify-center"><AlignJustify size={25} className="mt-1"/></SheetTrigger>
-          <SheetContent className="w-full max-w-[400px] sm:w-[540px]" side="left">
-            <SheetHeader>
-              <SheetTitle>Are you absolutely sure?</SheetTitle>
-              <SheetDescription>
-                This action cannot be undone. This will permanently delete your
-                account and remove your data from our servers.
-              </SheetDescription>
-            </SheetHeader>
-          </SheetContent>
-        </Sheet>
-      </div>
-    );
-  }
-  
-  export default NavbarSheet;
+"use client";
+import { useState } from "react";
+import Link from "next/link";
+import { FaBars, FaTimes } from "react-icons/fa";
+import NavbarLogo from "./NavbarLogo";
+import navItems from "@/lib/navItems";
+import { signUserOut } from "@/lib/actions/users";
+
+const NavbarSheet = ({ user }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
+
+  return (
+    <div>
+      <nav className="bg-primary flex justify-between items-center p-4">
+        <div className="sm:hidden flex items-center">
+          <button onClick={toggleSidebar} className="text-white text-2xl">
+            <FaBars />
+          </button>
+        </div>
+      </nav>
+
+      {isOpen && (
+        <div className="sm:hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex flex-col items-center">
+          <div className="bg-white w-full h-full flex flex-col p-4">
+            <div className="flex justify-end">
+              <button onClick={toggleSidebar} className="text-2xl text-black">
+                <FaTimes />
+              </button>
+            </div>
+
+            <NavbarLogo />
+            {user ? (
+              <div className="flex flex-col gap-3 mt-3 h-[95vh]">
+                {navItems.map((data, idx) => (
+                  <Link
+                    key={idx}
+                    href={data.link}
+                    className="bg-primary rounded-md py-2 px-4 text-center text-[16px] text-white"
+                    onClick={toggleSidebar}
+                  >
+                    {data.label}
+                  </Link>
+                ))}
+                <Link
+                  href={"/user/profile"}
+                  className="bg-primary rounded-md py-2 px-4 text-center text-[16px] text-white"
+                  onClick={toggleSidebar}
+                >
+                  Profile
+                </Link>
+
+                <Link
+                  href={"/user/tours"}
+                  className="bg-primary rounded-md py-2 px-4 text-center text-[16px] text-white"
+                  onClick={toggleSidebar}
+                >
+                  My tours
+                </Link>
+
+                {user?.role.toLowerCase() != "user" && (
+                  <Link
+                    href={"/admin/dashboard"}
+                    className="bg-primary rounded-md py-2 px-4 text-center text-[16px] text-white"
+                    onClick={toggleSidebar}
+                  >
+                    Dashboard
+                  </Link>
+                )}
+                <form
+                  action={signUserOut}
+                  className="font-bold text-black text-center mt-auto"
+                >
+                  <button className="w-full my-2" type="submit">
+                    Log out
+                  </button>
+                </form>
+              </div>
+            ) : (
+              <div className="mx-2 flex gap-3 items-center mt-2">
+                <Link
+                  href={"/auth/signin"}
+                  className="bg-primary w-full rounded-md py-2 px-4 text-center text-[16px] text-white"
+                  onClick={toggleSidebar}
+                >
+                  Log in
+                </Link>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default NavbarSheet;

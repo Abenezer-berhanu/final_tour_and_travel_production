@@ -4,17 +4,22 @@ import NavbarLogo from "./NavbarLogo";
 import NavbarSearchInput from "./NavbarSearchInput";
 import NavbarSheet from "./NavbarSheet";
 import NavbarUser from "./NavbarUser";
+import { findUserById } from "@/lib/actions/users";
 
 async function Navbar() {
-  const {toursRes} = await fetchAllToursToSearch();
+  const toursRes = await fetchAllToursToSearch();
   const tours = toursRes ? JSON.parse(toursRes) : [];
+  const userRes = await findUserById();
+  const user = userRes && JSON.parse(userRes);
   return (
     <div className="flex w-full min-h-[70px] mb-10 items-center justify-between lg:px-20 md:px-10 px-2 bg-primary text-white">
       <div className="flex gap-3 items-center mr-4">
         <span className="hidden max-md:flex">
-          <NavbarSheet />
+          <NavbarSheet user={user} />
         </span>
-        <NavbarLogo />
+        <span className="hidden sm:flex">
+          <NavbarLogo />
+        </span>
       </div>
       <div className="flex items-center">
         <span className="max-md:hidden">
