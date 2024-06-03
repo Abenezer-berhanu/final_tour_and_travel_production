@@ -31,8 +31,8 @@ export const fetchAllUsers = async () => {
   }
 };
 
-export const loginUser = async (currentState, formData) => {
-  const { email, password } = Object.fromEntries(formData);
+export const loginUser = async (info) => {
+  const { email, password } = info;
   try {
     await connectDB();
     const user = await userModel.findOne({ email }).lean();
@@ -66,6 +66,7 @@ export const loginUser = async (currentState, formData) => {
           expires,
           httpOnly: true,
         });
+
         return { success: "logged in successfully" };
       } else {
         return { error: "invalid email or password" };

@@ -14,7 +14,7 @@ import Image from "next/image";
 function HomeCarousel() {
   return (
     <div className="relative">
-      <div className="absolute h-fit w-full shadow-lg bg-slate-50 z-40 max-w-[1000px] left-0 right-0 mx-auto -bottom-12 grid grid-cols-2 lg:grid-cols-4 ">
+      <div className="absolute h-28 w-full shadow-lg bg-slate-50 z-40 max-w-[1000px] left-0 right-0 mx-auto -bottom-12 grid grid-cols-2 lg:grid-cols-4 ">
         <div className="flex flex-col justify-center pl-3">
           <div className="flex gap-3">
             <b className="">Location</b>
@@ -60,7 +60,7 @@ function HomeCarousel() {
             delay: 7000,
           }),
         ]}
-        className="w-full max-w-[1300px] mx-auto shadow-md z-10"
+        className="w-full max-w-[1300px] mx-auto shadow-md z-0"
       >
         <CarouselContent>
           {homeCarousel.map((item, index) => (

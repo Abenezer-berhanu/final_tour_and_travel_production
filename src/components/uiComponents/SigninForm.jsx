@@ -11,32 +11,41 @@ import { toast } from "react-toastify";
 
 export default function SigninForm() {
   const { replace } = useRouter();
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [state, formAction] = useFormState(loginUser, null);
-  useEffect(() => {
-    if (state?.success) {
-      toast.success(state.success);
-      replace("/");
-    } else {
-      toast.error(state?.error);
-    }
-  }, [state]);
+  // const [state, formAction] = useFormState(loginUser, null);
+  const [info, setInfo] = useState({
+    email: "",
+    password: "",
+  });
 
-  const Submit = () => {
-    const { pending } = useFormStatus();
-    return (
-      <Button type="submit" disabled={pending} className="relative">
-        {pending ? <Spinner height={30} /> : "Sign in"}
-      </Button>
-    );
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    const res = await loginUser(info);
+    setLoading(false);
+
+    if (res.success) {
+      toast.success("logged in successfully");
+      replace("/");
+      return;
+    }
+    if (res.error) toast.error(res.error);
   };
+
+  const handleChange = async (e) => {
+    setInfo({ ...info, [e.target.name]: e.target.value });
+  };
+
+
   return (
-    <form action={formAction} className="w-full flex flex-col gap-3">
+    <form onSubmit={handleSubmit} className="w-full flex flex-col gap-3">
       <span className="flex flex-col gap-2">
         <p className="font-semibold">Email:</p>
         <input
           type="email"
           name="email"
+          onChange={(e) => handleChange(e)}
           placeholder="Email"
           required
           className="border py-2 bg-slate-50 rounded-md indent-2 outline-none focus:bg-white"
@@ -47,6 +56,7 @@ export default function SigninForm() {
           type={showPassword ? "text" : "password"}
           name="password"
           placeholder="Password"
+          onChange={(e) => handleChange(e)}
           className="border py-2 bg-slate-50 w-full rounded-md indent-2 outline-none focus:bg-white"
         />
         {showPassword ? (
@@ -67,7 +77,9 @@ export default function SigninForm() {
       >
         Forgot Password
       </Link>
-      <Submit />
+      <Button type="submit" disabled={loading} className="relative">
+        {loading ? <Spinner height={30} /> : "Sign in"}
+      </Button>
     </form>
   );
 }
