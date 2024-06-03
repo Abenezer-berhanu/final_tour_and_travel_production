@@ -1,76 +1,61 @@
-// "use client";
-// import ErrorAlert from "@/components/uiComponents/ErrorAlert";
-// import Spinner from "@/components/uiComponents/Spinner";
-// import TourCard from "@/components/uiComponents/TourCard";
-// import { fetchClosestTour } from "@/lib/actions/tours";
-// import { useState, useLayoutEffect } from "react";
-// import { toast } from "react-toastify";
+"use client";
+import CloseToursCard from "@/components/uiComponents/CloseToursCard";
+import ErrorAlert from "@/components/uiComponents/ErrorAlert";
+import Spinner from "@/components/uiComponents/Spinner";
+import TourCard from "@/components/uiComponents/TourCard";
+import { fetchClosestTour } from "@/lib/actions/tours";
+import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
-// const LocationComponent = () => {
-//   const [isLoading, setIsLoading] = useState(false);
-//   const [data, setData] = useState([]);
+const LocationComponent = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState([]);
+  console.log(data);
+  const [error, setError] = useState(null);
 
-//   useLayoutEffect(() => {
-//     // Check if geolocation is supported
-//     if ("geolocation" in navigator) {
-//       setIsLoading(true);
-//       navigator.geolocation.getCurrentPosition(
-//         async function (position) {
-//           // Get latitude and longitude
-//           const data = await fetchClosestTour(
-//             position.coords.latitude,
-//             position.coords.longitude
-//           );
-//           if (data?.success) {
-//             setData(data?.success);
-//           }
-//           if (data?.error) {
-//             toast.error(data?.error);
-//           }
-//           setIsLoading(false);
-//         },
-//         function (error) {
-//           setIsLoading(false);
-//         }
-//       );
-//     } else {
-//       setError("Geolocation is not supported by your browser.");
-//       setIsLoading(false);
-//     }
-//   }, []);
+  useEffect(() => {
+    const getGeolocation = () => {
+      if ("geolocation" in navigator) {
+        setIsLoading(true);
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            try {
+              const { latitude, longitude } = position.coords;
+              const response = await fetchClosestTour(latitude, longitude);
+              if (response?.success) {
+                setData(response.success);
+              } else if (response?.error) {
+                toast.error(response.error);
+              }
+            } catch (err) {
+              toast.error("Failed to fetch data.");
+            } finally {
+              setIsLoading(false);
+            }
+          },
+          (error) => {
+            setError("Unable to retrieve your location.");
+            setIsLoading(false);
+          }
+        );
+      } else {
+        setError("Geolocation is not supported by your browser.");
+      }
+    };
 
-//   return (
-//     <div className="min-h-screen ">
-//       <h1 className="text-xl font-bold mb-10">Closest Tours</h1>
-//       {isLoading ? (
-//         <Spinner />
-//       ) : (
-//         <div>
-//           {data.length > 0 ? (
-//             <div className="grid grid-cols-4">
-//               {data.map((item, idx) => (
-//                 <TourCard key={idx} data={item} />
-//               ))}
-//             </div>
-//           ) : (
-//             <ErrorAlert
-//               info={true}
-//               description={"No close tour has found."}
-//               safe={true}
-//             />
-//           )}
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
+    getGeolocation();
+  }, []);
 
-// export default LocationComponent;
+  return (
+    <div className="min-h-screen">
+      <h1 className="text-xl font-bold mb-10">Closest Tours</h1>
+      <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        {data.map((tour, idx) => (
+          <CloseToursCard data={tour} />
+        ))}
+      </div>
+    </div>
+  );
+};
 
-import React from "react";
-
-function page() {
-  return <div>page</div>;
-}
-
-export default page;
+export default LocationComponent;
