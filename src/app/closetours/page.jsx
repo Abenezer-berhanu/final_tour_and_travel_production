@@ -47,7 +47,7 @@ const LocationComponent = () => {
   }, []);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen max-sm:mx-2">
       <h1 className="text-xl font-bold mb-10">Closest Tours</h1>
       <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {data.map((tour, idx) => (

@@ -10,7 +10,7 @@ async function page() {
   const users = usersRes ? JSON.parse(usersRes) : [];
   return (
     <div className="flex flex-col gap-3">
-      <span className="flex justify-between items-center">
+      <span className="flex max-sm:flex-col max-sm:gap-2 justify-between items-center">
         <h1 className="text-2xl font-bold">All Users</h1>
         <AdminUsersFilterComp />
         <AdminUserSearchInput />

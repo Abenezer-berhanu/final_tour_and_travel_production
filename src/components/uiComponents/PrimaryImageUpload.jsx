@@ -23,7 +23,7 @@ function PrimaryImageUpload() {
   }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
   return (
-    <div className="flex flex-col gap-5">
+    <div>
       <div
         {...getRootProps()}
         className="flex flex-col items-center justify-center text-sm"
@@ -47,13 +47,15 @@ function PrimaryImageUpload() {
       </div>
       <Separator />
       {coverImage && (
-        <Image
-          width={300}
-          height={300}
-          src={coverImage}
-          className="h-12 w-12 object-cover"
-          alt="uploaded image"
-        />
+        <div>
+          <Image
+            width={300}
+            height={300}
+            src={coverImage}
+            className="h-12 w-12 object-cover"
+            alt="uploaded image"
+          />
+        </div>
       )}
     </div>
   );

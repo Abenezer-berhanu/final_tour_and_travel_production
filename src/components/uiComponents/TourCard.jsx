@@ -6,13 +6,12 @@ import { fetchReviewById } from "@/lib/actions/review";
 import Rating from "./Rating";
 
 async function TourCard({ data }) {
-  console.log(data);
   const reviewRes = await fetchReviewById(data?._id);
-  // const reviews = reviewRes ? JSON.parse(reviewRes) : null;
-  // const rating =
-  //   reviews.length > 0
-  //     ? reviews.reduce((acc, cur) => acc + cur.rating, 0) / reviews.length
-  //     : 0;
+  const reviews = reviewRes ? JSON.parse(reviewRes) : null;
+  const rating =
+    reviews.length > 0
+      ? reviews.reduce((acc, cur) => acc + cur.rating, 0) / reviews.length
+      : 0;
   return (
     <Link href={`/tour/${data?._id}`} className="group">
       <Card>

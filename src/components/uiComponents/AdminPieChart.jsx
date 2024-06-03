@@ -6,6 +6,8 @@ export function AdminPieChart({ tours }) {
   const mediumTours = tours.filter((tour) => tour.difficulty == "medium");
   const easyTours = tours.filter((tour) => tour.difficulty == "easy");
 
+  console.log(tours);
+
   const data = [
     ["task", "difficulty level"],
     ["difficult", Number(hardTours.length)],

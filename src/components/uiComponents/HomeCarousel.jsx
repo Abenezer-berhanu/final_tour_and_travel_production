@@ -14,32 +14,32 @@ import Image from "next/image";
 function HomeCarousel() {
   return (
     <div className="relative">
-      <div className="absolute h-28 w-full shadow-lg bg-slate-50 z-40 max-w-[1000px] left-0 right-0 mx-auto -bottom-12 grid grid-cols-2 lg:grid-cols-4 ">
+      <div className="absolute h-fit w-full shadow-lg bg-slate-50 z-40 max-w-[1000px] left-0 right-0 mx-auto -bottom-12 grid grid-cols-2 lg:grid-cols-4 ">
         <div className="flex flex-col justify-center pl-3">
           <div className="flex gap-3">
             <b className="">Location</b>
-            <LocateFixed className="text-slate-700" />
+            <LocateFixed className="text-slate-700 max-sm:hidden" />
           </div>
-          <p className="text-slate-700">Anywhere you want</p>
+          <p className="text-slate-700 max-sm:text-sm line-clamp-1">Anywhere you want</p>
         </div>
         <div className="flex gap-3 items-center">
           <Separator orientation="vertical" className="max-h-24" />
           <div className="flex flex-col">
             <div className="flex gap-3">
               <b className="">Check in</b>
-              <Calendar />
+              <Calendar className=" max-sm:hidden"/>
             </div>
-            <p className="text-slate-700">Your selection</p>
+            <p className="text-slate-700 max-sm:text-sm line-clamp-1">Your selection</p>
           </div>
         </div>
         <div className="flex gap-3 items-center">
           <Separator orientation="vertical" className="max-h-24" />
           <div className="flex flex-col">
             <div className="flex gap-3">
-              <b className="">Check out</b>
-              <Calendar />
+              <b className="max-sm:text-sm line-clamp-1">Check out</b>
+              <Calendar className=" max-sm:hidden"/>
             </div>
-            <p className="text-slate-700">Your selection</p>
+            <p className="text-slate-700 line-clamp-1">Your selection</p>
           </div>
         </div>
 
@@ -47,8 +47,8 @@ function HomeCarousel() {
           <Separator orientation="vertical" className="max-h-24" />
           <div className="flex flex-col">
             <div className="flex gap-3">
-              <b className="">Experience</b>
-              <Star />
+              <b className="max-sm:text-sm">Experience</b>
+              <Star className=" max-sm:hidden"/>
             </div>
             <p className="text-slate-700">Life time</p>
           </div>

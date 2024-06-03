@@ -11,7 +11,7 @@ async function page() {
   const tours = toursRes ? await JSON.parse(toursRes) : [];
   return (
     <div className="flex flex-col gap-3">
-      <span className="flex justify-between items-center">
+      <span className="flex max-sm:flex-col max-sm:gap-2 justify-between items-center">
         <h1 className="text-2xl font-bold">All Tours</h1>
         <AdminUsersFilter />
         <AdminPriceSliderFilter />

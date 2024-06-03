@@ -23,9 +23,6 @@ async function page({ searchParams }) {
           <>
             <span className="flex justify-between items-center">
               <b className="text-xl">Popular Places</b>
-              <Button variant="ghost" className="hover:bg-none text-primary">
-                view more
-              </Button>
             </span>
 
             <Suspense fallback={<Spinner />}>

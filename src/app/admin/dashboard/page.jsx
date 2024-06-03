@@ -17,8 +17,8 @@ import AdminSmallToursTable from "@/components/uiComponents/AdminSmallToursTable
 async function page() {
   const usersRes = await getAllUsers();
   const users = usersRes ? JSON.parse(usersRes) : [];
-  const toursRes = await getAllTours();
-  const tours = toursRes ? await JSON.parse(toursRes) : [];
+  const toursRes = await getAllTours({tours: false});
+  const tours = toursRes ? JSON.parse(toursRes) : [];
   const activeUsersRes = await getActiveUsers();
   const activeUsers = activeUsersRes && JSON.parse(activeUsersRes);
   const inactiveUsersRes = await getInactiveUsers();

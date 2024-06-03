@@ -35,7 +35,7 @@ function DashboardLayout({ myInfo }) {
       </span>
       {viewList && (
         <div
-          className={`hidden sm:flex flex-col items-start justify-center gap-3 mt-2`}
+          className={`flex flex-col items-start justify-center gap-3 mt-2`}
         >
           <Link
             href={"/admin/dashboard"}

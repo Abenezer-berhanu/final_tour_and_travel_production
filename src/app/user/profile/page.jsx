@@ -7,7 +7,7 @@ async function Profile() {
   const user = userRes && JSON.parse(userRes);
 
   return (
-    <div className="bg-slate-50 w-full h-full relative overflow-hidden p-2  sm:p-8">
+    <div className="bg-slate-50 w-full h-full relative overflow-hidden p-2 sm:p-8">
       <div className="max-w-[1200px] mx-auto py-3 flex flex-col gap-3">
         <div className="py-5 flex flex-col gap-1">
           <b className="text-xl">Profile</b>

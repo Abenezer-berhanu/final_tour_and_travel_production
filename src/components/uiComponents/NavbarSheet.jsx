@@ -33,6 +33,13 @@ const NavbarSheet = ({ user }) => {
             </div>
 
             <NavbarLogo />
+            <Link
+              href={"/"}
+              className="bg-primary rounded-md py-2 px-4 text-center text-[16px] text-white mt-5"
+              onClick={toggleSidebar}
+            >
+              Home
+            </Link>
             {user ? (
               <div className="flex flex-col gap-3 mt-3 h-[95vh]">
                 {navItems.map((data, idx) => (

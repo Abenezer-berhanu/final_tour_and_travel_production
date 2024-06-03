@@ -75,18 +75,18 @@ export const fetchTop5Cheap = async () => {
 export const getAllTours = async ({ tours }) => {
   const { userInfo } = await verifyToken();
   try {
-    if (userInfo.role !== "guide") {
+    const limitTours = tours && userInfo.role == "guide";
+
+    if (limitTours) {
+      await connectDB();
+      const tour = await tourModel.find({ guides: userInfo.userId });
+      return JSON.stringify(tour);
+    } else {
       const tourRes = await fetch(`${process.env.FRONTEND_DOMAIN}/api/tours`, {
         cache: "no-cache",
         next: { tags: ["tours"] },
       });
       const { tour } = await tourRes.json();
-      if (tour) {
-        return JSON.stringify(tour);
-      }
-    } else if (userInfo.role == "guide" && tours) {
-      await connectDB();
-      const tour = await tourModel.find({ guides: userInfo.userId });
       if (tour) {
         return JSON.stringify(tour);
       }
