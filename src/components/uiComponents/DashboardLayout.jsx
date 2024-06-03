@@ -12,7 +12,7 @@ function DashboardLayout({ myInfo }) {
   const [viewList, setViewList] = useState(true);
   const pathname = usePathname();
   return (
-    <div className="bg-main h-full bg-primary text-white flex flex-col p-3 w-full flex-grow">
+    <div className="bg-main h-fit bg-primary text-white flex flex-col p-3 w-full flex-grow">
       <h1 className="text-xl font-bold mx-auto">My Dashboard</h1>
       <div className="flex flex-col gap-1 items-center justify-center">
         <Avatar className="size-24">
