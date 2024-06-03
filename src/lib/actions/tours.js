@@ -613,6 +613,7 @@ export const updateTour = async (currentState, formData) => {
           existTour.location[0].description,
       },
       guides: guides || existTour.guides,
+      leadGuides: tourInfo.leadGuides,
       imageCover: primaryImage || existTour.imageCover,
       images: secondaryImages.length > 0 ? secondaryImages : existTour.images,
     };

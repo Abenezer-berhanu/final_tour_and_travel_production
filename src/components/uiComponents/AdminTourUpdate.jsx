@@ -21,13 +21,13 @@ import { useRouter } from "next/navigation";
 import Spinner from "./Spinner";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import MultipleLeadGuidesSelect from "./MultipleLeadGuidesSelect";
 
 function AdminTourUpdate({ tour }) {
   const { push } = useRouter();
   const [state, formAction] = useFormState(updateTour, null);
-  const { images, coverImage, startingDate, chosenGuides } = useSelector(
-    (state) => state.images
-  );
+  const { images, coverImage, startingDate, chosenGuides, chosenLeadGuides } =
+    useSelector((state) => state.images);
 
   useEffect(() => {
     if (state?.success) {
@@ -53,7 +53,8 @@ function AdminTourUpdate({ tour }) {
       <input type="hidden" name="startingDate" value={startingDate} />
       <input type="hidden" name="guides" value={chosenGuides} />
       <input type="hidden" name="tourId" value={tour._id} />
-      <div className="grid grid-cols-3 gap-3">
+      <input type="hidden" name="leadGuides" value={chosenLeadGuides} />
+      <div className="grid sm:grid-cols-3 gap-3">
         <span className="flex flex-col gap-1">
           <label
             htmlFor="name"
@@ -106,7 +107,7 @@ function AdminTourUpdate({ tour }) {
         </span>
       </div>
       {/* //////////////////////////////////////// */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid sm:grid-cols-3 gap-3">
         <span className="flex flex-col gap-1">
           <label
             htmlFor="name"
@@ -163,7 +164,7 @@ function AdminTourUpdate({ tour }) {
       </div>
 
       <Separator />
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid sm:grid-cols-2 gap-3">
         <span className="flex flex-col gap-1">
           <label
             htmlFor="summary"
@@ -200,7 +201,7 @@ function AdminTourUpdate({ tour }) {
       </div>
       <Separator />
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid sm:grid-cols-2 gap-3">
         <span className="flex flex-col gap-1 border p-2">
           <label
             htmlFor="day"
@@ -248,8 +249,8 @@ function AdminTourUpdate({ tour }) {
           </Link>
         </small>
       </h1>
-      <div className="grid grid-cols-3 gap-3">
-        <div className="flex gap-2 border border-slate-200 p-3">
+      <div className="grid sm:grid-cols-3 gap-3">
+        <div className="grid lg:flex gap-2 border border-slate-200 p-3">
           <div className="">
             <label htmlFor="startLong" className="text-xs">
               Longitude
@@ -362,8 +363,8 @@ function AdminTourUpdate({ tour }) {
           </Link>
         </small>
       </h1>
-      <div className="grid grid-cols-3 gap-3">
-        <div className="flex gap-2 border border-slate-200 p-3">
+      <div className="grid md:grid-cols-3 gap-3">
+        <div className="grid lg:flex gap-2 border border-slate-200 p-3">
           <div className="">
             <label htmlFor="landLong" className="text-xs">
               Longitude
@@ -464,14 +465,25 @@ function AdminTourUpdate({ tour }) {
 
       <Separator />
       <h1 className="text-lg font-semibold">Choose Guides</h1>
-      <div>
-        <MultipleSelect guides={tour.guides} />
+      <div className="grid sm:grid-cols-2 gap-3">
+        <span>
+          <small>
+            <b>Guides</b>
+          </small>
+          <MultipleSelect guides={tour?.guides} />
+        </span>
+        <span>
+          <small>
+            <b>Lead Guides</b>
+          </small>
+          <MultipleLeadGuidesSelect guides={tour?.leadGuides || []} />
+        </span>
       </div>
 
       <Separator />
       <h1 className="font-semibold text-md">Upload Tour Images</h1>
-      <div className="col-span-6 sm:col-span-5 bg-white p-5 grid grid-cols-6 gap-3 rounded-lg font-medium">
-        <div className="col-span-2 p-2 flex flex-col gap-3">
+      <div className="col-span-6 sm:col-span-5 bg-white p-5 grid sm:grid-cols-6 gap-3 rounded-lg font-medium">
+        <div className="col-span-4 md:col-span-2 p-2 flex flex-col gap-3">
           <h1 className="text-sm font-semibold">Primary Image</h1>
           <span className="border p-3">
             <PrimaryImageUpload />
