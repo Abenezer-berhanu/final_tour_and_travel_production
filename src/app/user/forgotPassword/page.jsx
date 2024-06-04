@@ -47,7 +47,7 @@ function usePage() {
             />
             <Submit />
           </form>
-          <Link href="/login" className="block mt-4 text-primary">
+          <Link href="/auth/signin" className="block mt-4 text-primary">
             Go back to login
           </Link>
         </div>
