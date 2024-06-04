@@ -10,7 +10,6 @@ import { useSearchParams } from "next/navigation";
 import Spinner from "./Spinner";
 
 export default function AdminAllUsersTable({ users, me }) {
-  console.log(me);
   const [state, formAction] = useFormState(adminDeleteAccount, null);
   const [usersData, setUsersData] = useState(users);
   const searchParams = useSearchParams();
