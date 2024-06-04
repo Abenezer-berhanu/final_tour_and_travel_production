@@ -14,10 +14,11 @@ async function page() {
         <h1 className="text-2xl font-bold">All Booked Tours</h1>
         <AdminBookSearch />
       </span>
-
-      <Suspense fallback={<Spinner height={50} />}>
-        <AdminAllBooking books={book} />
-      </Suspense>
+      <div className="max-h-[540px] overflow-y-auto no-scrollbar">
+        <Suspense fallback={<Spinner height={50} />}>
+          <AdminAllBooking books={book} />
+        </Suspense>
+      </div>
     </div>
   );
 }

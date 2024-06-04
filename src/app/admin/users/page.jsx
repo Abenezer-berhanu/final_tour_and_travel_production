@@ -15,9 +15,11 @@ async function page() {
         <AdminUsersFilterComp />
         <AdminUserSearchInput />
       </span>
-      <Suspense fallback={<Spinner height={50} />}>
-        <AdminAllUsersTable users={users} />
-      </Suspense>
+      <div className="max-h-[540px] overflow-y-auto no-scrollbar">
+        <Suspense fallback={<Spinner height={50} />}>
+          <AdminAllUsersTable users={users} />
+        </Suspense>
+      </div>
     </div>
   );
 }
