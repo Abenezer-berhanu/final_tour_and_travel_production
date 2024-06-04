@@ -6,7 +6,7 @@ async function page() {
   const booksRes = await findMyBooks();
   const books = (booksRes && JSON.parse(booksRes)) || null;
   return (
-    <>
+    <div className="my-4">
       <h1 className="text-2xl font-bold mb-10">My Tours</h1>
       {books ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-[1200px] mx-auto">
@@ -19,7 +19,7 @@ async function page() {
           description={"Please check your connection and try again."}
         />
       )}
-    </>
+    </div>
   );
 }
 
