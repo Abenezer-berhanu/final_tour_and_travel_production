@@ -9,11 +9,24 @@ import ReviewPopUp from "./ReviewPopUp";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { findUserById } from "@/lib/actions/users";
+import { useFormState, useFormStatus } from "react-dom";
+import Spinner from "./Spinner";
+import { toast } from "react-toastify";
 
 export default function AdminAllToursTable({ tours }) {
+  const [state, formAction] = useFormState(deleteTour, null);
   const [toursData, setToursData] = useState(tours);
   const searchParams = useSearchParams();
   const [userInfo, setUserInfo] = useState();
+  useEffect(() => {
+    if (state?.success) {
+      toast.success("tour deleted successfully");
+      window.location.reload();
+    } else if (state?.error) {
+      toast.error(state.error);
+    }
+  }, [state]);
+
   useLayoutEffect(() => {
     const fetchUserInfo = async () => {
       const user = await findUserById();
@@ -55,6 +68,19 @@ export default function AdminAllToursTable({ tours }) {
       setToursData(tours);
     }
   }, [searchParams]);
+
+  const Submit = () => {
+    const { pending } = useFormStatus();
+    return (
+      <Button
+        variant="ghost"
+        disabled={pending}
+        className="bg-transparent hover:bg-transparent p-0 text-red-500 hover:underline hover:text-red-600"
+      >
+        {pending ? <Spinner height={10} /> : "Delete"}
+      </Button>
+    );
+  };
   return (
     <Table>
       <Thead>
@@ -88,14 +114,9 @@ export default function AdminAllToursTable({ tours }) {
             <Td className="text-sm font-semibold py-1">{tour.duration} Days</Td>
             <Td className="text-sm font-semibold py-1 flex gap-4">
               {userInfo?.role == "admin" && (
-                <form action={deleteTour}>
+                <form action={formAction}>
                   <input type="hidden" name="id" value={tour?._id} />
-                  <Button
-                    variant="ghost"
-                    className="bg-transparent hover:bg-transparent p-0 text-red-500 hover:underline hover:text-red-600"
-                  >
-                    Delete
-                  </Button>
+                  <Submit />
                 </form>
               )}
               {userInfo?.role != "guide" && (

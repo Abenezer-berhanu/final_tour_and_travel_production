@@ -267,7 +267,6 @@ function AdminTourUpdate({ tour }) {
               <input
                 type="text"
                 id="startLong"
-                required
                 name="startLong"
                 className="h-10 w-16 rounded outline-none border border-gray-500 text-center [-moz-appearance:_textfield] sm:text-sm [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
               />
@@ -297,7 +296,6 @@ function AdminTourUpdate({ tour }) {
               <input
                 type="text"
                 id="startLat"
-                required
                 name="startLat"
                 className="h-10 w-16 rounded outline-none border border-gray-500 text-center [-moz-appearance:_textfield] sm:text-sm [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
               />
@@ -381,7 +379,6 @@ function AdminTourUpdate({ tour }) {
               <input
                 type="text"
                 id="landLong"
-                required
                 name="landLong"
                 className="h-10 w-16 rounded outline-none border border-gray-500 text-center [-moz-appearance:_textfield] sm:text-sm [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
               />
@@ -411,7 +408,6 @@ function AdminTourUpdate({ tour }) {
               <input
                 type="text"
                 id="landLat"
-                required
                 name="landLat"
                 className="h-10 w-16 rounded outline-none border border-gray-500 text-center [-moz-appearance:_textfield] sm:text-sm [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
               />

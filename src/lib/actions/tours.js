@@ -96,7 +96,7 @@ export const getAllTours = async ({ tours }) => {
   }
 };
 
-export const deleteTour = async (formData) => {
+export const deleteTour = async (currentState, formData) => {
   const { id } = Object.fromEntries(formData);
   try {
     await tourModel.findByIdAndDelete(id);
@@ -104,6 +104,7 @@ export const deleteTour = async (formData) => {
     return { success: true };
   } catch (error) {
     console.log(error);
+    return { error: "something went wrong please try again" };
   }
 };
 
@@ -613,7 +614,7 @@ export const updateTour = async (currentState, formData) => {
           existTour.location[0].description,
       },
       guides: guides || existTour.guides,
-      leadGuides: tourInfo.leadGuides,
+      leadGuides: leadGuides || existTour?.leadGuides,
       imageCover: primaryImage || existTour.imageCover,
       images: secondaryImages.length > 0 ? secondaryImages : existTour.images,
     };
