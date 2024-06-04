@@ -16,7 +16,7 @@ import { useEffect } from "react";
 import Spinner from "./Spinner";
 import { toast } from "react-toastify";
 
-function BookForm({ tourId, image, name, price, size }) {
+function BookForm({ tourId, image, name, price, size, isUser }) {
   const { push } = useRouter();
   const [state, formAction] = useFormState(payWithStripe, null);
 
@@ -65,7 +65,7 @@ function BookForm({ tourId, image, name, price, size }) {
           </SelectGroup>
         </SelectContent>
       </Select>
-      <Submit size={size} />
+      {isUser == "user" ? <Submit size={size} /> : "Only user can book."}
     </form>
   );
 }

@@ -15,6 +15,7 @@ import Image from "next/image";
 import { fetchReviewById } from "@/lib/actions/review";
 import TourReview from "@/components/uiComponents/TourReview";
 import { format } from "date-fns";
+import { findUserById } from "@/lib/actions/users";
 
 async function page({ params }) {
   const { tourId: id } = params;
@@ -28,6 +29,8 @@ async function page({ params }) {
     reviews.length > 0
       ? reviews.reduce((acc, cur) => acc + cur.rating, 0) / reviews.length
       : 0;
+  const meRes = await findUserById();
+  const me = meRes && JSON.parse(meRes);
 
   return (
     <div className="min-h-screen">
@@ -142,6 +145,7 @@ async function page({ params }) {
                   price={data.price}
                   name={data.name}
                   size={data.maxGroupSize}
+                  isUser={me?.role}
                 />
               </div>
               <hr />
