@@ -4,7 +4,7 @@ import reviewModel from "../db/model/reviewModel";
 import { verifyToken } from "../VerifyToken";
 
 export const giveReview = async (currentState, formData) => {
-  const { useInfo } = await verifyToken();
+  const { userInfo } = await verifyToken();
   const { tourId, review, rating } = Object.fromEntries(formData);
   if (!review || !rating) {
     return { error: "All fields must be provided" };
