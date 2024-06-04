@@ -1,16 +1,18 @@
 "use server";
 import connectDB from "../db/config";
 import reviewModel from "../db/model/reviewModel";
+import { verifyToken } from "../VerifyToken";
 
 export const giveReview = async (currentState, formData) => {
-  const { tourId, userId, review, rating } = Object.fromEntries(formData);
+  const { useInfo } = await verifyToken();
+  const { tourId, review, rating } = Object.fromEntries(formData);
   if (!review || !rating) {
     return { error: "All fields must be provided" };
   }
 
   const reviewInfo = {
     tour: tourId,
-    user: "6650b6be8d63639bac1b2070",
+    user: userInfo?.userId,
     review,
     rating,
   };

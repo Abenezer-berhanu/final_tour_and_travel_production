@@ -6,6 +6,7 @@ import Rating from "./Rating";
 import { format } from "date-fns";
 
 const ReviewComp = ({ review }) => {
+  console.log(review)
   return (
     <div className="flex gap-4">
       <Avatar>
@@ -38,6 +39,7 @@ const ReviewComp = ({ review }) => {
   );
 };
 function TourReview({ reviews }) {
+  console.log(reviews)
   return (
     <div>
       {reviews.map((review, idx) => (
