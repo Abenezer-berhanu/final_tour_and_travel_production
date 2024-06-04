@@ -568,8 +568,17 @@ export const updateTour = async (currentState, formData) => {
       }
     }
 
-    const startCountry = startLat + "," + startLong;
-    const landingCountry = landLat + "," + landLong;
+    let startCountry;
+    let landingCountry;
+
+    if (startLat && startLong) {
+      startCountry = startLat + "," + startLong;
+    }
+
+    if (landLat && landLong) {
+      landingCountry = landLat + "," + landLong;
+    }
+
     //give each fields value if that is sent through req if not give it existing value
 
     const dataToBeSaved = {

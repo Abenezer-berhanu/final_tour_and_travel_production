@@ -18,7 +18,7 @@ async function page() {
         <AdminTourSearchInput />
       </span>
 
-      <div className="max-h-[540px] overflow-y-auto no-scrollbar">
+      <div className="max-h-[500px] overflow-y-auto">
         <Suspense fallback={<Spinner height={50} />}>
           <AdminAllToursTable tours={tours} />
         </Suspense>
