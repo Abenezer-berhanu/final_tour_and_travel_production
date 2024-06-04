@@ -5,7 +5,6 @@ import ejs from "ejs";
 import path from "path";
 
 export const sendMail = async ({ emailType, userId, email }) => {
-  console.log(emailType, userId, email);
   try {
     const hashedToken = await bcrypt.hash(userId.toString(), 10);
     const twentyFourHoursInMillis = 24 * 60 * 60 * 1000;

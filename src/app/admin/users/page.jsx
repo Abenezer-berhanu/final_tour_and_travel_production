@@ -2,11 +2,11 @@ import AdminAllUsersTable from "@/components/uiComponents/AdminAllUsersTable";
 import AdminUserSearchInput from "@/components/uiComponents/AdminUserSearchInput";
 import AdminUsersFilterComp from "@/components/uiComponents/AdminUsersFilterComp";
 import Spinner from "@/components/uiComponents/Spinner";
-import { findUserById, getActiveUsers } from "@/lib/actions/users";
+import { findUserById, getAllUsers } from "@/lib/actions/users";
 import React, { Suspense } from "react";
 
 async function page() {
-  const usersRes = await getActiveUsers();
+  const usersRes = await getAllUsers();
   const users = usersRes ? JSON.parse(usersRes) : [];
   const meRes = await findUserById();
   const me = meRes && JSON.parse(meRes);

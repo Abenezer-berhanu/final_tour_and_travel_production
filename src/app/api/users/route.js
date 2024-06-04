@@ -6,6 +6,7 @@ export const GET = async () => {
   try {
     await connectDB();
     const user = await userModel.find({}).lean();
+    console.log(user.length);
     if (user) {
       return NextResponse.json({ user });
     }

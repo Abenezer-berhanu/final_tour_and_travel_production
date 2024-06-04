@@ -167,7 +167,7 @@ export const signUserOut = () => {
 export const getAllUsers = async () => {
   try {
     const userRes = await fetch(`${process.env.FRONTEND_DOMAIN}/api/users`, {
-      next: { tags: ["users"] },
+      next: { revalidate: 0, tags: ["users"] },
     });
     const { user } = await userRes.json();
     if (user) {
@@ -240,8 +240,6 @@ export const updateUser = async (currentState, formData) => {
       (key) =>
         (userInfo[key] == "" || undefined || null) && delete userInfo[key]
     );
-
-    console.log(userInfo);
     await connectDB();
     const user = await userModel.findById(id).lean();
     if (user) {
