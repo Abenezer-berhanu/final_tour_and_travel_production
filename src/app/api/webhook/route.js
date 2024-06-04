@@ -63,35 +63,6 @@ export async function POST(request, res) {
         const bookedTour = await findBookById(
           checkoutSessionCompleted?.metadata?.bookedTourId
         );
-
-        const dataForReciept = {
-          username: bookedTour.user.name,
-          userEmail: bookedTour.user.email,
-          isActive: true,
-          userId: bookedTour.user._id,
-          tourId: bookedTour.tour._id,
-          tourStatus: "Active",
-          startingAddress: bookedTour.tour.startLocation.address,
-          endAddress:
-            bookedTour.tour.location.address ||
-            bookedTour.tour.location[0].address,
-          tourPrice: bookedTour.tour.price,
-          transactionId: checkoutSessionCompleted.id,
-          date: formatDate(currentDate),
-          quantity:
-            Number(checkoutSessionCompleted.amount_total / 100) /
-            Number(bookedTour.tour.price),
-          amountPaid: Number(checkoutSessionCompleted.amount_total / 100),
-          transactionStatus: checkoutSessionCompleted.payment_status,
-          paymentIntent: checkoutSessionCompleted.payment_intent,
-          currency: checkoutSessionCompleted.currency,
-        };
-        const reciept = await generateInvoicePdf({ dataForReciept });
-
-        await bookModel.findByIdAndUpdate(
-          checkoutSessionCompleted?.metadata?.bookedTourId,
-          { pdfLink: reciept }
-        );
       } catch (error) {
         console.log(error);
       }
