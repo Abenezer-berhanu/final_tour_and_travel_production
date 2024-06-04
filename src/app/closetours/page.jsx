@@ -51,7 +51,7 @@ const LocationComponent = () => {
       <h1 className="text-xl font-bold mb-10">Closest Tours</h1>
       <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {data.map((tour, idx) => (
-          <CloseToursCard data={tour} />
+          <CloseToursCard data={tour} key={idx}/>
         ))}
       </div>
     </div>
