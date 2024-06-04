@@ -1,4 +1,3 @@
-export const maxDuration = 300;
 import Stripe from "stripe";
 import { headers } from "next/headers";
 import bookModel from "@/lib/db/model/bookModel";
