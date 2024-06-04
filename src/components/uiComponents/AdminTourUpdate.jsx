@@ -218,13 +218,12 @@ function AdminTourUpdate({ tour }) {
             htmlFor="secreteTour"
             className="block text-sm font-medium text-form_text"
           >
-            Is this tour Secret?
+            Is this tour Secret? <small>{Boolean(tour.secretTour).toString()}</small>
           </label>
           <div className="flex items-center space-x-2 h-full">
             <Checkbox
               name="isSecrete"
               id="secreteTour"
-              checked={tour.secretTour}
             />
             <label
               htmlFor="secreteTour"

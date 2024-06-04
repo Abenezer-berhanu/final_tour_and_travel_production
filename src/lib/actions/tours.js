@@ -589,7 +589,7 @@ export const updateTour = async (currentState, formData) => {
       price: price || existTour.price,
       summary: summary || existTour.summary,
       description: description || existTour.description,
-      secretTour: isSecrete || existTour.secretTour,
+      secretTour: Boolean(isSecrete),
       priceDiscount: discount || existTour.priceDiscount,
       startDate: startingDate || existTour.startDate,
       startLocation: {
