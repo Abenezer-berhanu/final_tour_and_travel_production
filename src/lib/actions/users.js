@@ -79,6 +79,16 @@ export const loginUser = async (info) => {
   }
 };
 
+export const fetchAllUserAdmin = async () => {
+  try {
+    await connectDB();
+    const users = await userModel.find({}).lean();
+    return users;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const registerUser = async (currentState, formData) => {
   const { name, email, password, confirmPassword } =
     Object.fromEntries(formData);

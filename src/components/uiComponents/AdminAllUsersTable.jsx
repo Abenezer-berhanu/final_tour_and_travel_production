@@ -11,8 +11,15 @@ import Spinner from "./Spinner";
 
 export default function AdminAllUsersTable({ users, me }) {
   const [state, formAction] = useFormState(adminDeleteAccount, null);
+
   const [usersData, setUsersData] = useState(users);
   const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (state?.success) {
+      window.location.reload();
+    }
+  }, [state]);
   useEffect(() => {
     let user = searchParams.get("user");
     let userRole = searchParams.get("userRole");

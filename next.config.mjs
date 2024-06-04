@@ -14,7 +14,6 @@ const nextConfig = {
       { protocol: "https", hostname: "w0.peakpx.com" },
     ],
   },
-  maxDuration: 300,
 };
 
 export default nextConfig;
