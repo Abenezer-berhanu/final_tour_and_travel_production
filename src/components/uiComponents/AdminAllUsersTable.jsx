@@ -9,7 +9,8 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Spinner from "./Spinner";
 
-export default function AdminAllUsersTable({ users }) {
+export default function AdminAllUsersTable({ users, me }) {
+  console.log(me);
   const [state, formAction] = useFormState(adminDeleteAccount, null);
   const [usersData, setUsersData] = useState(users);
   const searchParams = useSearchParams();
@@ -73,7 +74,7 @@ export default function AdminAllUsersTable({ users }) {
             <Td className="text-sm font-semibold py-1">
               <form action={formAction}>
                 <input type="hidden" name="id" value={user._id} />
-                <Submit />
+                {me?.role == "admin" && <Submit />}
               </form>
             </Td>
           </Tr>
