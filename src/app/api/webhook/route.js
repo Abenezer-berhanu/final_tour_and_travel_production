@@ -4,6 +4,7 @@ import bookModel from "@/lib/db/model/bookModel";
 import { generateInvoicePdf } from "@/lib/actions/tours";
 import { findBookById } from "@/lib/actions/book";
 import tourModel from "@/lib/db/model/tourModel";
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 function formatDate(date) {
@@ -21,23 +22,21 @@ function formatDate(date) {
     "Nov",
     "Dec",
   ];
-
-  const day = date.getDate(); // Get the day of the month (1-31)
-  const monthIndex = date.getMonth(); // Get the month (0-11)
-  const year = date.getFullYear(); // Get the full year (e.g., 2015)
-
-  const monthName = months[monthIndex]; // Get the short name of the month
-
+  const day = date.getDate();
+  const monthIndex = date.getMonth();
+  const year = date.getFullYear();
+  const monthName = months[monthIndex];
   return `${monthName} ${day} ${year}`;
 }
 
 const currentDate = new Date();
 
-export async function POST(request, res) {
+export async function POST(request) {
   const body = await request.text();
   const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET_KEY;
   const sig = headers().get("stripe-signature");
   let event;
+
   try {
     event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
   } catch (err) {
@@ -46,6 +45,16 @@ export async function POST(request, res) {
     });
   }
 
+  // Respond with 200 status immediately
+  const response = new Response("RESPONSE EXECUTE", { status: 200 });
+
+  // Process the event asynchronously
+  processWebhookEvent(event);
+
+  return response;
+}
+
+async function processWebhookEvent(event) {
   switch (event.type) {
     case "checkout.session.completed":
       const checkoutSessionCompleted = event.data.object;
@@ -54,10 +63,11 @@ export async function POST(request, res) {
           checkoutSessionCompleted?.metadata?.bookedTourId,
           { status: "paid" }
         );
-        // make it done here
+
         const bookedTour = await findBookById(
           checkoutSessionCompleted?.metadata?.bookedTourId
         );
+
         let quantity =
           Number(checkoutSessionCompleted.amount_total / 100) /
           Number(bookedTour.tour.price);
@@ -87,6 +97,7 @@ export async function POST(request, res) {
           paymentIntent: checkoutSessionCompleted.payment_intent,
           currency: checkoutSessionCompleted.currency,
         };
+
         const reciept = await generateInvoicePdf({ dataForReciept });
 
         await bookModel.findByIdAndUpdate(
@@ -98,8 +109,6 @@ export async function POST(request, res) {
       }
       break;
     default:
+      console.log(`Unhandled event type ${event.type}`);
   }
-  return new Response("RESPONSE EXECUTE", {
-    status: 200,
-  });
 }
