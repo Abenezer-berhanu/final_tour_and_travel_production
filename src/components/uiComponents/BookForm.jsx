@@ -16,7 +16,7 @@ import { useEffect } from "react";
 import Spinner from "./Spinner";
 import { toast } from "react-toastify";
 
-function BookForm({ tourId, image, name, price, size, isUser }) {
+function BookForm({ tourId, image, name, price, size, isUser, hasExpired }) {
   const { push } = useRouter();
   const [state, formAction] = useFormState(payWithStripe, null);
 
@@ -32,11 +32,13 @@ function BookForm({ tourId, image, name, price, size, isUser }) {
   const Submit = ({ size }) => {
     const { pending } = useFormStatus();
     return (
-      <Button className="w-full" disabled={!size}>
+      <Button className="w-full" disabled={!size || hasExpired}>
         {pending ? (
           <Spinner height={30} />
         ) : size == 0 ? (
           "Out of stock"
+        ) : hasExpired ? (
+          "Tour Date Passed"
         ) : (
           "Reserve"
         )}

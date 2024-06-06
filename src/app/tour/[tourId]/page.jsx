@@ -31,6 +31,11 @@ async function page({ params }) {
       : 0;
   const meRes = await findUserById();
   const me = meRes && JSON.parse(meRes);
+
+  const tourStartDate = new Date(data.startDate || data.startDates[0]);
+  const now = new Date();
+
+  const hasExpired = tourStartDate < now;
   return (
     <div className="min-h-screen p-3">
       {!data ? (
@@ -145,6 +150,7 @@ async function page({ params }) {
                   name={data.name}
                   size={data.maxGroupSize}
                   isUser={me?.role}
+                  hasExpired={hasExpired}
                 />
               </div>
               <hr />
