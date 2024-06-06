@@ -272,14 +272,13 @@ export const fetchAllTourFromStripe = async () => {
 };
 
 export const payWithStripe = async (currentState, formData) => {
-  const { userId, tourId, image, maxGroupSize, name, price, quantity } =
+  const { userId, tourId, image, name, price, quantity } =
     Object.fromEntries(formData);
   try {
     const savedTour = await bookTour({ tourId, userId, price });
-    const sizeToBe = Number(maxGroupSize) - quantity;
 
     if (savedTour) {
-      await tourModel.findByIdAndUpdate(tourId, { maxGroupSize: sizeToBe });
+      
       let activeTours = await fetchAllTourFromStripe();
       const stripeTour = activeTours?.find(
         (item) => item?.name?.toLowerCase() == name?.toLowerCase()

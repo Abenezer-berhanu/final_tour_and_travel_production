@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import bookModel from "@/lib/db/model/bookModel";
 import { generateInvoicePdf } from "@/lib/actions/tours";
 import { findBookById } from "@/lib/actions/book";
+import tourModel from "@/lib/db/model/tourModel";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 function formatDate(date) {
@@ -57,6 +58,14 @@ export async function POST(request, res) {
         const bookedTour = await findBookById(
           checkoutSessionCompleted?.metadata?.bookedTourId
         );
+        let quantity =
+          Number(checkoutSessionCompleted.amount_total / 100) /
+          Number(bookedTour.tour.price);
+
+        let sizeToBe = bookedTour?.tour?.maxGroupSize - quantity;
+        await tourModel.findByIdAndUpdate(bookedTour?.tour?._id, {
+          maxGroupSize: sizeToBe,
+        });
 
         const dataForReciept = {
           username: bookedTour.user.name,
@@ -72,9 +81,7 @@ export async function POST(request, res) {
           tourPrice: bookedTour.tour.price,
           transactionId: checkoutSessionCompleted.id,
           date: formatDate(currentDate),
-          quantity:
-            Number(checkoutSessionCompleted.amount_total / 100) /
-            Number(bookedTour.tour.price),
+          quantity,
           amountPaid: Number(checkoutSessionCompleted.amount_total / 100),
           transactionStatus: checkoutSessionCompleted.payment_status,
           paymentIntent: checkoutSessionCompleted.payment_intent,
