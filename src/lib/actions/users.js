@@ -176,10 +176,8 @@ export const signUserOut = () => {
 
 export const getAllUsers = async () => {
   try {
-    const userRes = await fetch(`${process.env.FRONTEND_DOMAIN}/api/users`, {
-      next: { revalidate: 0, tags: ["users"] },
-    });
-    const { user } = await userRes.json();
+    await connectDB();
+    const user = await userModel.find({}).lean();
     if (user) {
       return JSON.stringify(user);
     }
