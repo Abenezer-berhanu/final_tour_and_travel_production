@@ -55,7 +55,7 @@ export const fetchTourById = async (id) => {
     await connectDB();
     const tours = await tourModel
       .findById(id)
-      .populate("guides", "name email photo")
+      .populate("guides", "name email photo role isActive")
       .populate("leadGuides", "name email photo")
       .lean();
     return tours ? JSON.stringify(tours) : false;

@@ -31,9 +31,8 @@ async function page({ params }) {
       : 0;
   const meRes = await findUserById();
   const me = meRes && JSON.parse(meRes);
-
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen p-3">
       {!data ? (
         <div>
           <ErrorAlert
@@ -168,16 +167,34 @@ async function page({ params }) {
                 {data.guides.map((item, idx) => (
                   <div className="bg-slate-50 shadow-md w-full px-1" key={idx}>
                     <span className="flex items-center justify-start px-2">
-                      <Avatar>
-                        <AvatarFallback>
-                          <AvatarImage
-                            src={item.photo || "https://github.com/shadcn.png"}
-                          />
-                          <AvatarFallback>B</AvatarFallback>
-                        </AvatarFallback>
+                      <Avatar className="size-14 overflow-hidden">
+                        <AvatarImage
+                          src={item.photo || "https://github.com/shadcn.png"}
+                          className="size-14 rounded-full"
+                        />
+                        <AvatarFallback>B</AvatarFallback>
                       </Avatar>
-                      <span className="p-2">
-                        <b>{item.name}</b>
+
+                      <span className="p-2 flex flex-col gap-1">
+                        <span>
+                          <b>{item.name}</b>
+                          <small
+                            className={`${
+                              item.isActive ? "text-green-400" : "text-red-500"
+                            }`}
+                          >
+                            {" "}
+                            |{item.isActive ? "active" : "inactive"}
+                          </small>
+                        </span>
+                        <Badge
+                          variant={"secondary"}
+                          className={
+                            "w-fit p-0 px-3 flex items-center justify-center font-bold tracking-wide ring-1"
+                          }
+                        >
+                          {item.role}
+                        </Badge>
                         <p className="text-sm">{item.email}</p>
                       </span>
                     </span>
