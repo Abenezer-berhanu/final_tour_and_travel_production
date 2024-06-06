@@ -62,6 +62,7 @@ export default function AdminAllUsersTable({ users, me }) {
           <Th className="text-white text-start">Name</Th>
           <Th className="text-white text-start">Email</Th>
           <Th className="text-white text-start">Role</Th>
+          <Th className="text-white text-start">is Active</Th>
           <Th className="text-white text-center">Action</Th>
         </Tr>
       </Thead>
@@ -77,6 +78,13 @@ export default function AdminAllUsersTable({ users, me }) {
             <Td className="text-sm font-semibold py-1">{user.name}</Td>
             <Td className="text-sm font-semibold py-1">{user.email}</Td>
             <Td className="text-sm font-semibold py-1">{user.role}</Td>
+            <Td
+              className={`text-sm font-semibold py-1 ${
+                user.isActive ? "text-green-400" : "text-black"
+              }`}
+            >
+              {user.isActive ? "Active" : "Inactive"}
+            </Td>
             <Td className="text-sm font-semibold py-1">
               <form action={formAction}>
                 <input type="hidden" name="id" value={user._id} />

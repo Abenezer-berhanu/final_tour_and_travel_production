@@ -11,7 +11,6 @@ async function Navbar() {
   const tours = toursRes ? JSON.parse(toursRes) : [];
   const userRes = await findUserById();
   const user = userRes && JSON.parse(userRes);
-  console.log(user);
   return (
     <div className="flex w-full min-h-[70px] border-b border-slate-50 items-center justify-between lg:px-20 md:px-10 px-2 bg-primary text-white">
       <div className="flex gap-3 items-center mr-4">
