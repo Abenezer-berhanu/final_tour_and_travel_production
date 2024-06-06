@@ -217,14 +217,21 @@ export const updateUser = async (currentState, formData) => {
   const { name, photo, currentPassword, newPassword } =
     Object.fromEntries(formData);
   const id = userInfo.userId;
+
+  // atleast one field exist
   if (!name && !JSON.parse(photo) && !newPassword && !currentPassword) {
     return { error: "Atleast on field is required." };
   }
 
+  // check if the user didn't specify a one field only regarding password
   if ((currentPassword && !newPassword) || (!currentPassword && newPassword)) {
     return {
-      error: "Please Provide both a New password and Existing Password",
+      error: "Please Provide both a password and confirm Password",
     };
+  }
+
+  if (currentPassword !== newPassword) {
+    return { error: "both password and confirm Password must be the same" };
   }
 
   try {
@@ -232,11 +239,13 @@ export const updateUser = async (currentState, formData) => {
       passwordSchema.parse(newPassword);
     }
 
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(currentPassword, salt);
+
     const userInfo = {
       name,
       photo: JSON.parse(photo),
-      currentPassword,
-      newPassword,
+      password: hashedPassword,
     };
 
     if (JSON.parse(photo)) {
@@ -250,25 +259,15 @@ export const updateUser = async (currentState, formData) => {
       (key) =>
         (userInfo[key] == "" || undefined || null) && delete userInfo[key]
     );
+
     await connectDB();
     const user = await userModel.findById(id).lean();
     if (user) {
-      if (userInfo.password) {
-        if (passwordCompare) {
-          const updatedUser = await userModel.findByIdAndUpdate(id, userInfo);
-          if (updatedUser) {
-            return { success: "Your account has been updated successfully." };
-          }
-          return { error: "something went wrong please try again." };
-        }
-        return { error: "Current password is not correct." };
-      } else {
-        const updatedUser = await userModel.findByIdAndUpdate(id, userInfo);
-        if (updatedUser) {
-          return { success: "Your account has been updated successfully." };
-        }
-        return { error: "something went wrong please try again." };
+      const updatedUser = await userModel.findByIdAndUpdate(id, userInfo);
+      if (updatedUser) {
+        return { success: "Your account has updated successfully." };
       }
+      return { error: "something went wrong please try again." };
     }
   } catch (error) {
     if (error?.name == "ZodError") {

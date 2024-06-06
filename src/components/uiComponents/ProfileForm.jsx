@@ -147,23 +147,23 @@ function ProfileForm({ user }) {
         <div className="col-span-4 sm:col-span-1">
           <b className="">Password</b>
           <p className="text-slate-700 text-sm">
-            Enter your current password to make update.
+            Enter your the password to make update.
           </p>
         </div>
         <div className="col-span-4 sm:col-span-3 bg-slate-50 rounded-md p-5 flex flex-col gap-7">
           <label htmlFor="password" className="flex flex-col">
-            <span className="font-semibold">Current Password</span>
+            <span className="font-semibold">Password</span>
             <input
               type="password"
               name="currentPassword"
               id="password"
-              placeholder="current password"
+              placeholder="password"
               className="border-b border-black/50 bg-transparent outline-none py-1 text-sm focus:border-green-600"
             />
           </label>
 
           <label htmlFor="newPassword" className="flex flex-col">
-            <span className="font-semibold">New Password</span>
+            <span className="font-semibold">Confirm Password</span>
             <input
               type="password"
               id="newPassword"
