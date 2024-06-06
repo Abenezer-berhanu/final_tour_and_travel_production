@@ -126,7 +126,7 @@ function AdminTourForm({ guides, leadGuides }) {
             <SelectContent>
               <SelectItem value="easy">Easy</SelectItem>
               <SelectItem value="medium">Medium</SelectItem>
-              <SelectItem value="hard">Hard</SelectItem>
+              <SelectItem value="difficult">Difficult</SelectItem>
             </SelectContent>
           </Select>
         </span>
