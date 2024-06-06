@@ -82,11 +82,8 @@ export const getAllTours = async ({ tours }) => {
       const tour = await tourModel.find({ guides: userInfo.userId });
       return JSON.stringify(tour);
     } else {
-      const tourRes = await fetch(`${process.env.FRONTEND_DOMAIN}/api/tours`, {
-        cache: "no-store",
-        next: { revalidate: 0, tags: ["tours"] },
-      });
-      const { tour } = await tourRes.json();
+      await connectDB();
+      const tour = await tourModel.find({}).lean();
       if (tour) {
         return JSON.stringify(tour);
       }
@@ -100,7 +97,6 @@ export const deleteTour = async (currentState, formData) => {
   const { id } = Object.fromEntries(formData);
   try {
     await tourModel.findByIdAndDelete(id);
-    revalidateTag("tours");
     return { success: true };
   } catch (error) {
     console.log(error);
