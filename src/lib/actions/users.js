@@ -38,6 +38,9 @@ export const loginUser = async (info) => {
     const user = await userModel.findOne({ email }).lean();
 
     if (user) {
+      if (user.isEmailVerified === false) {
+        return { error: "Email not verified" };
+      }
       const correctPassword = await bcrypt.compare(password, user?.password);
       if (correctPassword) {
         const userInfo = {
