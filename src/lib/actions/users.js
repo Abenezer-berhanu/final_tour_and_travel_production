@@ -284,7 +284,6 @@ export const deleteAccount = async (currentState, formData) => {
   try {
     await connectDB();
     await userModel.findByIdAndUpdate(id, { isActive: false });
-    signUserOut();
     return { success: true };
   } catch (error) {
     console.log(error);

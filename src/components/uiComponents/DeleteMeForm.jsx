@@ -1,5 +1,5 @@
 "use client";
-import { deleteAccount } from "@/lib/actions/users";
+import { deleteAccount, signUserOut } from "@/lib/actions/users";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -10,7 +10,7 @@ function DeleteMeForm() {
   const { replace } = useRouter();
   useEffect(() => {
     if (state?.success) {
-      replace("/auth/signin");
+      signUserOut();
     }
   }, [state]);
   const Submit = () => {
