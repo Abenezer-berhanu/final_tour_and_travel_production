@@ -280,19 +280,12 @@ export const updateUser = async (currentState, formData) => {
 
 export const deleteAccount = async (currentState, formData) => {
   const { userInfo } = await verifyToken();
-  const { purpose } = Object.fromEntries(formData);
   const id = userInfo?.userId;
   try {
     await connectDB();
-    if (purpose == "permanent") {
-      await userModel.findByIdAndDelete(id);
-      signUserOut();
-      return { success: true };
-    } else if (purpose == "temporary") {
-      await userModel.findByIdAndUpdate(id, { isActive: false });
-      signUserOut();
-      return { success: true };
-    }
+    await userModel.findByIdAndUpdate(id, { isActive: false });
+    signUserOut();
+    return { success: true };
   } catch (error) {
     console.log(error);
   }
