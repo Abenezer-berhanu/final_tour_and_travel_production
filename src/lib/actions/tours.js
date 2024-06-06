@@ -83,8 +83,8 @@ export const getAllTours = async ({ tours }) => {
       return JSON.stringify(tour);
     } else {
       const tourRes = await fetch(`${process.env.FRONTEND_DOMAIN}/api/tours`, {
-        cache: "no-cache",
-        next: { tags: ["tours"] },
+        cache: "no-store",
+        next: { revalidate: 0, tags: ["tours"] },
       });
       const { tour } = await tourRes.json();
       if (tour) {
@@ -278,7 +278,6 @@ export const payWithStripe = async (currentState, formData) => {
     const savedTour = await bookTour({ tourId, userId, price });
 
     if (savedTour) {
-      
       let activeTours = await fetchAllTourFromStripe();
       const stripeTour = activeTours?.find(
         (item) => item?.name?.toLowerCase() == name?.toLowerCase()
