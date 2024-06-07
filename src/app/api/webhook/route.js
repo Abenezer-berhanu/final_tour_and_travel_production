@@ -66,48 +66,7 @@ async function processWebhookEvent(event) {
           { status: "paid" }
         );
 
-        console.log("book updated to paid");
-
-        const bookedTour = await findBookById(
-          checkoutSessionCompleted?.metadata?.bookedTourId
-        );
-
-        let quantity =
-          Number(checkoutSessionCompleted.amount_total / 100) /
-          Number(bookedTour.tour.price);
-
-        let sizeToBe = bookedTour?.tour?.maxGroupSize - quantity;
-        await tourModel.findByIdAndUpdate(bookedTour?.tour?._id, {
-          maxGroupSize: sizeToBe,
-        });
-
-        const dataForReciept = {
-          username: bookedTour.user.name,
-          userEmail: bookedTour.user.email,
-          isActive: true,
-          userId: bookedTour.user._id,
-          tourId: bookedTour.tour._id,
-          tourStatus: "Active",
-          startingAddress: bookedTour.tour.startLocation.address,
-          endAddress:
-            bookedTour.tour.location.address ||
-            bookedTour.tour.location[0].address,
-          tourPrice: bookedTour.tour.price,
-          transactionId: checkoutSessionCompleted.id,
-          date: formatDate(currentDate),
-          quantity,
-          amountPaid: Number(checkoutSessionCompleted.amount_total / 100),
-          transactionStatus: checkoutSessionCompleted.payment_status,
-          paymentIntent: checkoutSessionCompleted.payment_intent,
-          currency: checkoutSessionCompleted.currency,
-        };
-
-        const reciept = await generateInvoicePdf({ dataForReciept });
-
-        await bookModel.findByIdAndUpdate(
-          checkoutSessionCompleted?.metadata?.bookedTourId,
-          { pdfLink: reciept }
-        );
+       
       } catch (error) {
         console.log(error);
       }
