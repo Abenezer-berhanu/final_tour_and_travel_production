@@ -4,6 +4,7 @@ import bookModel from "@/lib/db/model/bookModel";
 import { generateInvoicePdf } from "@/lib/actions/tours";
 import { findBookById } from "@/lib/actions/book";
 import tourModel from "@/lib/db/model/tourModel";
+import connectDB from "@/lib/db/config";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -55,6 +56,7 @@ export async function POST(request) {
 }
 
 async function processWebhookEvent(event) {
+  await connectDB();
   switch (event.type) {
     case "checkout.session.completed":
       const checkoutSessionCompleted = event.data.object;
