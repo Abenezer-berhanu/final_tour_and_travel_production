@@ -24,9 +24,9 @@ async function page() {
         </Suspense>
       ) : (
         <ErrorAlert
-          description={
-            "Couldn't find the necessary data please check your connection!"
-          }
+          safe={true}
+          info={true}
+          description={"Couldn't find any guide."}
         />
       )}
     </div>
