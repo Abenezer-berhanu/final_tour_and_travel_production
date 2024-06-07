@@ -52,7 +52,7 @@ export async function POST(request) {
   // Process the event asynchronously
   processWebhookEvent(event);
 
-  console.lgo("working till here");
+  console.log("working till here");
 
   return response;
 }
