@@ -52,8 +52,6 @@ export async function POST(request) {
   // Process the event asynchronously
   processWebhookEvent(event);
 
-  console.log("working till here");
-
   return response;
 }
 
@@ -83,8 +81,6 @@ async function processWebhookEvent(event) {
           maxGroupSize: sizeToBe,
         });
 
-        console.log("tour quantity is modified");
-
         const dataForReciept = {
           username: bookedTour.user.name,
           userEmail: bookedTour.user.email,
@@ -108,14 +104,10 @@ async function processWebhookEvent(event) {
 
         const reciept = await generateInvoicePdf({ dataForReciept });
 
-        console.log("reciept generated is modified");
-
         await bookModel.findByIdAndUpdate(
           checkoutSessionCompleted?.metadata?.bookedTourId,
           { pdfLink: reciept }
         );
-
-        console.log("reciept saved to db ", reciept);
       } catch (error) {
         console.log(error);
       }
