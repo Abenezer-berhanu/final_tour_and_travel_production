@@ -10,6 +10,8 @@ async function page() {
   const leadGuidesRes = await fetchLeadGuides();
   const leadGuides = leadGuidesRes ? JSON.parse(leadGuidesRes) : [];
 
+
+
   return (
     <div className="flex flex-col gap-3">
       <div className="w-full pl-5 py-4 flex flex-col bg-slate-100">
