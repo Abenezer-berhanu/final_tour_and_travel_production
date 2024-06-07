@@ -68,6 +68,8 @@ async function processWebhookEvent(event) {
           { status: "paid" }
         );
 
+        console.log("book updated to paid");
+
         const bookedTour = await findBookById(
           checkoutSessionCompleted?.metadata?.bookedTourId
         );
@@ -80,6 +82,8 @@ async function processWebhookEvent(event) {
         await tourModel.findByIdAndUpdate(bookedTour?.tour?._id, {
           maxGroupSize: sizeToBe,
         });
+
+        console.log("tour quantity is modified");
 
         const dataForReciept = {
           username: bookedTour.user.name,
@@ -104,10 +108,14 @@ async function processWebhookEvent(event) {
 
         const reciept = await generateInvoicePdf({ dataForReciept });
 
+        console.log("reciept generated is modified");
+
         await bookModel.findByIdAndUpdate(
           checkoutSessionCompleted?.metadata?.bookedTourId,
           { pdfLink: reciept }
         );
+
+        console.log("reciept saved to db ", reciept);
       } catch (error) {
         console.log(error);
       }
