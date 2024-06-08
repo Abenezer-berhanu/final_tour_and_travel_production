@@ -47,19 +47,20 @@ export async function POST(req) {
       await connectDB();
       const bookedTourId = stripeSession.metadata.bookedTourId;
 
+
       const bookedTour = await bookModel
         .findById(bookedTourId)
-        .populate("tour");
+        .populate("tour")
+        .lean();
 
       const { userInfo } = await verifyToken();
 
-      if (bookedTour?.status !== "paid") {
-        await bookModel.findByIdAndUpdate(
-          stripeSession?.metadata?.bookedTourId,
-          {
-            status: "paid",
-          }
-        );
+
+      if (bookedTour?.status != "paid") {
+        const updatedTour = await bookModel.findByIdAndUpdate(bookedTourId, {
+          status: "paid",
+        });
+
 
         const quantity =
           Number(stripeSession.amount_total / 100) /
@@ -68,6 +69,12 @@ export async function POST(req) {
 
         await tourModel.findByIdAndUpdate(bookedTour?.tour?._id, {
           maxGroupSize: sizeToBe,
+        });
+
+        const bookItSelf = await bookModel.findByIdAndUpdate(bookedTourId);
+
+        await bookModel.findByIdAndUpdate(bookedTourId, {
+          status: "paid",
         });
 
         const dataForReceipt = {

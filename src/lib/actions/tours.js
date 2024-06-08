@@ -316,7 +316,7 @@ export const payWithStripe = async (currentState, formData) => {
   }
 };
 
-export const generateInvoicePdf = async ({ dataForReciept }) => {
+export const generateInvoicePdf = async ({ dataForReceipt }) => {
   try {
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage([800, 350]);
@@ -355,7 +355,7 @@ export const generateInvoicePdf = async ({ dataForReciept }) => {
     });
 
     //name
-    page.drawText(`Name: ${dataForReciept.username}`, {
+    page.drawText(`Name: ${dataForReceipt.username}`, {
       x: 50,
       y: height - 7 * fontSize,
       size: fontSize,
@@ -363,7 +363,7 @@ export const generateInvoicePdf = async ({ dataForReciept }) => {
     });
 
     //email
-    page.drawText(`Email: ${dataForReciept.userEmail}`, {
+    page.drawText(`Email: ${dataForReceipt.userEmail}`, {
       x: 50,
       y: height - 8.5 * fontSize,
       size: fontSize,
@@ -371,7 +371,7 @@ export const generateInvoicePdf = async ({ dataForReciept }) => {
     });
 
     //date
-    page.drawText(`Date: ${dataForReciept.date}`, {
+    page.drawText(`Date: ${dataForReceipt.date}`, {
       x: 50,
       y: height - 10 * fontSize,
       size: fontSize,
@@ -379,7 +379,7 @@ export const generateInvoicePdf = async ({ dataForReciept }) => {
     });
 
     //userId
-    page.drawText(`UserId: ${dataForReciept.userId}`, {
+    page.drawText(`UserId: ${dataForReceipt.userId}`, {
       x: 50,
       y: height - 11.5 * fontSize,
       size: fontSize,
@@ -396,7 +396,7 @@ export const generateInvoicePdf = async ({ dataForReciept }) => {
     });
 
     //transaction id
-    page.drawText(`Status: ${dataForReciept.transactionStatus}`, {
+    page.drawText(`Status: ${dataForReceipt.transactionStatus}`, {
       x: 50,
       y: height - 15.5 * fontSize,
       size: fontSize,
@@ -404,7 +404,7 @@ export const generateInvoicePdf = async ({ dataForReciept }) => {
     });
 
     //date
-    page.drawText(`Date: ${dataForReciept.date}`, {
+    page.drawText(`Date: ${dataForReceipt.date}`, {
       x: 50,
       y: height - 17 * fontSize,
       size: fontSize,
@@ -412,7 +412,7 @@ export const generateInvoicePdf = async ({ dataForReciept }) => {
     });
 
     //paid amount
-    page.drawText(`Amount: ${dataForReciept.amountPaid}`, {
+    page.drawText(`Amount: ${dataForReceipt.amountPaid}`, {
       x: 50,
       y: height - 18.5 * fontSize,
       size: fontSize,
@@ -420,7 +420,7 @@ export const generateInvoicePdf = async ({ dataForReciept }) => {
     });
 
     //payment status
-    page.drawText(`TransactionId: ${dataForReciept.transactionId}`, {
+    page.drawText(`TransactionId: ${dataForReceipt.transactionId}`, {
       x: 50,
       y: height - 20 * fontSize,
       size: fontSize,
@@ -428,7 +428,7 @@ export const generateInvoicePdf = async ({ dataForReciept }) => {
     });
 
     //currency
-    page.drawText(`Currency: ${dataForReciept.currency}`, {
+    page.drawText(`Currency: ${dataForReceipt.currency}`, {
       x: 50,
       y: height - 21.5 * fontSize,
       size: fontSize,
@@ -436,7 +436,7 @@ export const generateInvoicePdf = async ({ dataForReciept }) => {
     });
 
     //PAYMENT INTENT
-    page.drawText(`Payment Intent: ${dataForReciept.paymentIntent}`, {
+    page.drawText(`Payment Intent: ${dataForReceipt.paymentIntent}`, {
       x: 50,
       y: height - 23 * fontSize,
       size: fontSize,
@@ -453,7 +453,7 @@ export const generateInvoicePdf = async ({ dataForReciept }) => {
     });
 
     //tour id
-    page.drawText(`Tour Id: ${dataForReciept.tourId}`, {
+    page.drawText(`Tour Id: ${dataForReceipt.tourId}`, {
       x: 400,
       y: height - 7 * fontSize,
       size: fontSize,
@@ -461,7 +461,7 @@ export const generateInvoicePdf = async ({ dataForReciept }) => {
     });
 
     //tour is Active
-    page.drawText(`Tour Status: ${dataForReciept.tourStatus}`, {
+    page.drawText(`Tour Status: ${dataForReceipt.tourStatus}`, {
       x: 400,
       y: height - 8.5 * fontSize,
       size: fontSize,
@@ -469,7 +469,7 @@ export const generateInvoicePdf = async ({ dataForReciept }) => {
     });
 
     //start address
-    page.drawText(`Staring Address: ${dataForReciept.startingAddress}`, {
+    page.drawText(`Staring Address: ${dataForReceipt.startingAddress}`, {
       x: 400,
       y: height - 10 * fontSize,
       size: fontSize,
@@ -477,7 +477,7 @@ export const generateInvoicePdf = async ({ dataForReciept }) => {
     });
 
     //end address
-    page.drawText(`End Address: ${dataForReciept.endAddress}`, {
+    page.drawText(`End Address: ${dataForReceipt.endAddress}`, {
       x: 400,
       y: height - 11.5 * fontSize,
       size: fontSize,
@@ -485,7 +485,7 @@ export const generateInvoicePdf = async ({ dataForReciept }) => {
     });
 
     //Price
-    page.drawText(`Price: $${dataForReciept.tourPrice}`, {
+    page.drawText(`Price: $${dataForReceipt.tourPrice}`, {
       x: 400,
       y: height - 13 * fontSize,
       size: fontSize,
@@ -493,7 +493,7 @@ export const generateInvoicePdf = async ({ dataForReciept }) => {
     });
 
     //qty
-    page.drawText(`Quantity: ${dataForReciept.quantity}`, {
+    page.drawText(`Quantity: ${dataForReceipt.quantity}`, {
       x: 400,
       y: height - 14.5 * fontSize,
       size: fontSize,
