@@ -329,7 +329,7 @@ export const generateInvoicePdf = async ({ dataForReceipt }) => {
     const fontBig = 18;
     const { height } = page.getSize();
 
-    page.drawImage(img, {
+    page.drawImage(footerImg, {
       x: 0,
       y: height - 50,
     });
