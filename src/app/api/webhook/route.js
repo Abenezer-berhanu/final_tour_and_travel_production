@@ -5,6 +5,7 @@ import { generateInvoicePdf } from "@/lib/actions/tours";
 import { findBookById } from "@/lib/actions/book";
 import tourModel from "@/lib/db/model/tourModel";
 import connectDB from "@/lib/db/config";
+import { verifyToken } from "@/lib/VerifyToken";
 
 function formatDate(date) {
   const months = [
@@ -57,6 +58,10 @@ export async function POST(req, res) {
       const bookItSelf = await bookModel
         .findById(bookedTourId)
         .populate("tour");
+
+      const { userInfo } = await verifyToken();
+
+      console.log("user", userInfo);
       console.log("bookItSelf", bookItSelf);
 
       const bookedTour = await findBookById(bookedTourId);
