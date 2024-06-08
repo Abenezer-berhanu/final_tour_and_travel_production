@@ -50,9 +50,11 @@ export async function POST(req, res) {
 
       console.log("stripe session", stripeSession);
 
-      const bookedTour = await findBookById(
-        stripeSession?.metadata?.bookedTourId
-      );
+      const bookedTourId = stripeSession.metadata.bookedTourId;
+
+      console.log("booked tour id", bookingTourId);
+
+      const bookedTour = await findBookById(bookedTourId);
 
       console.log("first", bookedTour);
 
