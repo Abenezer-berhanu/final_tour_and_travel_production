@@ -317,15 +317,27 @@ export const payWithStripe = async (currentState, formData) => {
 };
 
 export const generateInvoicePdf = async ({ dataForReceipt }) => {
-  console.log(dataForReceipt);
   try {
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage([800, 350]);
+    let img = fs.readFileSync("./public/assets/recieptHeading.png");
+    let footerImg = fs.readFileSync("./public/assets/recieptFooter.png");
+    img = await pdfDoc.embedPng(img);
+    footerImg = await pdfDoc.embedPng(footerImg);
 
     const fontSize = 12;
     const fontBig = 18;
     const { height } = page.getSize();
 
+    page.drawImage(img, {
+      x: 0,
+      y: height - 50,
+    });
+
+    page.drawImage(footerImg, {
+      x: 0,
+      y: 0,
+    });
     //support
     page.drawText("Support: joshrde2002@gmail.com", {
       x: 550,
@@ -497,7 +509,7 @@ export const generateInvoicePdf = async ({ dataForReceipt }) => {
 
     return res.secure_url;
   } catch (error) {
-    console.log("error from generating PDF", error);
+    console.log(error);
   }
 };
 
