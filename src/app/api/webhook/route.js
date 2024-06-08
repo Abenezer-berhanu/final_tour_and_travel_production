@@ -54,6 +54,10 @@ export async function POST(req, res) {
 
       console.log("booked tour id", bookedTourId);
 
+      const bookItSelf = await bookModel.findById(bookedTourId);
+      console.log("bookItSelf", bookItSelf);
+
+      
       const bookedTour = await findBookById(bookedTourId);
 
       console.log("first", bookedTour);
