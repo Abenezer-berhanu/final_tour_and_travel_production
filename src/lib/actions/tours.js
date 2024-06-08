@@ -321,8 +321,6 @@ export const generateInvoicePdf = async ({ dataForReceipt }) => {
   try {
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage([800, 350]);
-    img = await pdfDoc.embedPng(img);
-    footerImg = await pdfDoc.embedPng(footerImg);
 
     const fontSize = 12;
     const fontBig = 18;
