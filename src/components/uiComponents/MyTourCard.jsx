@@ -41,7 +41,7 @@ function MyTourCard({ item }) {
               Invoice: {item.pdfLink ? "YES" : "NO"}
             </h5>
             <h5 className="font-semibold text-slate-700">
-              Payment: {item.pdfLink ? "PAID" : "PENDING"}
+              Payment: {item.status == "paid" ? "PAID" : "PENDING"}
             </h5>
           </div>
 
