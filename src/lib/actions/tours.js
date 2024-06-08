@@ -302,7 +302,7 @@ export const payWithStripe = async (currentState, formData) => {
       const session = await stripe.checkout.sessions.create({
         line_items: [bookingTour],
         mode: "payment",
-        success_url: `${process.env.FRONTEND_DOMAIN}/checkout/success`,
+        success_url: `${process.env.FRONTEND_DOMAIN}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${process.env.FRONTEND_DOMAIN}/checkout/cancel?id=${savedTour?._id}`,
         metadata: { bookedTourId: savedTour?._id.toString() },
       });
