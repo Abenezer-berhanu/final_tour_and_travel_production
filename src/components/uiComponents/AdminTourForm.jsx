@@ -206,7 +206,7 @@ function AdminTourForm({ guides, leadGuides }) {
       </div>
       <Separator />
 
-      <div className="grid sm:grid-cols-2 gap-3">
+      <div className="grid gap-3">
         <span className="flex flex-col gap-1 border p-2 w-full">
           <label
             htmlFor="day"
@@ -216,24 +216,6 @@ function AdminTourForm({ guides, leadGuides }) {
           </label>
 
           <AdminDatePicker />
-        </span>
-
-        <span className="flex flex-col gap-1 border p-2 w-full">
-          <label
-            htmlFor="secreteTour"
-            className="block text-sm font-medium text-form_text"
-          >
-            Is this tour Secret?
-          </label>
-          <div className="flex items-center space-x-2 h-full">
-            <Checkbox name="isSecrete" id="secreteTour" />
-            <label
-              htmlFor="secreteTour"
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              Click if the tour is secret
-            </label>
-          </div>
         </span>
       </div>
       <Separator />
