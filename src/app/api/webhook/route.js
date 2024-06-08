@@ -50,7 +50,7 @@ export async function POST(req, res) {
         stripeSession?.metadata?.bookedTourId
       );
 
-      console.log(bookedTour);
+      console.log("first", bookedTour);
 
       if (bookedTour?.status !== "paid") {
         await bookModel.findByIdAndUpdate(
@@ -60,7 +60,10 @@ export async function POST(req, res) {
           }
         );
 
-        console.log(bookedTour.tour);
+        console.log(
+          "inside here the first tour has been found",
+          bookedTour.tour
+        );
 
         const quantity =
           Number(stripeSession.amount_total / 100) /
