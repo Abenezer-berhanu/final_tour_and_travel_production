@@ -320,7 +320,7 @@ export const generateInvoicePdf = async ({ dataForReceipt }) => {
   try {
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage([800, 350]);
-    let img = fs.readFileSync("./public/assets/recieptHeading.png");
+    // let img = fs.readFileSync("./public/assets/recieptHeading.png");
     let footerImg = fs.readFileSync("./public/assets/recieptFooter.png");
     img = await pdfDoc.embedPng(img);
     footerImg = await pdfDoc.embedPng(footerImg);
