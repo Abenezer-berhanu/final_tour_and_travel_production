@@ -56,7 +56,6 @@ export async function POST(req, res) {
 
       const bookItSelf = await bookModel
         .findById(bookedTourId)
-        .populate("user")
         .populate("tour");
       console.log("bookItSelf", bookItSelf);
 
