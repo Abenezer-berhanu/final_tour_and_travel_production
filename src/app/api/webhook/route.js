@@ -1,10 +1,13 @@
 import Stripe from "stripe";
-import { NextResponse } from "next/server";
+import { headers } from "next/headers";
 import bookModel from "@/lib/db/model/bookModel";
 import { generateInvoicePdf } from "@/lib/actions/tours";
 import tourModel from "@/lib/db/model/tourModel";
 import connectDB from "@/lib/db/config";
-import { verifyToken } from "@/lib/VerifyToken";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY,{
+  apiVersion: '2022-11-15'  // Specify the API version you want to use
+});
 
 function formatDate(date) {
   const months = [
@@ -30,40 +33,53 @@ function formatDate(date) {
 
 const currentDate = new Date();
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2022-11-15",
-});
+export async function POST(request) {
+  const body = await request.text();
+  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET_KEY;
+  const sig = headers().get("stripe-signature");
+  let event;
 
-export async function POST(req, res) {
   try {
-    const reqBody = await req.json();
-    const { session_id } = reqBody;
-
-    const stripeSession = await stripe.checkout.sessions.retrieve(session_id, {
-      expand: ["payment_intent", "line_items"],
+    event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
+  } catch (err) {
+    return new Response(`Webhook Error: ${err}`, {
+      status: 400,
     });
+  }
 
-    if (stripeSession) {
-      await connectDB();
-      const bookedTourId = stripeSession.metadata.bookedTourId;
+  // Respond with 200 status immediately
+  const response = new Response("RESPONSE EXECUTE", { status: 200 });
 
-      const bookedTour = await bookModel
-        .findById(bookedTourId)
-        .populate("tour");
+  // Process the event asynchronously
+  processWebhookEvent(event);
 
-      const { userInfo } = await verifyToken();
+  return response;
+}
 
-      if (bookedTour?.status !== "paid") {
+async function processWebhookEvent(event) {
+  await connectDB();
+  switch (event.type) {
+    case "checkout.session.completed":
+      const checkoutSessionCompleted = event.data.object;
+      try {
         await bookModel.findByIdAndUpdate(
-          stripeSession?.metadata?.bookedTourId,
-          {
-            status: "paid",
-          }
+          checkoutSessionCompleted?.metadata?.bookedTourId,
+          { status: "paid" }
         );
 
+        console.log("book updated to paid");
+
+        const bookedTour = await bookModel
+        .findById(checkoutSessionCompleted?.metadata?.bookedTourId)
+        .populate("tour");
+
+        const { userInfo } = await verifyToken();
+
+
+
         const quantity =
-          Number(stripeSession.amount_total / 100) /
-          Number(bookedTour.tour.price);
+        Number(stripeSession.amount_total / 100) /
+        Number(bookedTour.tour.price);
         const sizeToBe = bookedTour?.tour?.maxGroupSize - quantity;
 
         await tourModel.findByIdAndUpdate(bookedTour?.tour?._id, {
@@ -91,6 +107,8 @@ export async function POST(req, res) {
           currency: stripeSession.currency,
         };
 
+
+
         const receipt = await generateInvoicePdf({ dataForReceipt });
 
         await bookModel.findByIdAndUpdate(
@@ -100,23 +118,11 @@ export async function POST(req, res) {
           }
         );
 
-        return NextResponse.json({
-          success: "Tour is successfully booked.",
-        });
-      } else {
-        return NextResponse.json({
-          success: "Tour already booked.",
-        });
+      } catch (error) {
+        console.log(error);
       }
-    } else {
-      return NextResponse.json({
-        error: "Couldn't find stripe payment detail",
-      });
-    }
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({
-      error: "Internal server error",
-    });
+      break;
+    default:
+      console.log(`Unhandled event type ${event.type}`);
   }
 }
