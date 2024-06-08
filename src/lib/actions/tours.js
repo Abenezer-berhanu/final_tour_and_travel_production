@@ -321,7 +321,6 @@ export const generateInvoicePdf = async ({ dataForReceipt }) => {
   try {
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage([800, 350]);
-    // let img = fs.readFileSync("./public/assets/recieptHeading.png");
     let footerImg = fs.readFileSync("./public/assets/recieptFooter.png");
     img = await pdfDoc.embedPng(img);
     footerImg = await pdfDoc.embedPng(footerImg);
@@ -329,11 +328,6 @@ export const generateInvoicePdf = async ({ dataForReceipt }) => {
     const fontSize = 12;
     const fontBig = 18;
     const { height } = page.getSize();
-
-    page.drawImage(footerImg, {
-      x: 0,
-      y: height - 50,
-    });
 
     page.drawImage(footerImg, {
       x: 0,
