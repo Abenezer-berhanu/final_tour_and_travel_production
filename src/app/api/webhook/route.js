@@ -1,26 +1,14 @@
 import Stripe from "stripe";
-import { headers } from "next/headers";
+import { NextResponse } from "next/server";
 import bookModel from "@/lib/db/model/bookModel";
 import { generateInvoicePdf } from "@/lib/actions/tours";
 import { findBookById } from "@/lib/actions/book";
 import tourModel from "@/lib/db/model/tourModel";
 import connectDB from "@/lib/db/config";
-import { NextResponse } from "next/server";
 
 function formatDate(date) {
   const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
   ];
   const day = date.getDate();
   const monthIndex = date.getMonth();
@@ -32,7 +20,7 @@ function formatDate(date) {
 const currentDate = new Date();
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2022-11-15", // Specify the API version you want to use
+  apiVersion: "2022-11-15",
 });
 
 export async function POST(req, res) {
@@ -47,28 +35,21 @@ export async function POST(req, res) {
     if (stripeSession) {
       await connectDB();
 
-      const bookedTour = await findBookById(
-        stripeSession?.metadata?.bookedTourId
-      );
+      const bookedTour = await findBookById(stripeSession?.metadata?.bookedTourId);
 
-      if (bookedTour?.status != "paid") {
-        await bookModel.findByIdAndUpdate(
-          stripeSession?.metadata?.bookedTourId,
-          {
-            status: "paid",
-          }
-        );
+      if (bookedTour?.status !== "paid") {
+        await bookModel.findByIdAndUpdate(stripeSession?.metadata?.bookedTourId, {
+          status: "paid",
+        });
 
-        let quantity =
-          Number(stripeSession.amount_total / 100) /
-          Number(bookedTour.tour.price);
+        const quantity = Number(stripeSession.amount_total / 100) / Number(bookedTour.tour.price);
+        const sizeToBe = bookedTour?.tour?.maxGroupSize - quantity;
 
-        let sizeToBe = bookedTour?.tour?.maxGroupSize - quantity;
         await tourModel.findByIdAndUpdate(bookedTour?.tour?._id, {
           maxGroupSize: sizeToBe,
         });
 
-        const dataForReciept = {
+        const dataForReceipt = {
           username: bookedTour.user.name,
           userEmail: bookedTour.user.email,
           isActive: true,
@@ -76,9 +57,7 @@ export async function POST(req, res) {
           tourId: bookedTour.tour._id,
           tourStatus: "Active",
           startingAddress: bookedTour.tour.startLocation.address,
-          endAddress:
-            bookedTour.tour.location.address ||
-            bookedTour.tour.location[0].address,
+          endAddress: bookedTour.tour.location.address || bookedTour.tour.location[0].address,
           tourPrice: bookedTour.tour.price,
           transactionId: stripeSession.id,
           date: formatDate(currentDate),
@@ -89,14 +68,12 @@ export async function POST(req, res) {
           currency: stripeSession.currency,
         };
 
-        const reciept = await generateInvoicePdf({ dataForReciept });
+        const receipt = await generateInvoicePdf({ dataForReceipt });
 
-        await bookModel.findByIdAndUpdate(
-          stripeSession?.metadata?.bookedTourId,
-          {
-            pdfLink: reciept,
-          }
-        );
+        await bookModel.findByIdAndUpdate(stripeSession?.metadata?.bookedTourId, {
+          pdfLink: receipt,
+        });
+
         return NextResponse.json({
           success: "Tour is successfully booked.",
         });
@@ -107,10 +84,13 @@ export async function POST(req, res) {
       }
     } else {
       return NextResponse.json({
-        error: "couldn't find stripe payment detail",
+        error: "Couldn't find stripe payment detail",
       });
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    return NextResponse.json({
+      error: "Internal server error",
+    });
   }
 }
