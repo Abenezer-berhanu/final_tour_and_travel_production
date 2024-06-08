@@ -317,6 +317,7 @@ export const payWithStripe = async (currentState, formData) => {
 };
 
 export const generateInvoicePdf = async ({ dataForReceipt }) => {
+  console.log(dataForReceipt);
   try {
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage([800, 350]);
@@ -509,7 +510,7 @@ export const generateInvoicePdf = async ({ dataForReceipt }) => {
 
     return res.secure_url;
   } catch (error) {
-    console.log(error);
+    console.log("error from generating PDF", error);
   }
 };
 
