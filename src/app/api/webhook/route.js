@@ -52,7 +52,7 @@ export async function POST(req, res) {
 
       const bookedTourId = stripeSession.metadata.bookedTourId;
 
-      console.log("booked tour id", bookingTourId);
+      console.log("booked tour id", bookedTourId);
 
       const bookedTour = await findBookById(bookedTourId);
 
