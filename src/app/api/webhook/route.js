@@ -39,14 +39,17 @@ export async function POST(req) {
     const reqBody = await req.json();
     const { session_id } = reqBody;
 
+    console.log("session_id", session_id);
+
     const stripeSession = await stripe.checkout.sessions.retrieve(session_id, {
       expand: ["payment_intent", "line_items"],
     });
 
+    console.log("stripeSession", stripeSession);
+
     if (stripeSession) {
       await connectDB();
       const bookedTourId = stripeSession.metadata.bookedTourId;
-
 
       const bookedTour = await bookModel
         .findById(bookedTourId)
@@ -55,23 +58,23 @@ export async function POST(req) {
 
       const { userInfo } = await verifyToken();
 
-
       if (bookedTour?.status != "paid") {
         const updatedTour = await bookModel.findByIdAndUpdate(bookedTourId, {
           status: "paid",
         });
 
+        console.log("updatedTour", updatedTour);
 
         const quantity =
           Number(stripeSession.amount_total / 100) /
           Number(bookedTour.tour.price);
         const sizeToBe = bookedTour?.tour?.maxGroupSize - quantity;
 
+        console.log("quantity: ", quantity);
+
         await tourModel.findByIdAndUpdate(bookedTour?.tour?._id, {
           maxGroupSize: sizeToBe,
         });
-
-        const bookItSelf = await bookModel.findByIdAndUpdate(bookedTourId);
 
         await bookModel.findByIdAndUpdate(bookedTourId, {
           status: "paid",
@@ -99,6 +102,8 @@ export async function POST(req) {
         };
 
         const receipt = await generateInvoicePdf({ dataForReceipt });
+
+        console.log("receipt: ", receipt);
 
         await bookModel.findByIdAndUpdate(
           stripeSession?.metadata?.bookedTourId,
