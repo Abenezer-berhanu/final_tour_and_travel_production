@@ -54,10 +54,12 @@ export async function POST(req, res) {
 
       console.log("booked tour id", bookedTourId);
 
-      const bookItSelf = await bookModel.findById(bookedTourId);
+      const bookItSelf = await bookModel
+        .findById(bookedTourId)
+        .populate("user")
+        .populate("tour");
       console.log("bookItSelf", bookItSelf);
 
-      
       const bookedTour = await findBookById(bookedTourId);
 
       console.log("first", bookedTour);

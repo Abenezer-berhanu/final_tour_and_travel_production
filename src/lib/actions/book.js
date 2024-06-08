@@ -35,7 +35,6 @@ export const findBookById = async (id) => {
       .findById(id)
       .populate("user")
       .populate("tour")
-      .lean();
     return tour;
   } catch (error) {
     console.log(error);
