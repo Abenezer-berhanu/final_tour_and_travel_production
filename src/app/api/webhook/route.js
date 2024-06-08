@@ -8,7 +8,18 @@ import connectDB from "@/lib/db/config";
 
 function formatDate(date) {
   const months = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
   const day = date.getDate();
   const monthIndex = date.getMonth();
@@ -35,14 +46,25 @@ export async function POST(req, res) {
     if (stripeSession) {
       await connectDB();
 
-      const bookedTour = await findBookById(stripeSession?.metadata?.bookedTourId);
+      const bookedTour = await findBookById(
+        stripeSession?.metadata?.bookedTourId
+      );
+
+      console.log(bookedTour);
 
       if (bookedTour?.status !== "paid") {
-        await bookModel.findByIdAndUpdate(stripeSession?.metadata?.bookedTourId, {
-          status: "paid",
-        });
+        await bookModel.findByIdAndUpdate(
+          stripeSession?.metadata?.bookedTourId,
+          {
+            status: "paid",
+          }
+        );
 
-        const quantity = Number(stripeSession.amount_total / 100) / Number(bookedTour.tour.price);
+        console.log(bookedTour.tour);
+
+        const quantity =
+          Number(stripeSession.amount_total / 100) /
+          Number(bookedTour.tour.price);
         const sizeToBe = bookedTour?.tour?.maxGroupSize - quantity;
 
         await tourModel.findByIdAndUpdate(bookedTour?.tour?._id, {
@@ -57,7 +79,9 @@ export async function POST(req, res) {
           tourId: bookedTour.tour._id,
           tourStatus: "Active",
           startingAddress: bookedTour.tour.startLocation.address,
-          endAddress: bookedTour.tour.location.address || bookedTour.tour.location[0].address,
+          endAddress:
+            bookedTour.tour.location.address ||
+            bookedTour.tour.location[0].address,
           tourPrice: bookedTour.tour.price,
           transactionId: stripeSession.id,
           date: formatDate(currentDate),
@@ -70,9 +94,12 @@ export async function POST(req, res) {
 
         const receipt = await generateInvoicePdf({ dataForReceipt });
 
-        await bookModel.findByIdAndUpdate(stripeSession?.metadata?.bookedTourId, {
-          pdfLink: receipt,
-        });
+        await bookModel.findByIdAndUpdate(
+          stripeSession?.metadata?.bookedTourId,
+          {
+            pdfLink: receipt,
+          }
+        );
 
         return NextResponse.json({
           success: "Tour is successfully booked.",
