@@ -46,6 +46,10 @@ export async function POST(req, res) {
     if (stripeSession) {
       await connectDB();
 
+      console.log("stripe session id", session_id);
+
+      console.log("stripe session", stripeSession);
+
       const bookedTour = await findBookById(
         stripeSession?.metadata?.bookedTourId
       );
