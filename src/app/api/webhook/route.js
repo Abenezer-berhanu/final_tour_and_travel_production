@@ -2,7 +2,6 @@ import Stripe from "stripe";
 import { NextResponse } from "next/server";
 import bookModel from "@/lib/db/model/bookModel";
 import { generateInvoicePdf } from "@/lib/actions/tours";
-import { findBookById } from "@/lib/actions/book";
 import tourModel from "@/lib/db/model/tourModel";
 import connectDB from "@/lib/db/config";
 import { verifyToken } from "@/lib/VerifyToken";
@@ -46,27 +45,13 @@ export async function POST(req, res) {
 
     if (stripeSession) {
       await connectDB();
-
-      console.log("stripe session id", session_id);
-
-      console.log("stripe session", stripeSession);
-
       const bookedTourId = stripeSession.metadata.bookedTourId;
 
-      console.log("booked tour id", bookedTourId);
-
-      const bookItSelf = await bookModel
+      const bookedTour = await bookModel
         .findById(bookedTourId)
         .populate("tour");
 
       const { userInfo } = await verifyToken();
-
-      console.log("user", userInfo);
-      console.log("bookItSelf", bookItSelf);
-
-      const bookedTour = await findBookById(bookedTourId);
-
-      console.log("first", bookedTour);
 
       if (bookedTour?.status !== "paid") {
         await bookModel.findByIdAndUpdate(
@@ -74,11 +59,6 @@ export async function POST(req, res) {
           {
             status: "paid",
           }
-        );
-
-        console.log(
-          "inside here the first tour has been found",
-          bookedTour.tour
         );
 
         const quantity =
@@ -91,10 +71,10 @@ export async function POST(req, res) {
         });
 
         const dataForReceipt = {
-          username: bookedTour.user.name,
-          userEmail: bookedTour.user.email,
+          username: userInfo.name,
+          userEmail: userInfo.email,
           isActive: true,
-          userId: bookedTour.user._id,
+          userId: userInfo.userId,
           tourId: bookedTour.tour._id,
           tourStatus: "Active",
           startingAddress: bookedTour.tour.startLocation.address,
@@ -107,7 +87,7 @@ export async function POST(req, res) {
           quantity,
           amountPaid: Number(stripeSession.amount_total / 100),
           transactionStatus: stripeSession.payment_status,
-          paymentIntent: stripeSession.payment_intent,
+          paymentIntent: stripeSession.payment_intent.id,
           currency: stripeSession.currency,
         };
 
