@@ -511,22 +511,27 @@ export const generateInvoicePdf = async ({ dataForReceipt }) => {
     });
 
     const uid = uuidv4();
-    fs.writeFileSync(
-      `./public/storePdf/${uid}-reciept.pdf`,
-      await pdfDoc.save()
-    );
+    const result = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { resource_type: "raw" },
+        (error, result) => {
+          if (error) {
+            console.log("Error uploading PDF to Cloudinary", error);
+            reject(error);
+          } else {
+            console.log("Cloudinary upload result:", result);
+            resolve(result.secure_url);
+          }
+        }
+      );
 
-    console.log("here the pdf is saved ");
+      const bufferStream = new Readable();
+      bufferStream.push(pdfBytes);
+      bufferStream.push(null);
+      bufferStream.pipe(uploadStream);
+    });
 
-    const res = await cloudinary.uploader.upload(
-      `/storePdf/${uid}-reciept.pdf`
-    );
-
-    console.log(
-      "here the pdf is saved and uploading to cloudinary is running "
-    );
-
-    return res.secure_url;
+    return result;
   } catch (error) {
     console.log(error);
   }
