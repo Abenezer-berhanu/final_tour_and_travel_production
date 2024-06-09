@@ -3,7 +3,7 @@ import { revalidateTag } from "next/cache";
 import connectDB from "../db/config";
 import { bookTour } from "./book";
 import { PDFDocument, rgb } from "pdf-lib";
-import { Readable } from "stream";
+import fs from "fs";
 import { v4 as uuidv4 } from "uuid";
 import cloudinary from "../cloudinaryConfig";
 import tourModel from "../db/model/tourModel";
@@ -511,27 +511,19 @@ export const generateInvoicePdf = async ({ dataForReceipt }) => {
     });
 
     const uid = uuidv4();
-    const result = await new Promise((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        { resource_type: "raw" },
-        (error, result) => {
-          if (error) {
-            console.log("Error uploading PDF to Cloudinary", error);
-            reject(error);
-          } else {
-            console.log("Cloudinary upload result:", result);
-            resolve(result.secure_url);
-          }
-        }
-      );
+    fs.writeFileSync(`public/storePdf/${uid}-reciept.pdf`, await pdfDoc.save());
 
-      const bufferStream = new Readable();
-      bufferStream.push(pdfBytes);
-      bufferStream.push(null);
-      bufferStream.pipe(uploadStream);
-    });
+    console.log("here the pdf is saved ");
 
-    return result;
+    const res = await cloudinary.uploader.upload(
+      `public/storePdf/${uid}-reciept.pdf`
+    );
+
+    console.log(
+      "here the pdf is saved and uploading to cloudinary is running "
+    );
+
+    return res.secure_url;
   } catch (error) {
     console.log(error);
   }
