@@ -320,10 +320,10 @@ export const generateInvoicePdf = async ({ dataForReceipt }) => {
   try {
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage([800, 350]);
-    let img = fs.readFileSync("./public/assets/recieptHeading.png");
-    let footerImg = fs.readFileSync("./public/assets/recieptFooter.png");
-    img = await pdfDoc.embedPng(img);
-    footerImg = await pdfDoc.embedPng(footerImg);
+    footerImg =
+      "https://res.cloudinary.com/dg6ck04nm/image/upload/v1717909940/recieptFooter_sexepj.png";
+    img =
+      "https://res.cloudinary.com/dg6ck04nm/image/upload/v1717909941/recieptHeading_y2zbcv.png";
 
     const fontSize = 12;
     const fontBig = 18;
@@ -503,8 +503,14 @@ export const generateInvoicePdf = async ({ dataForReceipt }) => {
     const uid = uuidv4();
     fs.writeFileSync(`./storePdf/${uid}-reciept.pdf`, await pdfDoc.save());
 
+    console.log("here the pdf is saved ");
+
     const res = await cloudinary.uploader.upload(
       `./storePdf/${uid}-reciept.pdf`
+    );
+
+    console.log(
+      "here the pdf is saved and uploading to cloudinary is running "
     );
 
     return res.secure_url;

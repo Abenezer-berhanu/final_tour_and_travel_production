@@ -103,8 +103,6 @@ export async function POST(req) {
 
         const receipt = await generateInvoicePdf({ dataForReceipt });
 
-        console.log("receipt: ", receipt);
-
         await bookModel.findByIdAndUpdate(
           stripeSession?.metadata?.bookedTourId,
           {
