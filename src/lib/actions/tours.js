@@ -182,6 +182,12 @@ export const createTour = async (currentState, formData) => {
       return { error: message };
     }
 
+    const existNameTour = await tourModel.find({ name });
+
+    if (existNameTour) {
+      return { error: "tour name already exists" };
+    }
+
     //upload the images and update the fields
     let coverImageUrl = "";
     let imagesUrl = [];
@@ -553,6 +559,14 @@ export const updateTour = async (currentState, formData) => {
     //find tour by id
     await connectDB();
     const existTour = await tourModel.findById(tourId).lean();
+
+    if (name) {
+      const existNameTour = await tourModel.find({ name });
+
+      if (existNameTour) {
+        return { error: "tour name already exists" };
+      }
+    }
 
     // upload the images if they exist
     let primaryImage;

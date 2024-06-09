@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "../ui/separator";
 import AdminDatePicker from "./AdminDatePicker";
-import { Checkbox } from "../ui/checkbox";
 import ImagesUpload from "./ImagesUpload";
 import PrimaryImageUpload from "./PrimaryImageUpload";
 import { useSelector } from "react-redux";
@@ -83,6 +82,7 @@ function AdminTourForm({ guides, leadGuides }) {
 
           <input
             type="number"
+            min="0"
             id="duration"
             name="duration"
             required
