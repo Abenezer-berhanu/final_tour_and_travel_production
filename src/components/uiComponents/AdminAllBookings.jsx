@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { formatDistance } from "date-fns";
 
 export default function AdminAllBooking({ books }) {
   const [booksData, setBooksData] = useState(books);
@@ -26,11 +27,12 @@ export default function AdminAllBooking({ books }) {
       <Thead>
         <Tr className="bg-primary h-12">
           <Th className="text-white text-start">Image</Th>
-          <Th className="text-white text-start">Tour Name</Th>
-          <Th className="text-white text-start">User Name</Th>
-          <Th className="text-white text-start">Email</Th>
-          <Th className="text-white text-start">Status</Th>
-          <Th className="text-white text-start">PdfLink</Th>
+          <Th className="text-white text-start border-l border-1 border-slate-100 px-2">Tour Name</Th>
+          <Th className="text-white text-start border-l border-1 border-slate-100 px-2">User Name</Th>
+          <Th className="text-white text-start border-l border-1 border-slate-100 px-2">Email</Th>
+          <Th className="text-white text-start border-l border-1 border-slate-100 px-2">Status</Th>
+          <Th className="text-white text-start border-l border-1 border-slate-100 px-2">Date</Th>
+          <Th className="text-white text-start border-l border-1 border-slate-100 px-2">PdfLink</Th>
         </Tr>
       </Thead>
       <Tbody>
@@ -56,6 +58,12 @@ export default function AdminAllBooking({ books }) {
             >
               {book?.status}
             </Td>
+            <Td className="text-sm font-semibold py-1">
+              {formatDistance(new Date(), book?.createdAt, {
+                addSuffix: true,
+              })}
+            </Td>
+
             <Td className="text-sm font-semibold py-1">
               {book?.pdfLink && (
                 <Link
