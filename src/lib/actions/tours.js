@@ -512,14 +512,14 @@ export const generateInvoicePdf = async ({ dataForReceipt }) => {
 
     const uid = uuidv4();
     fs.writeFileSync(
-      `.public/storePdf/${uid}-reciept.pdf`,
+      `./public/storePdf/${uid}-reciept.pdf`,
       await pdfDoc.save()
     );
 
     console.log("here the pdf is saved ");
 
     const res = await cloudinary.uploader.upload(
-      `./public/storePdf/${uid}-reciept.pdf`
+      `/storePdf/${uid}-reciept.pdf`
     );
 
     console.log(
