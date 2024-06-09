@@ -320,10 +320,20 @@ export const generateInvoicePdf = async ({ dataForReceipt }) => {
   try {
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage([800, 350]);
-    const footerImg =
+    const footerImgUrl =
       "https://res.cloudinary.com/dg6ck04nm/image/upload/v1717909940/recieptFooter_sexepj.png";
-    const img =
+    const imgUrl =
       "https://res.cloudinary.com/dg6ck04nm/image/upload/v1717909941/recieptHeading_y2zbcv.png";
+
+    // Fetch images
+    const [footerImgBytes, imgBytes] = await Promise.all([
+      fetch(footerImgUrl).then((res) => res.arrayBuffer()),
+      fetch(imgUrl).then((res) => res.arrayBuffer()),
+    ]);
+
+    // Embed images
+    const footerImg = await pdfDoc.embedPng(footerImgBytes);
+    const img = await pdfDoc.embedPng(imgBytes);
 
     const fontSize = 12;
     const fontBig = 18;
