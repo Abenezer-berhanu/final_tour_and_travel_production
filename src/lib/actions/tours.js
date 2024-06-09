@@ -3,7 +3,7 @@ import { revalidateTag } from "next/cache";
 import connectDB from "../db/config";
 import { bookTour } from "./book";
 import { PDFDocument, rgb } from "pdf-lib";
-import fs from "fs";
+import { Readable } from "stream";
 import { v4 as uuidv4 } from "uuid";
 import cloudinary from "../cloudinaryConfig";
 import tourModel from "../db/model/tourModel";
