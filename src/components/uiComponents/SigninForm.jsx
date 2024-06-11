@@ -25,18 +25,19 @@ export default function SigninForm() {
     const res = await loginUser(info);
     setLoading(false);
 
-    if (res.success) {
+    if (res?.success) {
       toast.success("logged in successfully");
       replace("/");
       return;
+    } else if (res?.error) toast.error(res.error);
+    else {
+      toast.error("You reach the request limit. please try after 10 minutes");
     }
-    if (res.error) toast.error(res.error);
   };
 
   const handleChange = async (e) => {
     setInfo({ ...info, [e.target.name]: e.target.value });
   };
-
 
   return (
     <form onSubmit={handleSubmit} className="w-full flex flex-col gap-3">

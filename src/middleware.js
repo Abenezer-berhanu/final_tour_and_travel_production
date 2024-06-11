@@ -1,10 +1,29 @@
 import { NextResponse } from "next/server";
 import { verifyToken } from "./lib/VerifyToken";
+import { Ratelimit } from "@upstash/ratelimit";
+import { redis } from "./lib/upstash";
+import { headers } from "next/headers";
 
 export async function middleware(request) {
+  const rateLimit = new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(15, "600s"),
+  });
+  const path = request.nextUrl.pathname;
+
+  const ip = headers().get("x-forwarded-for");
+
+  if (path === "/auth/signin" && !success) {
+    const { success } = await rateLimit.limit(ip);
+    if (success) {
+      return {
+        error: "You reach the request limit. please try after 10 minutes",
+      };
+    }
+  }
+
   const token = request.cookies.get("adventure_hub_jwt")?.value || "";
 
-  const path = request.nextUrl.pathname;
   const isOnPublicPath = path === "/" || path === "/closetours";
   const isOnAdminPath = path.startsWith("/admin");
 
