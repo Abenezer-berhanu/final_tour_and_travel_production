@@ -13,9 +13,9 @@ import TourCard from "@/components/uiComponents/TourCard";
 import { fetchRelatedTours, fetchTourById } from "@/lib/actions/tours";
 import Image from "next/image";
 import { fetchReviewById } from "@/lib/actions/review";
-import TourReview from "@/components/uiComponents/TourReview";
 import { format } from "date-fns";
 import { findUserById } from "@/lib/actions/users";
+import ReviewComponent from "@/components/uiComponents/ReviewComponent";
 
 async function page({ params }) {
   const { tourId: id } = params;
@@ -248,7 +248,7 @@ async function page({ params }) {
             <div className="max-w-[800px] flex flex-col gap-5 mb-5">
               <h1 className="font-bold text-lg">Reviews</h1>
               {reviews.length > 0 ? (
-                <TourReview reviews={reviews} />
+                <ReviewComponent reviews={reviews} />
               ) : (
                 <ErrorAlert
                   description={"No reviews yet."}

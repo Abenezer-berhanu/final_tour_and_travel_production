@@ -46,3 +46,16 @@ export const fetchReviewById = async (id) => {
     console.log(error);
   }
 };
+
+export const deleteReview = async (currentState, formData) => {
+  const reviewId = formData.get("id");
+
+  try {
+    await connectDB();
+    await reviewModel.findByIdAndDelete(reviewId);
+    return { success: true };
+  } catch (error) {
+    console.log(error);
+    return { error: "something went wrong please try again" };
+  }
+};
