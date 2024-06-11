@@ -465,7 +465,7 @@ function AdminTourForm({ guides, leadGuides }) {
       <h1 className="font-semibold text-md">Upload Tour Images</h1>
       <div className="col-span-6 sm:col-span-5 bg-white p-5 grid md:grid-cols-6 gap-3 rounded-lg font-medium">
         <div className="col-span-4 md:col-span-2 p-2 flex flex-col gap-3">
-          <h1 className="font-semibold text-sm">Detail Images</h1>
+          <h1 className="font-semibold text-sm">Cover Images</h1>
           <span className="border p-3">
             <PrimaryImageUpload />
           </span>

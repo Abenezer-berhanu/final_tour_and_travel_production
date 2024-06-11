@@ -6,7 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { GiSubway } from "react-icons/gi";
 import { Button } from "../ui/button";
-import { ArrowBigDown, ArrowBigUp } from "lucide-react";
+import { Album, ArrowBigDown, ArrowBigUp, User } from "lucide-react";
 
 function DashboardLayout({ myInfo }) {
   const [viewList, setViewList] = useState(true);
@@ -34,9 +34,7 @@ function DashboardLayout({ myInfo }) {
         </Button>
       </span>
       {viewList && (
-        <div
-          className={`flex flex-col items-start justify-center gap-3 mt-2`}
-        >
+        <div className={`flex flex-col items-start justify-center gap-3 mt-2`}>
           <Link
             href={"/admin/dashboard"}
             className={`flex w-full items-center justify-center ${
@@ -104,7 +102,7 @@ function DashboardLayout({ myInfo }) {
               } text-black rounded-md p-1 cursor-pointer hover:bg-primary_orange duration-200`}
             >
               <div className="flex gap-3 items-center py-5 min-w-[120px] max-h-[30px]">
-                <GiSubway size={25} />
+                <User size={25} />
                 <b>New User</b>
               </div>
             </Link>
@@ -120,7 +118,7 @@ function DashboardLayout({ myInfo }) {
               } text-black rounded-md p-1 cursor-pointer hover:bg-primary_orange duration-200`}
             >
               <div className="flex gap-3 items-center py-5 min-w-[120px] max-h-[30px]">
-                <GiSubway size={25} />
+                <Album size={25} />
                 <b>Bookings</b>
               </div>
             </Link>

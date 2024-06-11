@@ -56,6 +56,7 @@ export default function SigninForm() {
           type={showPassword ? "text" : "password"}
           name="password"
           placeholder="Password"
+          required
           onChange={(e) => handleChange(e)}
           className="border py-2 bg-slate-50 w-full rounded-md indent-2 outline-none focus:bg-white"
         />

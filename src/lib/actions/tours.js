@@ -69,7 +69,9 @@ export const fetchTop5Cheap = async () => {
     await connectDB();
     const tours = await tourModel.find({}).sort({ price: 1 }).limit(5).lean();
     return tours ? JSON.stringify(tours) : false;
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const getAllTours = async ({ tours }) => {
@@ -182,7 +184,7 @@ export const createTour = async (currentState, formData) => {
       return { error: message };
     }
 
-    const existNameTour = await tourModel.find({ name });
+    const existNameTour = await tourModel.findOne({ name });
 
     if (existNameTour) {
       return { error: "tour name already exists" };
@@ -561,7 +563,7 @@ export const updateTour = async (currentState, formData) => {
     const existTour = await tourModel.findById(tourId).lean();
 
     if (name) {
-      const existNameTour = await tourModel.find({ name });
+      const existNameTour = await tourModel.findOne({ name });
 
       if (existNameTour) {
         return { error: "tour name already exists" };
