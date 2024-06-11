@@ -7,7 +7,7 @@ import { getStorage } from "firebase/storage";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyCfhjj2VNrFitoSFkHZmqGGbLmJ86Gmscw",
+  apiKey: process.env.FIREBASE_APIKEY,
   authDomain: "adventurehub-f15d5.firebaseapp.com",
   projectId: "adventurehub-f15d5",
   storageBucket: "adventurehub-f15d5.appspot.com",
