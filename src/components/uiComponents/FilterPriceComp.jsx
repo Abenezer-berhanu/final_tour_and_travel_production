@@ -57,7 +57,7 @@ function FilterPriceComp() {
                 value="2500t05000"
                 onChange={handleChange}
               />
-              <label for="2500t05000">2500 - 5000</label>
+              <label for="2500to5000">2500 - 5000</label>
             </div>
 
             <div className="flex gap-2">

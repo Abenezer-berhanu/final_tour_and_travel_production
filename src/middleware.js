@@ -7,18 +7,24 @@ import { headers } from "next/headers";
 export async function middleware(request) {
   const rateLimit = new Ratelimit({
     redis,
-    limiter: Ratelimit.slidingWindow(15, "600s"),
+    limiter: Ratelimit.slidingWindow(30, "300s"),
   });
   const path = request.nextUrl.pathname;
 
   const ip = headers().get("x-forwarded-for");
 
-  if (path === "/auth/signin" && !success) {
+  if (path === "/auth/signi") {
     const { success } = await rateLimit.limit(ip);
     if (success) {
-      return {
-        error: "You reach the request limit. please try after 10 minutes",
-      };
+      return Response.json(
+        {
+          error:
+            "You reached the request limit. Please try again after 10 minutes.",
+        },
+        {
+          status: 429,
+        }
+      );
     }
   }
 

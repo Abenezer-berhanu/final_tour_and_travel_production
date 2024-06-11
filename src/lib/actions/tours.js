@@ -36,7 +36,7 @@ export const fetchAllTours = async (page, price) => {
   const priceRegex =
     price == "100to2500"
       ? { price: { $gte: 100, $lte: 2500 } }
-      : price == "2500t05000"
+      : price == "2500to5000"
       ? { price: { $gte: 2500, $lte: 5000 } }
       : price == "over5000"
       ? { price: { $gt: 5000 } }
