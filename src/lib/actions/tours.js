@@ -9,6 +9,8 @@ import cloudinary from "../cloudinaryConfig";
 import tourModel from "../db/model/tourModel";
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 import { verifyToken } from "../VerifyToken";
+import { storage } from "../firebase";
+import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 
 //check if the object has falsy value
 const checkForFalsyValues = (obj) => {
@@ -526,14 +528,17 @@ export const generateInvoicePdf = async ({ dataForReceipt }) => {
       color: rgb(0, 0, 0),
     });
 
+    const pdfBlob = await pdfDoc.save();
+
     const uid = uuidv4();
-    fs.writeFileSync(`public/storePdf/${uid}-receipt.pdf`, await pdfDoc.save());
 
-    const res = await cloudinary.uploader.upload(
-      `public/storePdf/${uid}-receipt.pdf`
-    );
+    const storageRef = ref(storage, `${uid}-receipt.pdf`);
 
-    return res.secure_url;
+    const snapshot = await uploadBytes(storageRef, pdfBlob);
+
+    const downloadUrl = await getDownloadURL(snapshot.ref);
+
+    return downloadUrl;
   } catch (error) {
     console.log(error);
   }
