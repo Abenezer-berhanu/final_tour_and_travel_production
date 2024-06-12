@@ -260,6 +260,9 @@ async function page({ params }) {
             <div className="w-full">
               {" "}
               <DetailPageMap
+                endLocation={
+                  data?.location?.coordinates || data?.location[0]?.coordinates
+                }
                 position={
                   data?.startLocation?.coordinates ||
                   data?.startLocation[0]?.coordinates

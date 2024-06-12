@@ -16,14 +16,12 @@ import { updateTour } from "@/lib/actions/tours";
 import { useFormState, useFormStatus } from "react-dom";
 import MultipleSelect from "./MultipleSelect";
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import Spinner from "./Spinner";
 import { toast } from "react-toastify";
 import Link from "next/link";
 import MultipleLeadGuidesSelect from "./MultipleLeadGuidesSelect";
 
-function AdminTourUpdate({ tour }) {
-  const { push } = useRouter();
+function AdminTourUpdate({ tour, guides, leadGuides }) {
   const [state, formAction] = useFormState(updateTour, null);
   const { images, coverImage, startingDate, chosenGuides, chosenLeadGuides } =
     useSelector((state) => state.images);
@@ -31,7 +29,7 @@ function AdminTourUpdate({ tour }) {
   useEffect(() => {
     if (state?.success) {
       toast.success("Tour updated successfully");
-      window.location.reload()
+      window.location.reload();
     } else if (state?.error) {
       toast.error(state?.error);
     }
@@ -443,13 +441,13 @@ function AdminTourUpdate({ tour }) {
           <small>
             <b>Guides</b>
           </small>
-          <MultipleSelect guides={tour?.guides} />
+          <MultipleSelect guides={guides} />
         </span>
         <span>
           <small>
             <b>Lead Guides</b>
           </small>
-          <MultipleLeadGuidesSelect guides={tour?.leadGuides || []} />
+          <MultipleLeadGuidesSelect guides={leadGuides} />
         </span>
       </div>
 
