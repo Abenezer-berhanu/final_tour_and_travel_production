@@ -11,8 +11,8 @@ const FitBounds = ({ startCoords, endCoords }) => {
 
   useEffect(() => {
     const bounds = [
-      [startCoords[0], startCoords[1]], 
-      [endCoords[0], endCoords[1]], 
+      [startCoords[0], startCoords[1]],
+      [endCoords[0], endCoords[1]],
     ];
     map.fitBounds(bounds);
   }, [map, startCoords, endCoords]);
@@ -20,7 +20,6 @@ const FitBounds = ({ startCoords, endCoords }) => {
   return null;
 };
 function DetailPageMap({ endLocation: endCoords, position: startCoords }) {
-
   return (
     <div>
       <MapContainer style={{ height: "400px", width: "100%" }}>
